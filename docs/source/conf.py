@@ -75,7 +75,7 @@ pygments_style = 'sphinx'
 # a list of builtin themes.
 #
 html_theme = 'classic'
-html_them_options = {
+html_theme_options = {
         "relbarbgcolo": "black"
 }
 
