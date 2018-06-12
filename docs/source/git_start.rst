@@ -70,4 +70,8 @@ Go back to the branch and ::
 	
 	git push -f origin 'branch'
 
+To push an empty commit: ::
+        
+        git commit --allow-empty -m "trigger rebuild"
+        git push origin master
 
