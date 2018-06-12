@@ -6,7 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = KX
 SOURCEDIR     = source
-BUILDDIR      = sphinxdoc-test-docs
+BUILDDIR      = ../sphinxdoc-test-docs
 
 # Put it first so that "make" without argument is like "make help".
 help:
