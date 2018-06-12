@@ -14,7 +14,6 @@ Welcome to KX's documentation!
    slack
    sphinx
    git
-   git_repo_change
 
 
 Indices and tables
