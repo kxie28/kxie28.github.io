@@ -69,3 +69,4 @@ Go to the main repo and ::
 Go back to the branch and ::
 	
 	git push -f origin 'branch'
+
