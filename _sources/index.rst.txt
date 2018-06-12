@@ -11,7 +11,7 @@ Welcome to KX's documentation!
    :caption: Contents:
 
    includeme
-
+   slack
 
 
 Indices and tables
