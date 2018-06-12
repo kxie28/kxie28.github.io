@@ -12,6 +12,8 @@ Welcome to KX's documentation!
 
    includeme
    slack
+   sphinx
+   git
 
 
 Indices and tables
