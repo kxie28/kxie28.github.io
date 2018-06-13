@@ -14,6 +14,7 @@ Welcome to KX's documentation!
    slack
    sphinx
    git
+   shell_scripts
 
 
 Indices and tables

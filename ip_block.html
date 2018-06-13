@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to KX’s documentation! &#8212; KX 1.0 documentation</title>
+    <title>Basic IP Block Script &#8212; KX 1.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="includeme.html" /> 
+    <link rel="prev" title="Shell Scripts" href="shell_scripts.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -24,9 +24,10 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="includeme.html" title="&lt;no title&gt;"
-             accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">KX 1.0 documentation</a> &#187;</li> 
+          <a href="shell_scripts.html" title="Shell Scripts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="shell_scripts.html" accesskey="U">Shell Scripts</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -35,35 +36,47 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-kx-s-documentation">
-<h1>Welcome to KX’s documentation!<a class="headerlink" href="#welcome-to-kx-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
+  <div class="section" id="basic-ip-block-script">
+<h1>Basic IP Block Script<a class="headerlink" href="#basic-ip-block-script" title="Permalink to this headline">¶</a></h1>
+<p>Put together a very basic IP block script. It accepts a URL and curls the contents and grabs the IPs listed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>x=1
+while [ $x -le 1 ]
+do
+        echo &quot;Enter URL: &quot;
+        read urlvar
+        regex=&#39;(https?|ftp|file)://[-A-Za-z0-9\+&amp;@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&amp;@#/%=~_|]&#39;
+if [[ $urlvar =~ $regex ]]
+then
+        curl $urlvar &gt;&gt; scriptip.lst
+        ((x++))
+else
+        echo &quot;Link not valid&quot;
+fi
+done
+
+grep -Ev &#39;^#|^$&#39; /home/kevin.xie/scriptip.lst |
+awk -v url=&quot;$urlvar&quot; &#39;{
+regex = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/
+for (x=1;x&lt;=NF;x++)
+where = match($0,regex)
+#ip = substr($0,RSTART,RLENGTH)
+if (where)
+        print $ips,&quot;, &quot; url
+}&#39; &gt; scriptip.lst.sort
+</pre></div>
+</div>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="slack.html">Slack Test App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sphinx.html">Sphinx Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sphinx_start.html">Sphinx Startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sphinx_rst_docs.html">ReStructured Text Cheatsheet</a></li>
+<li><p class="first">Curl (tool to transfer data from or to a server) each URL and grab that data and output it into a file
+Grep -Ev …</p>
+<blockquote>
+<div><ul class="simple">
+<li>E is for extended regex so we can search fro more conditions and v is for inverted search (instead of searching for “x” we search for everything <strong>but</strong> “x”
+^# and ^$ means grep is searching for everything but the lines that start with “#” and new lines ($ = blank lines)
+The awk command is searching for matching numbers from 0-9 separated by a “.” delimiter
+All the IPs are printed into a new file “ipblock.lst.sort”</li>
 </ul>
+</div></blockquote>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="git.html">Git</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="git_start.html">Git Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="git_repo_change.html">Changing Your Git Repo</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="shell_scripts.html">Shell Scripts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ip_block.html">Basic IP Block Script</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 
@@ -73,19 +86,13 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to KX’s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
-  <h4>Next topic</h4>
-  <p class="topless"><a href="includeme.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="shell_scripts.html"
+                        title="previous chapter">Shell Scripts</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
+      <li><a href="_sources/ip_block.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -112,9 +119,10 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="includeme.html" title="&lt;no title&gt;"
-             >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">KX 1.0 documentation</a> &#187;</li> 
+          <a href="shell_scripts.html" title="Shell Scripts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="shell_scripts.html" >Shell Scripts</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
