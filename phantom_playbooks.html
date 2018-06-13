@@ -157,6 +157,190 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="investigation-playbook-iocs">
+<h2>Investigation Playbook (IoCs)<a class="headerlink" href="#investigation-playbook-iocs" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">phantom.rules</span> <span class="k">as</span> <span class="nn">phantom</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="n">container</span><span class="p">):</span>
+        <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;on_start() called&#39;</span><span class="p">)</span>
+
+<span class="c1"># call &#39;ip_reputation_1&#39; block</span>
+<span class="n">ip_reputation_1</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">)</span>
+
+<span class="c1"># call &#39;domain_reputation_1&#39; block</span>
+<span class="n">domain_reputation_1</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">)</span>
+
+<span class="c1"># call &#39;file_reputation_1&#39; block</span>
+<span class="n">file_reputation_1</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">)</span>
+
+<span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">ip_reputation_1</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_artifacts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;ip_reputation_1() called&#39;</span><span class="p">)</span>
+<span class="c1"># collect data for &#39;ip_reputation_1&#39; call</span>
+<span class="n">container_data</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">collect2</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;artifact:*.cef.destinationAddress&#39;</span><span class="p">,</span> <span class="s1">&#39;artifact:*.id&#39;</span><span class="p">])</span>
+
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># build parameters list for &#39;ip_reputation_1&#39; call</span>
+<span class="k">for</span> <span class="n">container_item</span> <span class="ow">in</span> <span class="n">container_data</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">container_item</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;ip&#39;</span><span class="p">:</span> <span class="n">container_item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="c1"># context (artifact id) is added to associate results with the artifact</span>
+        <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;artifact_id&#39;</span><span class="p">:</span> <span class="n">container_item</span><span class="p">[</span><span class="mi">1</span><span class="p">]},</span>
+    <span class="p">})</span>
+
+<span class="n">phantom</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="s2">&quot;ip reputation&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;virustotal&#39;</span><span class="p">],</span> <span class="n">callback</span><span class="o">=</span><span class="n">decision_1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ip_reputation_1&quot;</span><span class="p">)</span>
+<span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">decision_1</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_artifacts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;decision_1() called&#39;</span><span class="p">)</span>
+
+<span class="c1"># check for &#39;if&#39; condition 1</span>
+<span class="n">matched_artifacts_1</span><span class="p">,</span> <span class="n">matched_results_1</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">condition</span><span class="p">(</span>
+<span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+<span class="n">action_results</span><span class="o">=</span><span class="n">results</span><span class="p">,</span>
+<span class="n">conditions</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;ip_reputation_1:action_result.summary.communicating_samples&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="p">])</span>
+
+<span class="c1"># call connected blocks if condition 1 matched</span>
+<span class="k">if</span> <span class="n">matched_artifacts_1</span> <span class="ow">or</span> <span class="n">matched_results_1</span><span class="p">:</span>
+        <span class="n">join_format_1</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="n">success</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">handle</span><span class="p">)</span>
+        <span class="k">return</span>
+
+<span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">create_ticket_1</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_artifacts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;create_ticket_1() called&#39;</span><span class="p">)</span>
+
+    <span class="c1">#phantom.debug(&#39;Action: {0} {1}&#39;.format(action[&#39;name&#39;], (&#39;SUCCEEDED&#39; if success else &#39;FAILED&#39;)))</span>
+
+    <span class="c1"># collect data for &#39;create_ticket_1&#39; call</span>
+    <span class="n">formatted_data_1</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">get_format_data</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;format_1&#39;</span><span class="p">)</span>
+
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># build parameters list for &#39;create_ticket_1&#39; call</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">formatted_data_1</span><span class="p">,</span>
+        <span class="s1">&#39;fields&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;project_key&#39;</span><span class="p">:</span> <span class="s2">&quot;GDCCS&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="s2">&quot;IP Reputation Test&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;priority&#39;</span><span class="p">:</span> <span class="s2">&quot;Medium&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;assignee&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;vault_id&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;issue_type&#39;</span><span class="p">:</span> <span class="s2">&quot;Incident&quot;</span><span class="p">,</span>
+   <span class="p">})</span>
+
+   <span class="n">phantom</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="s2">&quot;create ticket&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;jira&#39;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;create_ticket_1&quot;</span><span class="p">)</span>
+
+   <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">format_1</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_artifacts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;format_1() called&#39;</span><span class="p">)</span>
+
+    <span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;End Time: </span><span class="si">{0}</span><span class="s2"></span>
+<span class="s2">Event Name: </span><span class="si">{1}</span><span class="s2"></span>
+<span class="s2">Device Host Name: </span><span class="si">{2}</span><span class="s2"></span>
+<span class="s2">Source IP: </span><span class="si">{3}</span><span class="s2"></span>
+<span class="s2">Source Host Name: </span><span class="si">{4}</span><span class="s2"></span>
+<span class="s2">Source Port: </span><span class="si">{5}</span><span class="s2"></span>
+<span class="s2">Destination IP: </span><span class="si">{6}</span><span class="s2"></span>
+<span class="s2">Country: </span><span class="si">{7}</span><span class="s2"></span>
+<span class="s2">Destination Host Name: </span><span class="si">{8}</span><span class="s2">&quot;&quot;&quot;</span>
+
+     <span class="c1"># parameter list for template variable replacement</span>
+     <span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;ip_reputation_1:artifact:*.cef.endTime&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip_reputation_1:artifact:*.name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip_reputation_1:artifact:*.cef.deviceHostname&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip_reputation_1:artifact:*.cef.sourceHostName&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip_reputation_1:artifact:*.cef.sourceHostName&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip_reputation_1:artifact:*.cef.sourcePort&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip_reputation_1:action_result.parameter.ip&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip_reputation_1:artifact:*.cef.destinationHostName&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ip_reputation_1:artifact:*.cef.destinationPort&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">phantom</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;format_1&quot;</span><span class="p">)</span>
+
+    <span class="n">create_ticket_1</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">)</span>
+
+    <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">join_format_1</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_artifacts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;join_format_1() called&#39;</span><span class="p">)</span>
+
+        <span class="c1"># check if all connected incoming actions are done i.e. have succeeded or failed</span>
+
+        <span class="k">if</span> <span class="n">phantom</span><span class="o">.</span><span class="n">actions_done</span><span class="p">([</span> <span class="s1">&#39;ip_reputation_1&#39;</span><span class="p">,</span> <span class="s1">&#39;domain_reputation_1&#39;</span><span class="p">,</span> <span class="s1">&#39;file_reputation_1&#39;</span> <span class="p">]):</span>
+
+                <span class="c1"># call connected block &quot;format_1&quot;</span>
+                <span class="n">format_1</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="n">handle</span><span class="p">)</span>
+
+        <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">domain_reputation_1</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_artifacts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;domain_reputation_1() called&#39;</span><span class="p">)</span>
+
+    <span class="c1"># collect data for &#39;domain_reputation_1&#39; call</span>
+    <span class="n">container_data</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">collect2</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;artifact:*.cef.destinationDnsDomain&#39;</span><span class="p">,</span> <span class="s1">&#39;artifact:*.id&#39;</span><span class="p">])</span>
+
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># build parameters list for &#39;domain_reputation_1&#39; call</span>
+    <span class="k">for</span> <span class="n">container_item</span> <span class="ow">in</span> <span class="n">container_data</span><span class="p">:</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;domain&#39;</span><span class="p">:</span> <span class="n">container_item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="c1"># context (artifact id) is added to associate results with the artifact</span>
+            <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;artifact_id&#39;</span><span class="p">:</span> <span class="n">container_item</span><span class="p">[</span><span class="mi">1</span><span class="p">]},</span>
+        <span class="p">})</span>
+
+    <span class="n">phantom</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="s2">&quot;domain reputation&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;virustotal&#39;</span><span class="p">],</span> <span class="n">callback</span><span class="o">=</span><span class="n">join_format_1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;domain_reputation_1&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">file_reputation_1</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_artifacts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filtered_results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;file_reputation_1() called&#39;</span><span class="p">)</span>
+
+    <span class="c1"># collect data for &#39;file_reputation_1&#39; call</span>
+    <span class="n">container_data</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">collect2</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">datapath</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;artifact:*.cef.fileHash&#39;</span><span class="p">,</span> <span class="s1">&#39;artifact:*.id&#39;</span><span class="p">])</span>
+
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># build parameters list for &#39;file_reputation_1&#39; call</span>
+    <span class="k">for</span> <span class="n">container_item</span> <span class="ow">in</span> <span class="n">container_data</span><span class="p">:</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;hash&#39;</span><span class="p">:</span> <span class="n">container_item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="c1"># context (artifact id) is added to associate results with the artifact</span>
+            <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;artifact_id&#39;</span><span class="p">:</span> <span class="n">container_item</span><span class="p">[</span><span class="mi">1</span><span class="p">]},</span>
+         <span class="p">})</span>
+
+    <span class="n">phantom</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="s2">&quot;file reputation&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;virustotal&#39;</span><span class="p">],</span> <span class="n">callback</span><span class="o">=</span><span class="n">join_format_1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;file_reputation_1&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">on_finish</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">summary</span><span class="p">):</span>
+    <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;on_finish() called&#39;</span><span class="p">)</span>
+    <span class="c1"># This function is called after all actions are completed.</span>
+    <span class="c1"># summary of all the action and/or all detals of actions</span>
+    <span class="c1"># can be collected here.</span>
+
+    <span class="c1"># summary_json = phantom.get_summary()</span>
+    <span class="c1"># if &#39;result&#39; in summary_json:</span>
+        <span class="c1"># for action_result in summary_json[&#39;result&#39;]:</span>
+            <span class="c1"># if &#39;action_run_id&#39; in action_result:</span>
+                <span class="c1"># action_results = phantom.get_action_results(action_run_id=action_result[&#39;action_run_id&#39;], result_data=False, flatten=False)</span>
+                <span class="c1"># phantom.debug(action_results)</span>
+
+    <span class="k">return</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -169,6 +353,7 @@
   <ul>
 <li><a class="reference internal" href="#">Phantom Playbooks</a><ul>
 <li><a class="reference internal" href="#microsoft-ata-runbook-playbook">Microsoft ATA Runbook Playbook</a></li>
+<li><a class="reference internal" href="#investigation-playbook-iocs">Investigation Playbook (IoCs)</a></li>
 </ul>
 </li>
 </ul>
