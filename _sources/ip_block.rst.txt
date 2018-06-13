@@ -29,10 +29,10 @@ Put together a very basic IP block script. It accepts a URL and curls the conten
         }' > scriptip.lst.sort
 
 * Curl (tool to transfer data from or to a server) each URL and grab that data and output it into a file
-  Grep -Ev ...
-        - E is for extended regex so we can search fro more conditions and v is for inverted search (instead of searching for "x" we search for everything **but** "x"
-          \^# and \^$ means grep is searching for everything but the lines that start with "#" and new lines (\$ = blank lines)
-          The awk command is searching for matching numbers from 0-9 separated by a "." delimiter
-          All the IPs are printed into a new file "ipblock.lst.sort"
+* Grep -Ev ...
+  - E is for extended regex so we can search fro more conditions and v is for inverted search (instead of searching for "x" we search for everything **but** "x"
+  - \^# and \^$ means grep is searching for everything but the lines that start with "#" and new lines (\$ = blank lines)
+  - The awk command is searching for matching numbers from 0-9 separated by a "." delimiter
+  - All the IPs are printed into a new file "ipblock.lst.sort"
 
 
