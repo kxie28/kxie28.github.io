@@ -15,6 +15,7 @@ Welcome to KX's documentation!
    sphinx
    git
    shell_scripts
+   phantom
 
 
 Indices and tables
