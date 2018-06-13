@@ -1,0 +1,220 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Phantom Playbooks &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Phantom - Security Automation and Orchestration" href="phantom.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="phantom.html" title="Phantom - Security Automation and Orchestration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="phantom.html" accesskey="U">Phantom - Security Automation and Orchestration</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="phantom-playbooks">
+<h1>Phantom Playbooks<a class="headerlink" href="#phantom-playbooks" title="Permalink to this headline">¶</a></h1>
+<p>These are some of the playbooks that I put together to run in Phantom for automation purposes</p>
+<div class="section" id="microsoft-ata-runbook-playbook">
+<h2>Microsoft ATA Runbook Playbook<a class="headerlink" href="#microsoft-ata-runbook-playbook" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">artifact_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<span class="k">for</span> <span class="n">artifacts</span> <span class="ow">in</span> <span class="n">check_array</span><span class="p">:</span>
+<span class="n">art</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">condition</span><span class="p">(</span>
+        <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+        <span class="n">conditions</span><span class="o">=</span><span class="p">[[</span><span class="s2">&quot;artifact:*.name&quot;</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">],],)</span>
+<span class="k">if</span> <span class="n">art</span> <span class="ow">or</span> <span class="n">result</span><span class="p">:</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">artifacts</span><span class="o">+</span><span class="s1">&#39; event detected&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;destination&#39;</span><span class="p">:</span> <span class="s2">&quot;phantom&quot;</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">if</span> <span class="n">art</span> <span class="ow">or</span> <span class="n">result</span><span class="p">:</span>
+        <span class="n">artifact_name</span> <span class="o">+=</span> <span class="n">artifacts</span>
+
+<span class="c1">#convert the startTime string into something useable</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="n">datapaths</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;artifact:*.data.startTime&#39;</span><span class="p">]</span>
+
+<span class="c1">#collect the startTime artifact</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+                        <span class="n">datapath</span><span class="o">=</span><span class="n">datapaths</span><span class="p">,</span>
+                        <span class="n">scope</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span>
+                        <span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                        <span class="n">none_if_first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">time</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">timedate</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="c1">#Since the artifact collected is a list of lists, need to go through and extract just the string</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">time</span> <span class="o">+=</span> <span class="n">j</span>
+                <span class="n">timedate</span> <span class="o">+=</span> <span class="n">j</span>
+
+<span class="c1">#Format the string into the time format needed for checks</span>
+<span class="n">tformat</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">tformat</span><span class="p">)</span>
+<span class="n">the_time</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">the_time</span><span class="p">)</span>
+<span class="n">check_time_mes</span><span class="p">,</span> <span class="n">check_time_res</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">condition</span><span class="p">(</span>
+        <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+        <span class="n">conditions</span><span class="o">=</span><span class="p">[[</span><span class="nb">str</span><span class="p">(</span><span class="n">the_time</span><span class="p">),</span> <span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;05:00:000&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">the_time</span><span class="p">),</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;17:00:000&quot;</span><span class="p">],],</span>
+        <span class="n">logical_operator</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;filter_1:condition_1&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">check_time_mes</span> <span class="ow">or</span> <span class="n">check_time_res</span><span class="p">:</span>
+        <span class="n">phantom</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="s2">&quot;send message&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;slacktest&#39;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;send_message&quot;</span><span class="p">)</span>
+
+<span class="n">check_time_mes1</span><span class="p">,</span> <span class="n">check_time_res1</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">condition</span><span class="p">(</span>
+        <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+        <span class="n">conditions</span><span class="o">=</span><span class="p">[[</span><span class="nb">str</span><span class="p">(</span><span class="n">the_time</span><span class="p">),</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;17:00:000&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">the_time</span><span class="p">),</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;5:00:000&quot;</span><span class="p">],],</span>
+        <span class="n">logical_operator</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;filter_2:condition_2&quot;</span><span class="p">)</span>
+
+<span class="c1">#phantom.debug(&quot;this is a test\nI need a new line please\n...&quot;)</span>
+<span class="c1">#Check time, if off work time, send email</span>
+<span class="k">if</span> <span class="n">check_time_mes1</span> <span class="ow">or</span> <span class="n">check_time_res1</span><span class="p">:</span>
+        <span class="n">email_parameters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">priority</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">phantom</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="s1">&#39;artifact:*.data.priority&#39;</span><span class="p">))</span>
+        <span class="c1">#phantom.debug(priority)</span>
+        <span class="c1">#priorities = []</span>
+        <span class="c1">#check = []</span>
+        <span class="c1">#for i in priority:</span>
+        <span class="c1">#    check.append(&quot;priority&quot; : i)</span>
+        <span class="c1">#    for j in i:</span>
+        <span class="c1">#        priorities += j</span>
+        <span class="c1">#phantom.debug(check)</span>
+        <span class="c1">#phantom.debug(priorities)</span>
+        <span class="n">deviceVendor</span> <span class="o">=</span> <span class="n">artifact_finding</span><span class="p">(</span><span class="s2">&quot;artifact:*.data.deviceVendor&quot;</span><span class="p">)</span>
+        <span class="n">deviceProduct</span> <span class="o">=</span> <span class="n">artifact_finding</span><span class="p">(</span><span class="s2">&quot;artifact:*.data.finalDeviceProduct&quot;</span><span class="p">)</span>
+        <span class="n">deviceEventClassId</span> <span class="o">=</span> <span class="n">artifact_finding</span><span class="p">(</span><span class="s2">&quot;artifact:*.data.deviceEventClassId&quot;</span><span class="p">)</span>
+        <span class="n">deviceHostName</span> <span class="o">=</span> <span class="n">artifact_finding</span><span class="p">(</span><span class="s2">&quot;artifact:*.data.deviceHostName&quot;</span><span class="p">)</span>
+        <span class="n">sourceUserName</span> <span class="o">=</span> <span class="n">artifact_finding</span><span class="p">(</span><span class="s2">&quot;artifact:*.cef.sourceUserName&quot;</span><span class="p">)</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">artifact_finding</span><span class="p">(</span><span class="s2">&quot;artifact:*.data.message&quot;</span><span class="p">)</span>
+        <span class="n">hostName</span> <span class="o">=</span> <span class="n">artifact_finding</span><span class="p">(</span><span class="s2">&quot;artifact:*.data.originalAgentHostName&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">artifacts</span> <span class="ow">in</span> <span class="n">email_array</span><span class="p">:</span>
+                <span class="n">art</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">phantom</span><span class="o">.</span><span class="n">condition</span><span class="p">(</span>
+                        <span class="n">container</span><span class="o">=</span><span class="n">container</span><span class="p">,</span>
+                        <span class="n">conditions</span><span class="o">=</span><span class="p">[[</span><span class="s2">&quot;artifact:*.name&quot;</span><span class="p">,</span> <span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="n">artifacts</span><span class="p">],],)</span>
+                <span class="k">if</span> <span class="n">art</span> <span class="ow">or</span> <span class="n">result</span><span class="p">:</span>
+                        <span class="n">email_parameters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                        <span class="s1">&#39;from&#39;</span><span class="p">:</span> <span class="s2">&quot;phantom@intelgd.com&quot;</span><span class="p">,</span>
+                        <span class="s1">&#39;to&#39;</span><span class="p">:</span> <span class="s2">&quot;xxx@xxxx.com&quot;</span><span class="p">,</span>
+                        <span class="s1">&#39;subject&#39;</span><span class="p">:</span> <span class="s2">&quot;MS ATA Event: &quot;</span> <span class="o">+</span> <span class="n">artifact_name</span><span class="p">,</span>
+                        <span class="c1">#&#39;body&#39;: artifacts + &quot; attack from &quot; + hostName,</span>
+                        <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="s2">&quot;Date in EST time zone: &quot;</span> <span class="o">+</span> <span class="n">timedate</span> <span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;Event name/signature it flagged on: &quot;</span><span class="o">+</span><span class="n">artifact_name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Device it&#39;s alerting on (FW, AV, etc.): &quot;</span> <span class="o">+</span> <span class="n">deviceVendor</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">deviceProduct</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Device Event Class ID: &quot;</span> <span class="o">+</span> <span class="n">deviceEventClassId</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Device Host Name: &quot;</span> <span class="o">+</span> <span class="n">deviceHostName</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Attacker User Name: &quot;</span> <span class="o">+</span> <span class="n">sourceUserName</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Message: &quot;</span> <span class="o">+</span> <span class="n">message</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Executive Summary</span><span class="se">\n</span><span class="s2">On &quot;</span> <span class="o">+</span> <span class="n">timedate</span> <span class="o">+</span> <span class="s1">&#39;, the SIEM triggered a &quot;&#39;</span><span class="o">+</span> <span class="n">artifact_name</span> <span class="o">+</span> <span class="s1">&#39;&quot; event.&#39;</span> <span class="p">,</span>
+            <span class="s1">&#39;attachments&#39;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">})</span>
+<span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">artifact_name</span><span class="p">)</span>
+<span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">deviceVendor</span><span class="p">)</span>
+<span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">deviceProduct</span><span class="p">)</span>
+<span class="n">phantom</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="s2">&quot;send email&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">email_parameters</span><span class="p">,</span> <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;smtp_server&#39;</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;send_email_1&quot;</span><span class="p">)</span>
+
+<span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">on_finish</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">summary</span><span class="p">):</span>
+        <span class="n">phantom</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;on_finish() called&#39;</span><span class="p">)</span>
+        <span class="c1"># This function is called after all actions are completed.</span>
+        <span class="c1"># summary of all the action and/or all detals of actions</span>
+        <span class="c1"># can be collected here.</span>
+
+<span class="c1"># summary_json = phantom.get_summary()</span>
+<span class="c1"># if &#39;result&#39; in summary_json:</span>
+        <span class="c1"># for action_result in summary_json[&#39;result&#39;]:</span>
+        <span class="c1"># if &#39;action_run_id&#39; in action_result:</span>
+        <span class="c1"># action_results = phantom.get_action_results(action_run_id=action_result[&#39;action_run_id&#39;], result_data=False, flatten=False)</span>
+        <span class="c1"># phantom.debug(action_results)</span>
+<span class="k">return</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Phantom Playbooks</a><ul>
+<li><a class="reference internal" href="#microsoft-ata-runbook-playbook">Microsoft ATA Runbook Playbook</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="phantom.html"
+                        title="previous chapter">Phantom - Security Automation and Orchestration</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/phantom_playbooks.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="phantom.html" title="Phantom - Security Automation and Orchestration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="phantom.html" >Phantom - Security Automation and Orchestration</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
