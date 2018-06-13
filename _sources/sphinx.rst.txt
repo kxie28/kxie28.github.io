@@ -7,5 +7,5 @@ Some Sphinx installation notes
    :maxdepth: 2
 
    sphinx_start
-
+   sphinx_rst_docs
 
