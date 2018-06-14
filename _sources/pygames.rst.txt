@@ -1,5 +1,5 @@
-Small assortment of PyGames I created
-=====================================
+Small assortment of PyGames I put together
+==========================================
 
 .. toctree::
    :maxdepth: 2
