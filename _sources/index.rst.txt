@@ -16,6 +16,7 @@ Welcome to KX's documentation!
    git
    shell_scripts
    phantom
+   pygames
 
 
 Indices and tables
