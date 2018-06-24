@@ -8,5 +8,5 @@ Some Git Notes
    
    git_start
    git_repo_change
-   git_contributing_to_project
+   git_contribution
 
