@@ -7,5 +7,6 @@ Some Git Notes
    :maxdepth: 2
    
    git_start
-   git_repo_change.rst
+   git_repo_change
+   git_contributing_to_project
 
