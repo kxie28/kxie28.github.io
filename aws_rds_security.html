@@ -1,0 +1,236 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS RDS Security &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AWS RDS Best Practices" href="aws_rds_best_practices.html" />
+    <link rel="prev" title="AWS RDS DB Snapshot, Backup and Restore" href="aws_rds_snapshot_backup.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_rds_best_practices.html" title="AWS RDS Best Practices"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aws_rds_snapshot_backup.html" title="AWS RDS DB Snapshot, Backup and Restore"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" accesskey="U">AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-rds-security">
+<h1>AWS RDS Security<a class="headerlink" href="#aws-rds-security" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>AWS RDS Security<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">AWS provides multiple features to provide RDS security</p>
+<blockquote>
+<div><ul class="simple">
+<li>DB instance can be hosted in a VPC for the greatest possible network access control</li>
+<li>IAM policies can be used to assign permissions that determine who is allowed to manage RDS resources</li>
+<li>Security groups allow to control what IP addresses or EC2 instances can connect to the databases on a DB instance</li>
+<li>Secure Socket Layer (SSL) connections with DB instances</li>
+<li>RDS encryption to secure RDS instances and snapshots at rest.</li>
+<li>Network encryption and transparent data encryption (TDE) with Oracle DB instances</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="rds-authentication-and-access-control">
+<h2>RDS Authentication and Access Control<a class="headerlink" href="#rds-authentication-and-access-control" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>IAM can be used to control which RDS operations each individual user has permission to call</li>
+</ul>
+</div>
+<div class="section" id="encrypting-rds-resources">
+<h2>Encrypting RDS Resources<a class="headerlink" href="#encrypting-rds-resources" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">RDS encrypted instances use the industry standard AES-256 encryption algorithm to encrypt data on the server that hosts the RDS instance</p>
+</li>
+<li><p class="first">RDS then handles authentication of access and decryption of this data with a minimal impact on performance, and with no need to modify your database client applications</p>
+</li>
+<li><p class="first">Data at Rest Encryption</p>
+<blockquote>
+<div><ul class="simple">
+<li>can be enabled on RDS instances to encrypt the underlying storage</li>
+<li>encryption keys are managed by KMS</li>
+<li>can be enabled only during instance creation</li>
+<li>once enabled, the encryption keys cannot be changed</li>
+<li>if the key is lost, the DB can only be restored from the backup</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Once encryption is enabled for an RDS instance,</p>
+<blockquote>
+<div><ul class="simple">
+<li>logs are encrypted</li>
+<li>snapshots are encrypted</li>
+<li>automated backups are encrypted</li>
+<li>read replicas are encrypted</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Cross region replicas and snapshots copy does not work since the key is only available in a single region</p>
+</li>
+<li><p class="first">RDS DB Snapshot considerations</p>
+<blockquote>
+<div><ul class="simple">
+<li>DB snapshot encrypted using an KMS encryption key can be copied</li>
+<li>Copying an encrypted DB snapshot, results in an encrypted copy of the DB snapshot</li>
+<li>When copying, DB snapshot can either be encrypted with the same KMS encryption key as the original DB snapshot, or a different KMS encryption key to encrypt the copy of the DB snapshot.</li>
+<li>An unencrypted DB snapshot can be copied to an encrypted snapshot, a quick way to add encryption to a previously unencrypted DB instance.</li>
+<li>Encrypted snapshot can be restored only to an encrypted DB instance</li>
+<li>If a KMS encryption key is specified when restoring from an unencrypted DB cluster snapshot, the restored DB cluster is encrypted using the specified KMS encryption key</li>
+<li>Copying an encrypted snapshot shared from another AWS account, requires access to the KMS encryption key used to encrypt the DB snapshot.</li>
+<li>Because KMS encryption keys are specific to the region that they are created in, encrypted snapshot cannot be copied to another region</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Transparent Data Encryption (TDE)</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Automatically encrypts the data before it is written to the underlying storage device and decrypts when it is read  from the storage device</p>
+</li>
+<li><p class="first">is supported by Oracle and SQL Server</p>
+<blockquote>
+<div><ul class="simple">
+<li>Oracle requires key storage outside of the KMS and integrates with CloudHSM for this</li>
+<li>SQL Server requires a key but is managed by RDS</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="ssl-to-encrypt-a-connection-to-a-db-instance">
+<h2>SSL to Encrypt a Connection to a DB Instance<a class="headerlink" href="#ssl-to-encrypt-a-connection-to-a-db-instance" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Encrypt connections using SSL for data in transit between the applications and the DB instance</li>
+<li>Amazon RDS creates an SSL certificate and installs the certificate on the DB instance when RDS provisions the instance.</li>
+<li>SSL certificates are signed by a certificate authority. SSL certificate includes the DB instance endpoint as the Common Name (CN) for the SSL certificate to guard against spoofing attacks</li>
+<li>While SSL offers security benefits, be aware that SSL encryption is a compute-intensive operation and will increase the latency of the database connection.</li>
+</ul>
+</div>
+<div class="section" id="rds-security-groups">
+<h2>RDS Security Groups<a class="headerlink" href="#rds-security-groups" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Security groups control the access that traffic has in and out of a DB instance</li>
+<li>VPC security groups act like a firewall controlling network access to your DB instance.</li>
+<li>VPC security groups can be configured and associated with the DB instance to allow access from an IP address range, port, or EC2 security group</li>
+<li>Database security groups default to a “deny all” access mode and customers must specifically authorize network ingress.</li>
+</ul>
+</div>
+<div class="section" id="master-user-account-privileges">
+<h2>Master User Account Privileges<a class="headerlink" href="#master-user-account-privileges" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>When you create a new DB instance, the default master user that used gets certain privileges for that DB instance</li>
+<li>Subsequently, other users with permissions can be created</li>
+</ul>
+</div>
+<div class="section" id="event-notification">
+<h2>Event Notification<a class="headerlink" href="#event-notification" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Event notifications can be configured for important events that occur on the DB instance</li>
+<li>Notifications of a variety of important events that can occur on the RDS instance, such as whether the instance was shut down, a backup was started, a failover occurred, the security group was changed, or your storage space is low can be received</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS RDS Security</a><ul>
+<li><a class="reference internal" href="#id1">AWS RDS Security</a></li>
+<li><a class="reference internal" href="#rds-authentication-and-access-control">RDS Authentication and Access Control</a></li>
+<li><a class="reference internal" href="#encrypting-rds-resources">Encrypting RDS Resources</a></li>
+<li><a class="reference internal" href="#ssl-to-encrypt-a-connection-to-a-db-instance">SSL to Encrypt a Connection to a DB Instance</a></li>
+<li><a class="reference internal" href="#rds-security-groups">RDS Security Groups</a></li>
+<li><a class="reference internal" href="#master-user-account-privileges">Master User Account Privileges</a></li>
+<li><a class="reference internal" href="#event-notification">Event Notification</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_rds_snapshot_backup.html"
+                        title="previous chapter">AWS RDS DB Snapshot, Backup and Restore</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aws_rds_best_practices.html"
+                        title="next chapter">AWS RDS Best Practices</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_rds_security.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_rds_best_practices.html" title="AWS RDS Best Practices"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aws_rds_snapshot_backup.html" title="AWS RDS DB Snapshot, Backup and Restore"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" >AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

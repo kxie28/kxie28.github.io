@@ -1,0 +1,248 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS RDS Best Practices &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS RDS Security" href="aws_rds_security.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_rds_security.html" title="AWS RDS Security"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" accesskey="U">AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-rds-best-practices">
+<h1>AWS RDS Best Practices<a class="headerlink" href="#aws-rds-best-practices" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="amazon-rds-basic-operational-guidelines">
+<h2>Amazon RDS Basic Operational Guidelines<a class="headerlink" href="#amazon-rds-basic-operational-guidelines" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first"><strong>Monitoring</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Memory, CPU, and storage usage should be monitored.</li>
+<li>CloudWatch can be setup for notifications when usage patterns change or when the capacity of deployment is approached, so that system performance and availability can be maintained</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Scaling</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Scale up the DB instance when approaching storage capacity limits.</li>
+<li>There should be some buffer in storage and memory to accommodate unforeseen increases in demand from the applications.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Backups</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">Enable Automatic Backups and set the backup window to occur during the daily low in WriteIOPS.</p>
+</li>
+<li><p class="first">On a MySQL DB instance,</p>
+<blockquote>
+<div><ul class="simple">
+<li>Do not create more than 10,000 tables using Provisioned IOPS or 1000 tables using standard storage. Large numbers of tables will significantly increase database recovery time after a failover or database crash. If you need to create more tables than recommended, set the innodb_file_per_table parameter to 0.</li>
+<li>Avoid tables in the database growing too large. Provisioned storage limits restrict the maximum size of a MySQL table file to 6 TB. Instead, partition the large tables so that file sizes are well under the 6 TB limit. This can also improve performance and recovery time.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Performance</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">If the database workload requires more I/O than provisioned, recovery after a failover or database failure will be slow.</p>
+</li>
+<li><p class="first">To increase the I/O capacity of a DB instance,</p>
+<blockquote>
+<div><ul class="simple">
+<li>Migrate to a DB instance class with High I/O capacity.</li>
+<li>Convert from standard storage to Provisioned IOPS storage, and use a DB instance class that is optimized for Provisioned IOPS.</li>
+<li>if using Provisioned IOPS storage, provision additional throughput capacity.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Multi-AZ &amp; Failover</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">Deploy applications in all Availability Zones, so if an AZ goes down, applications in other AZs will still be available.</p>
+</li>
+<li><p class="first">Use Amazon RDS DB events to monitor failovers.</p>
+</li>
+<li><p class="first">Set a TTL of less than 30 seconds, if the client application is caching the DNS data of the DB instances. As the underlying IP address of a DB instance can change after a failover, caching the DNS data for an extended time can lead to connection failures if the application tries to connect to an IP address that no longer is in service.</p>
+</li>
+<li><p class="first">Multi-AZ requires transaction logging feature to be enabled. Do not use features like Simple recover mode, offline mode or Read-only mode which turn of transaction logging.</p>
+</li>
+<li><p class="first">To shorten failover time</p>
+<blockquote>
+<div><ul class="simple">
+<li>Ensure that sufficient Provisioned IOPS allocated for your workload. Inadequate I/O can lengthen failover times. Database recovery requires I/O.</li>
+<li>Use smaller transactions. Database recovery relies on transactions, so break up large transactions into multiple smaller transactions to shorten failover time</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Test failover for your DB instance to understand how long the process takes for your use case and to ensure that the application that accesses your DB instance can automatically connect to the new DB instance after failover.</p>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="db-instance-ram-recommendations">
+<h2>DB Instance RAM Recommendations<a class="headerlink" href="#db-instance-ram-recommendations" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>An Amazon RDS performance best practice is to allocate enough RAM so that the working set resides almost completely in memory.</li>
+<li>Value of ReadIOPS should be small and stable.</li>
+<li>ReadIOPS metric can be checked, using AWS CloudWatch while the DB instance is under load, to tell if the working set is almost all in memory</li>
+<li>If scaling up the DB instance class with more RAM, results in a dramatic drop in ReadIOPS, the working set was not almost completely in memory.</li>
+<li>Continue to scale up until ReadIOPS no longer drops dramatically after a scaling operation, or ReadIOPS is reduced to a very small amount.</li>
+</ul>
+</div>
+<div class="section" id="amazon-rds-security-best-practices">
+<h2>Amazon RDS Security Best Practices<a class="headerlink" href="#amazon-rds-security-best-practices" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Do not use AWS root credentials to manage Amazon RDS resources; and IAM users should be created for everyone,</li>
+<li>Grant each user the minimum set of permissions required to perform his or her duties.</li>
+<li>Use IAM groups to effectively manage permissions for multiple users.</li>
+<li>Rotate your IAM credentials regularly.</li>
+</ul>
+</div>
+<div class="section" id="using-enhanced-monitoring-to-identify-operating-system-issues">
+<h2>Using Enhanced Monitoring to Identify Operating System Issues<a class="headerlink" href="#using-enhanced-monitoring-to-identify-operating-system-issues" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Amazon RDS provides metrics in real time for the operating system (OS) that your DB instance runs on.</li>
+<li>Enhanced monitoring is available for all DB instance classes except for db.t1.micro and db.m1.small.</li>
+</ul>
+</div>
+<div class="section" id="using-metrics-to-identify-performance-issues">
+<h2>Using Metrics to Identify Performance Issues<a class="headerlink" href="#using-metrics-to-identify-performance-issues" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>To identify performance issues caused by insufficient resources and other common bottlenecks, you can monitor the metrics available for your Amazon RDS DB instance</li>
+<li>Performance metrics should be monitored on a regular basis to benchmark  the average, maximum, and minimum values for a variety of time ranges. to help identify performance degradation.</li>
+<li>Amazon CloudWatch alarms can be set for particular metric thresholds to be alerted when they are reached or breached</li>
+<li>A DB instance has a number of different categories of metrics which includes CPU, memory, disk space, IOPS, db connections and network traffic, and how to determine acceptable values depends on the metric.</li>
+<li>One of the best ways to improve DB instance performance is to tune the most commonly used and most resource-intensive queries to make them less expensive to run.</li>
+</ul>
+</div>
+<div class="section" id="recovery">
+<h2>Recovery<a class="headerlink" href="#recovery" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first"><strong>MySQL</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>InnoDB is the recommended and supported storage engine for MySQL DB instances on Amazon RDS.</li>
+<li>However, MyISAM performs better than InnoDB if you require intense, full-text search capability.</li>
+<li>Point-In-Time Restore and snapshot restore features of Amazon RDS for MySQL require a crash-recoverable storage engine and are supported for the InnoDB storage engine only.</li>
+<li>Although MySQL supports multiple storage engines with varying capabilities, not all of them are optimized for crash recovery and data durability.</li>
+<li>MyISAM storage engine does not support reliable crash recovery and might prevent a Point-In-Time Restore or snapshot restore from working as intended which might result in lost or corrupt data when MySQL is restarted after a crash.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>MariaDB</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>XtraDB is the recommended and supported storage engine for MariaDB DB instances on Amazon RDS.</li>
+<li>Point-In-Time Restore and snapshot restore features of Amazon RDS for MariaDB require a crash-recoverable storage engine and are supported for the XtraDB storage engine only.</li>
+<li>Although MariaDB supports multiple storage engines with varying capabilities, not all of them are optimized for crash recovery and data durability.</li>
+<li>For e.g although Aria is a crash-safe replacement for MyISAM, it might still prevent a Point-In-Time Restore or snapshot restore from working as intended. This might result in lost or corrupt data when MariaDB is restarted after a crash.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS RDS Best Practices</a><ul>
+<li><a class="reference internal" href="#amazon-rds-basic-operational-guidelines">Amazon RDS Basic Operational Guidelines</a></li>
+<li><a class="reference internal" href="#db-instance-ram-recommendations">DB Instance RAM Recommendations</a></li>
+<li><a class="reference internal" href="#amazon-rds-security-best-practices">Amazon RDS Security Best Practices</a></li>
+<li><a class="reference internal" href="#using-enhanced-monitoring-to-identify-operating-system-issues">Using Enhanced Monitoring to Identify Operating System Issues</a></li>
+<li><a class="reference internal" href="#using-metrics-to-identify-performance-issues">Using Metrics to Identify Performance Issues</a></li>
+<li><a class="reference internal" href="#recovery">Recovery</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_rds_security.html"
+                        title="previous chapter">AWS RDS Security</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_rds_best_practices.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_rds_security.html" title="AWS RDS Security"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" >AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
