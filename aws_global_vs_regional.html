@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Global vs. Regional vs. AZ resources &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Amazon Web Services" href="aws.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws.html" title="Amazon Web Services"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-global-vs-regional-vs-az-resources">
+<h1>AWS Global vs. Regional vs. AZ resources<a class="headerlink" href="#aws-global-vs-regional-vs-az-resources" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="_images/AWS-Global-vs-Regional-vs-AZs.png"><img alt="alternate text" class="align-center" src="_images/AWS-Global-vs-Regional-vs-AZs.png" style="width: 650.0px; height: 450.0px;" /></a>
+<p>IAM</p>
+<ul>
+<li><p class="first">Users, Groups, Roles, Accounts – Global</p>
+<blockquote>
+<div><ul class="simple">
+<li>Same AWS accounts, users, groups and roles can be used in all regions</li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>Key Pairs – <strong>Global</strong> or Regional</dt>
+<dd><ul class="first last simple">
+<li>Amazon EC2 created key pairs are specific to the region</li>
+<li>RSA key pair can be created and uploaded that can be used in all regions</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Virtual Private Cloud</p>
+<ul>
+<li><p class="first">VPC – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>VPC are created within a region</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Subnet – <strong>Availability Zone</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Subnet can span only a single Availability Zone</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Security groups – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>A security group is tied to a region and can be assigned only to instances in the same region.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">VPC Endpoints – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>You cannot create an endpoint between a VPC and an AWS service in a different region.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">VPC Peering – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>VPC Peering can be performed across VPC in the same account of different AWS accounts but only within the same region. They cannot span across regions</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Elastic IP Address – Regional</p>
+<blockquote>
+<div><ul class="simple">
+<li>Elastic IP address created within the region can be assigned to instances within the region only</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>EC2</p>
+<ul>
+<li><p class="first">Resource Identifiers – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Each resource identifier, such as an AMI ID, instance ID, EBS volume ID, or EBS snapshot ID, is tied to its region and can be used only in the region where you created the resource.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Instances – <strong>Availability Zone</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>An instance is tied to the Availability Zones in which you launched it. However, note that its instance ID is tied to the region.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">EBS Volumes – <strong>Availability Zone</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Amazon EBS volume is tied to its Availability Zone and can be attached only to instances in the same Availability Zone.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">EBS Snapshot – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>An EBS snapshot is tied to its region and can only be used to create volumes in the same region and has to be copied from One region to other if needed</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AMIs – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>AMI provides templates to launch EC2 instances</li>
+<li>AMI is tied to the Region where its files are located with Amazon S3. For using AMI in different regions, the AMI can be copied to other regions</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Auto Scaling – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Auto Scaling spans across multiple Availability Zones within the same region but cannot span across regions</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Elastic Load Balancer – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Elastic Load Balancer distributes traffic across instances in multiple Availability Zones in the same region</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Placement Groups – <strong>Availability Zone</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Placement groups can be span across Instances within the same Availability Zones</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">S3 – Global but Data is Regional</p>
+<blockquote>
+<div><ul class="simple">
+<li>S3 buckets are created within the selected region</li>
+<li>Objects stored are replicated across Availability Zones to provide high durability but are not cross region replicated unless done explicitly</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Route53 – <strong>Global</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Route53 services are offered at AWS edge locations and are global</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">DynamoDb – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>All data objects are stored within the same region and replicated across multiple Availability Zones in the same region</li>
+<li>Data objects can be explicitly replicated across regions using cross-region replication</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">WAF – <strong>Global</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Web Application Firewall (WAF) services protects web applications from common web exploits are offered at AWS edge locations and are global</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">CloudFront – <strong>Global</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>CloudFront is the global content delivery network (CDN) services are offered at AWS edge locations</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Storage Gateway – <strong>Regional</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>AWS Storage Gateway stores volume, snapshot, and tape data in the AWS region in which the gateway is activated</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws.html"
+                        title="previous chapter">Amazon Web Services</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_global_vs_regional.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws.html" title="Amazon Web Services"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
