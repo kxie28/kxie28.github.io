@@ -1,0 +1,260 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS RDS Storage &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS RDS Replication - Multi-AZ and Read Replica" href="aws_rds_multi-az.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_rds_multi-az.html" title="AWS RDS Replication - Multi-AZ and Read Replica"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" accesskey="U">AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-rds-storage">
+<h1>AWS RDS Storage<a class="headerlink" href="#aws-rds-storage" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>RDS storage uses Elastic Block Store (EBS) volumes for database and log storage.</li>
+<li>RDS automatically stripes across multiple EBS volumes to enhance IOPS performance, depending on the amount of storage requested</li>
+</ul>
+<div class="section" id="rds-storage-types">
+<h2>RDS Storage Types<a class="headerlink" href="#rds-storage-types" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>RDS storage provides three storage types: Magnetic, General Purpose (SSD), and Provisioned IOPS (input/output operations per second).</li>
+<li>These storage types differ in performance characteristics and price, which allows tailoring of storage performance and cost to the database needs</li>
+<li>MySQL, MariaDB, PostgreSQL, and Oracle RDS DB instances can be created with up to 6TB of storage and SQL Server RDS DB instances with up to 4TB of storage when using the Provisioned IOPS and General Purpose (SSD) storage types.</li>
+<li>Existing MySQL, PostgreSQL, and Oracle RDS database instances can be scaled to these new database storage limits without any downtime.</li>
+</ul>
+</div>
+<div class="section" id="magnetic-standard">
+<h2>Magnetic (Standard)<a class="headerlink" href="#magnetic-standard" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Magnetic storage, also called standard storage, offers cost-effective storage that is ideal for applications with light or burst I/O requirements.</li>
+<li>They deliver approximately 100 IOPS on average, with burst capability of up to hundreds of IOPS, and they can range in size from 5 GB to 3 TB, depending on the DB instance engine.</li>
+<li>Magnetic storage is not reserved for a single DB instance, so performance can vary greatly depending on the demands placed on shared resources by other customers.</li>
+</ul>
+</div>
+<div class="section" id="general-purpose-ssd">
+<h2>General Purpose (SSD)<a class="headerlink" href="#general-purpose-ssd" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>General purpose, SSD-backed storage, also called gp2, can provide faster access than disk-based storage.</li>
+<li>They can deliver single-digit millisecond latencies, with a base performance of 3 IOPS per Gigabyte (GB) and the ability to burst to 3,000 IOPS for extended periods of time up to a maximum of 10,000 PIOPS.</li>
+<li>Gp2 volumes can range in size from 5 GB to 6 TB for MySQL, MariaDB, PostgreSQL, and Oracle DB instances, and from 20 GB to 4 TB for SQL Server DB instances.</li>
+<li>Gp2 is excellent for small to medium-sized databases.</li>
+</ul>
+</div>
+<div class="section" id="provisioned-iops">
+<h2>Provisioned IOPS<a class="headerlink" href="#provisioned-iops" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Provisioned IOPS storage is designed to meet the needs of I/O-intensive workloads, particularly database workloads, that are sensitive to storage performance and consistency in random access I/O throughput.</li>
+<li>Provisioned IOPS storage is a storage type that delivers fast, predictable, and consistent throughput performance.</li>
+<li>For any production application that requires fast and consistent I/O performance, Amazon recommends Provisioned IOPS (input/output operations per second) storage.</li>
+<li>Provisioned IOPS storage is optimized for I/O intensive, online transaction processing (OLTP) workloads that have consistent performance requirements.</li>
+<li>Provisioned IOPS helps performance tuning.</li>
+<li>Provisioned IOPS volumes can range in size from 100 GB to 6 TB for MySQL, MariaDB, PostgreSQL, and Oracle DB engines. SQL Server Express and Web editions can range in size from 100 GB to 4 TB, while SQL Server Standard and Enterprise editions can range in size from 200 GB to 4 TB.</li>
+<li>Dedicated IOPS rate and storage space allocation is specified, when a DB instance is created. RDS provisions that IOPS rate and storage for the lifetime of the DB instance or until its changed.</li>
+<li>RDS delivers within 10 percent of the provisioned IOPS performance 99.9 percent of the time over a given year.</li>
+</ul>
+</div>
+<div class="section" id="adding-storage-and-changing-storage-type">
+<h2>Adding Storage and Changing Storage Type<a class="headerlink" href="#adding-storage-and-changing-storage-type" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>DB instance can be modified to use additional storage and converted to a different storage type.</li>
+<li><strong>However, storage allocated for a DB instance cannot be decreased</strong></li>
+<li>MySQL, MariaDB, PostgreSQL, and Oracle DB instances can be scaled up for storage, which helps improve I/O capacity.</li>
+<li><strong>Storage capacity nor the type of storage for a SQL Server DB instance can be changed due to extensibility limitations of striped storage attached to a Windows Server environment.</strong></li>
+<li>During the scaling process, the DB instance will be available for reads and writes, but may experience performance degradation</li>
+<li>Adding storage may take several hours; the duration of the process depends on several factors such as load, storage size, storage type, amount of IOPS provisioned (if any), and number of prior scale storage operations.</li>
+<li>While storage is being added, nightly backups are suspended and no other RDS operations can take place, including modify, reboot, delete, create Read Replica, and create DB Snapshot</li>
+</ul>
+</div>
+<div class="section" id="performance-metrics">
+<h2>Performance Metrics<a class="headerlink" href="#performance-metrics" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Amazon RDS provides several metrics that can be used to determine how the DB instance is performing.</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><strong>IOPS</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>the number of I/O operations completed per second.</li>
+<li>it is reported as the average IOPS for a given time interval.</li>
+<li>RDS reports read and write IOPS separately on one minute intervals.</li>
+<li>Total IOPS is the sum of the read and write IOPS.</li>
+<li>Typical values for IOPS range from zero to tens of thousands per second.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Latency</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>the elapsed time between the submission of an I/O request and its completion</li>
+<li>it is reported as the average latency for a given time interval.</li>
+<li>RDS reports read and write latency separately on one minute intervals in units of seconds.</li>
+<li>Typical values for latency are in the millisecond (ms)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Throughput</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>the number of bytes per second transferred to or from disk</li>
+<li>it is reported as the average throughput for a given time interval.</li>
+<li>RDS reports read and write throughput separately on one minute intervals using units of megabytes per second (MB/s).</li>
+<li>Typical values for throughput range from zero to the I/O channel’s maximum bandwidth.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Queue Depth</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>the number of I/O requests in the queue waiting to be serviced.</li>
+<li>these are I/O requests that have been submitted by the application but have not been sent to the device because the device is busy servicing other I/O requests.</li>
+<li>it is reported as the average queue depth for a given time interval.</li>
+<li>RDS reports queue depth in one minute intervals. Typical values for queue depth range from zero to several hundred.</li>
+<li>Time spent waiting in the queue is a component of Latency and</li>
+<li>Service Time (not available as a metric).</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="amazon-rds-storage-facts">
+<h2>Amazon RDS Storage Facts<a class="headerlink" href="#amazon-rds-storage-facts" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>First time a DB instance is started and accesses an area of disk for the first time, the process can take longer than all subsequent accesses to the same disk area. This is known as the “first touch penalty”. Once an area of disk has incurred the first touch penalty, that area of disk does not incur the penalty again for the life of the instance, even if the DB instance is rebooted, restarted, or the DB instance class changes. Note that a DB instance created from a snapshot, a point-in-time restore, or a read replica is a new instance and does incur this first touch penalty.</li>
+<li>RDS manages the DB instance and it reserves overhead space on the instance. While the amount of reserved storage varies by DB instance class and other factors, this reserved space can be as much as one or two percent of the total storage</li>
+<li>Provisioned IOPS provides a way to reserve I/O capacity by specifying IOPS. Like any other system capacity attribute, maximum throughput under load will be constrained by the resource that is consumed first, which could be IOPS, channel bandwidth, CPU, memory, or database internal resources.</li>
+<li>Current maximum channel bandwidth available is 4000 megabits per second (Mbps) full duplex. In terms of the read and write throughput metrics, this equates to about 210 megabytes per second (MB/s) in each direction. A perfectly balanced workload of 50% reads and 50% writes may attain a maximum combined throughput of 420 MB/s, which includes protocol overhead, so the actual data throughput may be less.</li>
+<li>Provisioned IOPS works with an I/O request size of 32 KB. Provisioned IOPS consumption is a linear function of I/O request size above 32 KB. An I/O request smaller than 32 KB is handled as one I/O; for e.g. 1000 16 KB I/O requests are treated the same as 1000 32 KB requests. I/O requests larger than 32 KB consume more than one I/O request; while, a 48 KB I/O request consumes 1.5 I/O requests of storage capacity; a 64 KB I/O request consumes 2 I/O requests</li>
+</ul>
+</div>
+<div class="section" id="factors-that-impact-storage-performance">
+<h2>Factors That Impact Storage Performance<a class="headerlink" href="#factors-that-impact-storage-performance" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Several factors can affect the performance of a DB instance, such as instance configuration, I/O characteristics, and workload demand.</p>
+</li>
+<li><p class="first">System related activities also consume I/O capacity and may reduce database instance performance while in progress:</p>
+<blockquote>
+<div><ul class="simple">
+<li>DB snapshot creation</li>
+<li>Nightly backups</li>
+<li>Multi-AZ peer creation</li>
+<li>Read replica creation</li>
+<li>Scaling storage</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">System resources can constrain the throughput of a DB instance, but there can be other reasons for a bottleneck. Database could be the issue if :-</p>
+<blockquote>
+<div><ul class="simple">
+<li>Channel throughput limit is not reached</li>
+<li>Queue depths are consistently low</li>
+<li>CPU utilization is under 80%</li>
+<li>Free memory available</li>
+<li>No swap activity</li>
+<li>Plenty of free disk space</li>
+<li>Application has dozens of threads all submitting transactions as fast as the database will take them, but there is clearly unused I/O capacity</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS RDS Storage</a><ul>
+<li><a class="reference internal" href="#rds-storage-types">RDS Storage Types</a></li>
+<li><a class="reference internal" href="#magnetic-standard">Magnetic (Standard)</a></li>
+<li><a class="reference internal" href="#general-purpose-ssd">General Purpose (SSD)</a></li>
+<li><a class="reference internal" href="#provisioned-iops">Provisioned IOPS</a></li>
+<li><a class="reference internal" href="#adding-storage-and-changing-storage-type">Adding Storage and Changing Storage Type</a></li>
+<li><a class="reference internal" href="#performance-metrics">Performance Metrics</a></li>
+<li><a class="reference internal" href="#amazon-rds-storage-facts">Amazon RDS Storage Facts</a></li>
+<li><a class="reference internal" href="#factors-that-impact-storage-performance">Factors That Impact Storage Performance</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_rds_multi-az.html"
+                        title="previous chapter">AWS RDS Replication - Multi-AZ and Read Replica</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_rds_storage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_rds_multi-az.html" title="AWS RDS Replication - Multi-AZ and Read Replica"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" >AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

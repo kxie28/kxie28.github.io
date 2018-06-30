@@ -1,0 +1,337 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS RDS Replication - Multi-AZ and Read Replica &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS Relational Database Service - RDS" href="aws_rds.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_rds.html" title="AWS Relational Database Service - RDS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" accesskey="U">AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-rds-replication-multi-az-and-read-replica">
+<h1>AWS RDS Replication - Multi-AZ and Read Replica<a class="headerlink" href="#aws-rds-replication-multi-az-and-read-replica" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="rds-multi-az-read-replica-overview">
+<h2>RDS Multi-AZ &amp; Read Replica Overview<a class="headerlink" href="#rds-multi-az-read-replica-overview" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">DB instances replicas can be created in two ways Multi-AZ &amp; Read Replica</p>
+</li>
+<li><p class="first"><strong>Multi-AZ deployment</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">Multi-AZ deployment provides high availability and failover support</p>
+</li>
+<li><p class="first">RDS automatically provisions and manages a synchronous standby replica in a different AZ (independent infrastructure in a physically separate location)</p>
+</li>
+<li><p class="first">RDS automatically fails over to the standby so that database operations can resume quickly without administrative intervention in case of</p>
+<blockquote>
+<div><ul class="simple">
+<li>Planned database maintenance</li>
+<li>Software patching</li>
+<li>Rebooting of the Primary instance</li>
+<li>Primary DB instance connectivity or host failure, or an</li>
+<li>Availability Zone failure</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Read Replica</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>RDS uses the PostgreSQL, MySQL, and MariaDB DB engines’ built-in replication functionality to create a special type of DB instance called a Read Replica from a source DB instance.</li>
+<li>Load on the source DB instance can be reduced by routing read queries from applications to the Read Replica.</li>
+<li>Read Replicas allow elastic scaling beyond the capacity constraints of a single DB instance for read-heavy database workloads</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="multi-az-deployment">
+<h2>Multi-AZ deployment<a class="headerlink" href="#multi-az-deployment" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Multi-AZ deployments provides high availability and automatic failover support for DB instances</p>
+</li>
+<li><p class="first">Multi-AZ helps improve the durability and availability of a critical system, enhancing availability during planned system maintenance, DB instance failure and Availability Zone disruption.</p>
+</li>
+<li><p class="first">Multi-AZ is a High Availability feature is not a scaling solution for read-only scenarios; standby replica can’t be used to serve read traffic. To service read-only traffic, use a Read Replica.</p>
+</li>
+<li><p class="first">Multi-AZ deployments for Oracle, PostgreSQL, MySQL, and MariaDB DB instances use Amazon technology, while SQL Server DB instances use SQL Server Mirroring.</p>
+</li>
+<li><p class="first">In a Multi-AZ deployment,</p>
+<blockquote>
+<div><ul>
+<li><p class="first">RDS automatically provisions and maintains a <strong>synchronous standby replica in a different Availability Zone.</strong></p>
+</li>
+<li><p class="first">Copies of data are stored in different Availability Zones for greater levels of data durability.</p>
+</li>
+<li><p class="first">Primary DB instance is <strong>synchronously replicated</strong> across Availability Zones to a standby replica to provide</p>
+<blockquote>
+<div><ul class="simple">
+<li>data redundancy,</li>
+<li>eliminate I/O freezes during snapshots and backups</li>
+<li>and minimize latency spikes during system backups.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">DB instances may have increased write and commit latency compared to a Single AZ deployment, due to the synchronous data replication</p>
+</li>
+<li><p class="first">Transaction success is returned only if the commit is successful both on the primary and the standby DB</p>
+</li>
+<li><p class="first">There might be a change in latency if the deployment fails over to the standby replica, although AWS is engineered with low-latency network connectivity between Availability Zones.</p>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">When using the BYOL licensing model, a license for both the primary instance and the standby replica is required</p>
+</li>
+<li><p class="first">For production workloads, it is recommended to use Multi-AZ deployment with Provisioned IOPS and DB instance classes (m1.large and larger), optimized for Provisioned IOPS for fast, consistent performance.</p>
+</li>
+<li><p class="first">When Single-AZ deployment is modified to a Multi-AZ deployment (for engines other than SQL Server or Amazon Aurora)</p>
+<blockquote>
+<div><ul class="simple">
+<li>RDS takes a snapshot of the primary DB instance from the deployment and restores the snapshot into another Availability Zone.</li>
+<li>RDS then sets up synchronous replication between the primary DB instance and the new instance.</li>
+<li>This avoids downtime when conversion from Single AZ to Multi-AZ</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="rds-multi-az-failover-process">
+<h2>RDS Multi-AZ Failover Process<a class="headerlink" href="#rds-multi-az-failover-process" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">In the event of a planned or unplanned outage of the DB instance,</p>
+<blockquote>
+<div><ul class="simple">
+<li>RDS automatically switches to a standby replica in another AZ, if enabled for Multi-AZ.</li>
+<li>Time it takes for the failover to complete depends on the database activity and other conditions at the time the primary DB instance became unavailable.</li>
+<li>Failover times are typically 60-120 secs. However, large transactions or a lengthy recovery process can increase failover time.</li>
+<li><strong>Failover mechanism automatically changes the DNS record of the DB instance to point to the standby DB instance.</strong></li>
+<li>Multi-AZ switch is seamless to the applications as there is no change in the endpoint URLs but just needs to re-establish any existing connections to the DB instance.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">RDS handles failover automatically so that database operations can be resumed as quickly as possible without administrative intervention.</p>
+</li>
+<li><p class="first">Primary DB instance switches over automatically to the standby replica if any of the following conditions occur:</p>
+<blockquote>
+<div><ul class="simple">
+<li>An Availability Zone outage</li>
+<li>Primary DB instance fails</li>
+<li>DB instance’s server type is changed</li>
+<li>Operating system of the DB instance is undergoing software patching</li>
+<li>A manual failover of the DB instance was initiated using <strong>Reboot with failover</strong> (also referred to as <strong>Forced Failover</strong>)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">If the Multi-AZ DB instance has failed over, can be determined by</p>
+<blockquote>
+<div><ul class="simple">
+<li>DB event subscriptions can be setup to notify you via email or SMS that a failover has been initiated.</li>
+<li>DB events can be viewed via the Amazon RDS console or APIs.</li>
+<li>Current state of your Multi-AZ deployment can be viewed via the RDS console and APIs.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="read-replica">
+<h2>Read Replica<a class="headerlink" href="#read-replica" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Amazon RDS uses the MySQL, MariaDB, and PostgreSQL (version 9.3.5 and later) DB engines’ built-in replication functionality to create a Read Replica from a source DB instance.</li>
+<li>Updates made to the source DB instance are asynchronously copied to the Read Replica.</li>
+<li>Load on the source DB instance can be reduced by routing read queries from the applications to the Read Replica.</li>
+<li>Using Read Replicas allow DB to elastically scale out beyond the capacity constraints of a single DB instance for read-heavy database workloads.</li>
+<li>Read Replica operates as a DB instance that allows read-only connections; applications can connect to a Read Replica the same way they would to any DB instance.</li>
+</ul>
+</div>
+<div class="section" id="read-replica-creation">
+<h2>Read Replica creation<a class="headerlink" href="#read-replica-creation" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Up to five Read Replicas can be created from one source DB instance.</p>
+</li>
+<li><p class="first">Creation process</p>
+<blockquote>
+<div><ul class="simple">
+<li>Automatic backups must be enabled on the source DB instance by setting the backup retention period to a value other than 0</li>
+<li>Existing DB instance needs to be specified as the source.</li>
+<li>RDS takes a snapshot of the source instance and creates a read-only instance from the snapshot.</li>
+<li>RDS then uses the <strong>asynchronous replication</strong> method for the DB engine to update the Read Replica for any changes to the source DB instance.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">RDS replicates all databases in the source DB instance.</p>
+</li>
+<li><p class="first">RDS sets up a secure communications channel between the source DB instance and the Read Replica, if that Read Replica is in a different AWS region from the DB instance.</p>
+</li>
+<li><p class="first">RDS establishes any AWS security configurations, such as adding security group entries, needed to enable the secure channel.</p>
+</li>
+<li><p class="first">During the Read Replica creation, a brief I/O suspension on the source DB instance can be experienced as the DB snapshot occurs.</p>
+</li>
+<li><p class="first"><strong>I/O suspension typically lasts about one minute and can be avoided if the source DB instance is a Multi-AZ deployment (in the case of Multi-AZ deployments, DB snapshots are taken from the standby).</strong></p>
+</li>
+<li><p class="first">Read Replica creation time can be slow if any long-running transactions are being executed and should wait for completion</p>
+</li>
+<li><p class="first">For multiple Read Replicas created in parallel from the same source DB instance, only one snapshot is taken at the start of the first create action.</p>
+</li>
+<li><p class="first">A Read Replica can be promoted to a new independent source DB, in which case the replication link is broken between the Read Replica and the source DB.  However, the replication continues for other replicas using the original source DB as the replication source</p>
+</li>
+</ul>
+</div>
+<div class="section" id="read-replica-deletion-db-failover">
+<h2>Read Replica Deletion &amp; DB Failover<a class="headerlink" href="#read-replica-deletion-db-failover" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Read Replicas must be explicitly deleted, using the same mechanisms for deleting a DB instance.</li>
+<li>If the source DB instance is deleted without deleting the replicas, each replica is promoted to a stand-alone, single-AZ DB instance.</li>
+<li>If the source instance of a Multi-AZ deployment fails over to the standby, any associated Read Replicas are switched to use the secondary as their replication source.</li>
+</ul>
+</div>
+<div class="section" id="read-replica-storage-compute-requirements">
+<h2>Read Replica Storage &amp; Compute requirements<a class="headerlink" href="#read-replica-storage-compute-requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>A Read Replica, by default, is created with the same storage type as the source DB instance.</li>
+<li>For replication to operate effectively, each Read Replica should have the same amount of compute &amp; storage resources as the source DB instance.</li>
+<li>Source DB instance, if scaled, Read Replicas should be scaled accordingly</li>
+</ul>
+</div>
+<div class="section" id="read-replica-features-limitations">
+<h2>Read Replica Features &amp; Limitations<a class="headerlink" href="#read-replica-features-limitations" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">RDS does not support circular replication.</p>
+</li>
+<li><p class="first">DB instance cannot be configured to serve as a replication source for an existing DB instance; a new Read Replica can be created only from an existing DB instance for e.g., if MyDBInstance replicates to ReadReplica1, ReadReplica1 can’t be configured to replicate back to MyDBInstance.  From ReadReplica1, only a new Read Replica can be created, such as ReadRep2.</p>
+</li>
+<li><p class="first">Cross-Region Replication</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><strong>MySQL, PostgresSQL</strong> (update from June 2016) or <strong>MariaDB Read Replica can be created in a different region</strong> than the source DB instance which helps to improve</p>
+<blockquote>
+<div><ul class="simple">
+<li>disaster recovery capabilities (reduces RTO and RPO),</li>
+<li>scale read operations into a region closer to end users,</li>
+<li>migration from a data center in one region to another region</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Read Replica can be created from other Read replicas as well. However, the replica lag is higher for these instances and there cannot be more than four instances involved in a replication chain.</p>
+</li>
+</ul>
+<a class="reference internal image-reference" href="_images/AWS-SQL-Behavior.png"><img alt="alternate text" class="align-center" src="_images/AWS-SQL-Behavior.png" style="width: 650.0px; height: 450.0px;" /></a>
+</div>
+<div class="section" id="read-replica-use-cases">
+<h2>Read Replica Use cases<a class="headerlink" href="#read-replica-use-cases" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Read Replicas can be used in variety of use cases, including:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Scaling beyond the compute or I/O capacity of a single DB instance for read-heavy database workloads, directing excess read traffic to Read Replica(s)</li>
+<li>Serving read traffic while the source DB instance is unavailable for e.g. If the source DB instance cannot take I/O requests due to backups I/O suspension or scheduled maintenance, the read traffic can be directed to the Read Replica(s). However, the data might be stale.</li>
+<li>Business reporting or data warehousing scenarios where business reporting queries can be executed against a Read Replica, rather than the primary, production DB instance.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS RDS Replication - Multi-AZ and Read Replica</a><ul>
+<li><a class="reference internal" href="#rds-multi-az-read-replica-overview">RDS Multi-AZ &amp; Read Replica Overview</a></li>
+<li><a class="reference internal" href="#multi-az-deployment">Multi-AZ deployment</a></li>
+<li><a class="reference internal" href="#rds-multi-az-failover-process">RDS Multi-AZ Failover Process</a></li>
+<li><a class="reference internal" href="#read-replica">Read Replica</a></li>
+<li><a class="reference internal" href="#read-replica-creation">Read Replica creation</a></li>
+<li><a class="reference internal" href="#read-replica-deletion-db-failover">Read Replica Deletion &amp; DB Failover</a></li>
+<li><a class="reference internal" href="#read-replica-storage-compute-requirements">Read Replica Storage &amp; Compute requirements</a></li>
+<li><a class="reference internal" href="#read-replica-features-limitations">Read Replica Features &amp; Limitations</a></li>
+<li><a class="reference internal" href="#read-replica-use-cases">Read Replica Use cases</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_rds.html"
+                        title="previous chapter">AWS Relational Database Service - RDS</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_rds_multi-az.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_rds.html" title="AWS Relational Database Service - RDS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" >AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
