@@ -1,0 +1,433 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Simple Store Service - S3 &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS Elastic Cloud Compute - EC2" href="aws_ec2.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_ec2.html" title="AWS Elastic Cloud Compute - EC2"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-simple-store-service-s3">
+<h1>AWS Simple Store Service - S3<a class="headerlink" href="#aws-simple-store-service-s3" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Amazon S3 is a simple key, value object store designed for the Internet</li>
+<li>S3 provides unlimited storage space and works on the pay as you use model. Service rates gets cheaper as the usage volume increases</li>
+<li>S3 is an Object level storage (not a Block level storage) and cannot be used to host OS or dynamic websites</li>
+<li>S3 resources for e.g. buckets and objects are private by default</li>
+</ul>
+<div class="section" id="s3-buckets-objects">
+<h2>S3 Buckets &amp; Objects<a class="headerlink" href="#s3-buckets-objects" title="Permalink to this headline">¶</a></h2>
+<p><strong>Buckets</strong></p>
+<ul>
+<li><p class="first">A bucket is a container for objects stored in S3 and help organize the S3 namespace.</p>
+</li>
+<li><p class="first">A bucket is owned by the AWS account that creates it and helps identify the account responsible for storage and data transfer charges. Bucket ownership is not transferable</p>
+</li>
+<li><p class="first">S3 bucket names are globally unique, regardless of the AWS region in which you create the bucket</p>
+</li>
+<li><p class="first">Even though S3 is a global service, buckets are created within a region specified during the creation of the bucket</p>
+</li>
+<li><p class="first">Every object is contained in a bucket</p>
+</li>
+<li><p class="first">There is no limit to the number of objects that can be stored in a bucket and no difference in performance whether you use many buckets to store your objects or a single bucket to store all your objects</p>
+</li>
+<li><p class="first">S3 data model is a flat structure i.e. there are no hierarchies or folders within the buckets. However, logical hierarchy can be inferred using the keyname prefix e.g. Folder1/Object1</p>
+</li>
+<li><p class="first">Restrictions</p>
+<blockquote>
+<div><ul class="simple">
+<li>100 buckets (soft limit) can be created in each of AWS account</li>
+<li>Bucket names should be globally unique and DNS compliant</li>
+<li>Bucket ownership is not transferable</li>
+<li>Buckets cannot be nested and cannot have bucket within another bucket</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">You can delete a empty or a non-empty bucket</p>
+</li>
+<li><p class="first">S3 allows retrieval of 1000 objects and provides pagination support</p>
+</li>
+</ul>
+<p><strong>Objects</strong></p>
+<ul>
+<li><p class="first">Objects are the fundamental entities stored in S3 bucket</p>
+</li>
+<li><p class="first">Object is uniquely identified within a bucket by a keyname and version ID</p>
+</li>
+<li><p class="first">Objects consist of object data, metadata and others</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>Key</strong> is object name</li>
+<li><strong>Value</strong> is data portion is opaque to S3</li>
+<li><strong>Metadata</strong> is the data about the data and is a set of name-value pairs that describe the object for e.g. content-type, size, last modified. Custom metadata can also be specified at the time the object is stored.</li>
+<li><strong>Version ID</strong> is the version id for the object and in combination with the key helps to unique identify an object within a bucket</li>
+<li><strong>Subresources</strong> helps provide additional information for an object</li>
+<li><strong>Access Control Information</strong> helps control access to the objects</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Metadata for an object cannot be modified after the object is uploaded and it can be only modified by performing the copy operation and setting the metadata</p>
+</li>
+<li><p class="first">Objects belonging to a bucket reside in a specific AWS region never leave that region, unless explicitly copied using Cross Region replication</p>
+</li>
+<li><p class="first">Object can be retrieved as a whole or a partially</p>
+</li>
+<li><p class="first">With Versioning enabled, you can retrieve current as well as pervious versions of an object</p>
+</li>
+</ul>
+</div>
+<div class="section" id="bucket-object-operations">
+<h2>Bucket &amp; Object Operations<a class="headerlink" href="#bucket-object-operations" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Listing</p>
+<blockquote>
+<div><ul class="simple">
+<li>S3 allows listing of all the keys within a bucket</li>
+<li>A single listing request would return a max of 1000 object keys with pagination support using an indicator in the response to indicate if the response was truncated</li>
+<li>Keys within a bucket can be listed using Prefix and Delimiter.</li>
+<li>Prefix limits results to only those keys (kind of filtering) that begin with the specified prefix, and delimiter causes list to roll up all keys that share a common prefix into a single summary list result.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Retrieval</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Object can be retrieved as a whole</p>
+</li>
+<li><p class="first">Object can be retrieved in parts or partially (specific range of bytes) by using the Range HTTP header.</p>
+</li>
+<li><p class="first">Range HTTP header is helpful</p>
+<blockquote>
+<div><ul class="simple">
+<li>if only partial object is needed for e.g. multiple files were uploaded as a single archive</li>
+<li>for fault tolerant downloads where the network connectivity is poor</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Objects can also be downloaded by sharing Pre-Signed urls</p>
+</li>
+<li><p class="first">Metadata of the object is returned in the response headers</p>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Object Uploads</p>
+<blockquote>
+<div><ul class="simple">
+<li>Single Operation – Objects of size 5GB can be uploaded in a single PUT operation</li>
+<li>Multipart upload – can be used for objects of size &gt; 5GB and supports max size of 5TB can is recommended for objects above size 100MB</li>
+<li>Pre-Signed URLs can also be used shared for uploading objects</li>
+<li>Uploading object if successful, can be verified if the request received a success response. Additionally, returned ETag can be compared to the calculated MD5 value of the upload object</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Copying Objects</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Copying of object up to 5GB can be performed using a single operation and multipart upload can be used for uploads up to 5TB</p>
+</li>
+<li><p class="first">When an object is copied</p>
+<blockquote>
+<div><ul class="simple">
+<li>user-controlled system metadata e.g. storage class and user-defined metadata are also copied.</li>
+<li>system controlled metadata e.g. the creation date etc is reset</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Copying Objects can be needed</p>
+<blockquote>
+<div><ul class="simple">
+<li>Create multiple object copies</li>
+<li>Copy object across locations</li>
+<li>Renaming of the objects</li>
+<li>Change object metadata for e.g. storage class, server-side encryption etc</li>
+<li><strong>Updating any metadata for an object requires all the metadata fields to be specified again</strong></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Deleting Objects</p>
+<blockquote>
+<div><ul>
+<li><p class="first">S3 allows deletion of a single object or multiple objects (max 1000) in a single call</p>
+</li>
+<li><p class="first">For Non Versioned buckets,</p>
+<blockquote>
+<div><ul class="simple">
+<li>the object key needs to be provided and object is permanently deleted</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">For Versioned buckets,</p>
+<blockquote>
+<div><ul class="simple">
+<li>if an object key is provided, S3 inserts a delete marker and the previous current object becomes non current object</li>
+<li>if an object key with a version ID is provided, the object is permanently deleted</li>
+<li>if the version ID is of the delete marker, the delete marker is removed and the previous non current version becomes the current version object</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Deletion can be MFA enabled for adding extra security</p>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Restoring Objects from Glacier</p>
+<blockquote>
+<div><ul class="simple">
+<li>Objects must be restored before you can access an archived object</li>
+<li>Restoration of an Object can take about 3 to 5 hours</li>
+<li>Restoration request also needs to specify the number of days for which the object copy needs to be maintained.</li>
+</ul>
+<p><a href="#id1"><span class="problematic" id="id2">*</span></a>During this period, the storage cost for both the archive and the copy is charged</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="pre-signed-urls">
+<h2>Pre-Signed URLs<a class="headerlink" href="#pre-signed-urls" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>All buckets and objects are by default private</li>
+<li>Pre-signed URLs allows user to be able to download or upload a specific object without requiring AWS security credentials or permissions</li>
+<li>Pre-signed URL allows anyone access to the object identified in the URL, provided the creator of the URL has permissions to access that object</li>
+<li>Creation of the pre-signed urls requires the creator to provide his security credentials, specify a bucket name, an object key, an HTTP method (GET for download object &amp; PUT of uploading objects), and expiration date and time</li>
+<li>Pre-signed urls are valid only till the expiration date &amp; time</li>
+</ul>
+</div>
+<div class="section" id="multipart-upload">
+<h2>Multipart Upload<a class="headerlink" href="#multipart-upload" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Multipart upload allows the user to upload a single object as a set of parts. Each part is a contiguous portion of the object’s data.</p>
+</li>
+<li><p class="first">Multipart uploads supports 1 to 10000 parts and each Part can be from 5MB to 5GB with last part size allowed to be less than 5MB</p>
+</li>
+<li><p class="first">Multipart uploads allows max upload size of 5TB (10000 parts * 5GB/part theoretically)</p>
+</li>
+<li><p class="first">Object parts can be uploaded independently and in any order. If transmission of any part fails, it can be retransmitted without affecting other parts.</p>
+</li>
+<li><p class="first">After all parts of the object are uploaded and complete initiated, S3 assembles these parts and creates the object.</p>
+</li>
+<li><p class="first">Using multipart upload provides the following advantages:</p>
+<blockquote>
+<div><p><a href="#id3"><span class="problematic" id="id4">*</span></a>Improved throughput – parallel upload of parts to improve throughput</p>
+<ul class="simple">
+<li>Quick recovery from any network issues – Smaller part size minimizes the impact of restarting a failed upload due to a network error.</li>
+<li>Pause and resume object uploads – Object parts can be uploaded over time. Once a multipart upload is initiated there is no expiry; you must explicitly complete or abort the multipart upload.</li>
+<li>Begin an upload before the final object size is known – an object can be uploaded as is it being created</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Three Step process</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><strong>Multipart Upload Initiation</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Initiation of a Multipart upload request to S3 returns a unique ID for each multipart upload.</li>
+<li>This ID needs to be provided for each part uploads, completion or abort request and listing of parts call.</li>
+<li>All the Object metadata required needs to be provided during the Initiation call</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Parts Upload</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Parts upload of objects can be performed using the unique upload ID</li>
+<li>A part number (between 1 – 10000) needs to be specified with each request which identifies each part and its position in the object</li>
+<li>If a part with the same part number is uploaded, the previous part would be overwritten</li>
+<li>After the part upload is successful, S3 returns an ETag header in the response which must be recorded along with the part number to be provided during the multipart completion request</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Multipart Upload Completion or Abort</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>On Multipart Upload Completion request, S3 creates an object by concatenating the parts in ascending order based on the part number and associates the metadata with the object</li>
+<li>Multipart Upload Completion request should include the unique upload ID with all the parts and the ETag information</li>
+<li>S3 response includes an ETag that uniquely identifies the combined object data</li>
+<li>On Multipart upload Abort request, the upload is aborted and all parts are removed. Any new part upload would fail. However, any in progress part upload is completed and hence and abort request must be sent after all the parts upload have been completed</li>
+<li>S3 should receive a multipart upload completion or abort request else it will not delete the parts and storage would be charged</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="virtual-hosted-style-vs-path-style-request">
+<h2>Virtual Hosted Style vs Path-Style Request<a class="headerlink" href="#virtual-hosted-style-vs-path-style-request" title="Permalink to this headline">¶</a></h2>
+<p>S3 allows the buckets and objects to be referred in Path-style or Virtual hosted-style URLs</p>
+</div>
+<div class="section" id="path-style">
+<h2>Path-style<a class="headerlink" href="#path-style" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Bucket name is not part of the domain (unless you use a region specific endpoint)</p>
+</li>
+<li><p class="first">the endpoint used must match the region in which the bucket resides</p>
+</li>
+<li><p class="first">for e.g, if you have a bucket called mybucket that resides in the EU (Ireland) region with object named puppy.jpg, the correct path-style syntax URI is <a class="reference external" href="http://s3-eu-west-1.amazonaws.com/mybucket/puppy.jpg">http://s3-eu-west-1.amazonaws.com/mybucket/puppy.jpg</a>.</p>
+</li>
+<li><p class="first">A “PermanentRedirect” error is received with an HTTP response code 301, and a message indicating what the correct URI is for the resource if a bucket is accessed outside the US East (N. Virginia) region with path-style syntax that uses either of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://s3.amazonaws.com">http://s3.amazonaws.com</a></li>
+</ul>
+<p><a href="#id5"><span class="problematic" id="id6">*</span></a>An endpoint for a region different from the one where the bucket resides. For example, if you use <a class="reference external" href="http://s3-eu-west-1.amazonaws.com">http://s3-eu-west-1.amazonaws.com</a> for a bucket that was created in the US West (N. California) region</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="virtual-hosted-style">
+<h2>Virtual hosted-style<a class="headerlink" href="#virtual-hosted-style" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">S3 supports virtual hosted-style and path-style access in all regions.</p>
+</li>
+<li><p class="first">In a virtual-hosted-style URL, the bucket name is part of the domain name in the URL</p>
+</li>
+<li><p class="first">for e.g. <a class="reference external" href="http://bucketname.s3.amazonaws.com/objectname">http://bucketname.s3.amazonaws.com/objectname</a></p>
+</li>
+<li><p class="first">S3 virtual hosting can be used to address a bucket in a REST API call by using the HTTP Host header</p>
+</li>
+<li><p class="first">Benefits</p>
+<blockquote>
+<div><ul class="simple">
+<li>attractiveness of customized URLs,</li>
+<li>provides an ability to publish to the “root directory” of the bucket’s virtual server. This ability can be important because many existing applications search for files in this standard location.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">S3 updates DNS to reroute the request to the correct location when a bucket is created in any region, which might take time.</p>
+</li>
+<li><p class="first">S3 routes any virtual hosted-style requests to the US East (N.Virginia) region, by default, if the US East (N. Virginia) endpoint s3.amazonaws.com is used, instead of the region-specific endpoint (for example, s3-eu-west-1.amazonaws.com) and S3 redirects it with HTTP 307 redirect to the correct region.</p>
+</li>
+<li><p class="first">When using virtual hosted-style buckets with SSL, the SSL wild card certificate only matches buckets that do not contain periods.To work around this, use HTTP or write your own certificate verification logic.</p>
+</li>
+<li><p class="first">If you make a request to the <a class="reference external" href="http://bucket.s3.amazonaws.com">http://bucket.s3.amazonaws.com</a> endpoint, the DNS has sufficient information to route your request directly to the region where your bucket resides.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="s3-pricing">
+<h2>S3 Pricing<a class="headerlink" href="#s3-pricing" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Amazon S3 costs vary by Region</p>
+</li>
+<li><p class="first">Charges in S3 are incurred for</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Storage – cost is per GB/month</p>
+</li>
+<li><p class="first">Requests – per request cost varies depending on the request type GET, PUT</p>
+</li>
+<li><p class="first">Data Transfer</p>
+<blockquote>
+<div><ul class="simple">
+<li>data transfer in is free</li>
+<li>data transfer out is charged per GB/month (except in the same region or to Amazon CloudFront)</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS Simple Store Service - S3</a><ul>
+<li><a class="reference internal" href="#s3-buckets-objects">S3 Buckets &amp; Objects</a></li>
+<li><a class="reference internal" href="#bucket-object-operations">Bucket &amp; Object Operations</a></li>
+<li><a class="reference internal" href="#pre-signed-urls">Pre-Signed URLs</a></li>
+<li><a class="reference internal" href="#multipart-upload">Multipart Upload</a></li>
+<li><a class="reference internal" href="#virtual-hosted-style-vs-path-style-request">Virtual Hosted Style vs Path-Style Request</a></li>
+<li><a class="reference internal" href="#path-style">Path-style</a></li>
+<li><a class="reference internal" href="#virtual-hosted-style">Virtual hosted-style</a></li>
+<li><a class="reference internal" href="#s3-pricing">S3 Pricing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_ec2.html"
+                        title="previous chapter">AWS Elastic Cloud Compute - EC2</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_s3.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_ec2.html" title="AWS Elastic Cloud Compute - EC2"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
