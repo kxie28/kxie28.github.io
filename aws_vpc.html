@@ -1,0 +1,354 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Virtual Private Cloud - VPC &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS Global vs. Regional vs. AZ resources" href="aws_global_vs_regional.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_global_vs_regional.html" title="AWS Global vs. Regional vs. AZ resources"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-virtual-private-cloud-vpc">
+<h1>AWS Virtual Private Cloud - VPC<a class="headerlink" href="#aws-virtual-private-cloud-vpc" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="vpc-overview-and-components">
+<h2>VPC Overview and Components<a class="headerlink" href="#vpc-overview-and-components" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">A virtual private cloud (VPC) is a virtual network dedicated to the AWS account. It is logically isolated from other virtual networks in the AWS cloud.</p>
+</li>
+<li><p class="first">VPC allows the user to select IP address range, create subnets, and configure route tables, network gateways, and security settings.</p>
+</li>
+<li><p class="first"><strong>VPC Sizing</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">VPC needs a set of IP addresses in the form of a Classless Inter-Domain Routing (CIDR) block for e.g, 10.0.0.0/16, which allows 2^16 (65536) IP address to be available</p>
+</li>
+<li><p class="first">Allowed CIDR block size is between</p>
+<blockquote>
+<div><ul class="simple">
+<li>/28 netmask (minimum with 2^4 – 16 available IP address) and</li>
+<li>/16 netmask (maximum with 2^16 – 65536 IP address)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">CIDR block from private (non-publicly routable) IP address can be assigned</p>
+<blockquote>
+<div><ul class="simple">
+<li>10.0.0.0 – 10.255.255.255 (10/8 prefix)</li>
+<li>172.16.0.0 – 172.31.255.255 (172.16/12 prefix)</li>
+<li>192.168.0.0 – 192.168.255.255 (192.168/16 prefix)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">It’s possible to specify a range of publicly routable IP addresses; however, direct access to the Internet is not currently supported from publicly routable CIDR blocks in a VPC</p>
+</li>
+<li><p class="first">You can now resize VPC. Read AWS blog post.</p>
+</li>
+<li><p class="first">VPC is separate from any other VPC created with the same CIDR block even if it resides within the same AWS account</p>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">VPC allows VPC Peering connections with other VPC within the same or different AWS accounts</p>
+</li>
+<li><p class="first">Connection between your VPC and corporate or home network can be established, however the CIDR blocks should be not be overlapping for e.g. VPC with CIDR 10.0.0.0/16 can communicate with 10.1.0.0/16 corporate network but the connections would be dropped if it tries to connect to 10.0.37.0/16 corporate network cause of overlapping ip addresses.</p>
+</li>
+<li><p class="first">VPC allows you to set tenancy option for the Instances launched in it. By default, the tenancy option is shared. If dedicated option selected, all the instances within it are launched on a dedicated hardware overriding the individual instance tenancy setting</p>
+</li>
+<li><p class="first">Deletion of the VPC is possible only after terminating all instances within the VPC, and deleting all the components with the VPC for e.g. subnets, security groups, network ACLs, route tables, Internet gateways, VPC peering connections, and DHCP options</p>
+</li>
+</ul>
+<a class="reference internal image-reference" href="_images/AWS-VPC-Components.png"><img alt="alternate text" class="align-center" src="_images/AWS-VPC-Components.png" style="width: 650.0px; height: 450.0px;" /></a>
+</div>
+<div class="section" id="ip-addresses">
+<h2>IP Addresses<a class="headerlink" href="#ip-addresses" title="Permalink to this headline">¶</a></h2>
+<p>Instances launched in the VPC can have Private, Public and Elastic IP address assigned to it and are properties of ENI (Network Interfaces)</p>
+<ul>
+<li><p class="first">Private IP Addresses</p>
+<blockquote>
+<div><ul class="simple">
+<li>Private IP addresses are not reachable over the Internet, and can be used for communication only between the instances within the VPC</li>
+<li>All instances are assigned a private IP address, within the IP address range of the subnet, to the default network interface</li>
+<li>Primary IP address is associated with the network interface for its lifetime, even when the instance is stopped and restarted and is released only when the instance is terminated</li>
+<li>Additional Private IP addresses, known as secondary private IP address, can be assigned to the instances and these can be reassigned from one network interface to another</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Public IP address</p>
+<blockquote>
+<div><ul class="simple">
+<li>Public IP addresses are reachable over the Internet, and can be used for communication between instances and the Internet, or with other AWS services that have public endpoints</li>
+<li>Public IP address assignment to the Instance depends if the Public IP Addressing is enabled for the Subnet.</li>
+<li>Public IP address can also be assigned to the Instance by enabling the Public IP addressing during the creation of the instance, which overrides the subnet’s public IP addressing attribute</li>
+<li>Public IP address is assigned from AWS pool of IP addresses and it is not associated with the AWS account and hence is released when the instance is stopped and restarted or terminated.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Elastic IP address</p>
+<blockquote>
+<div><ul class="simple">
+<li>Elastic IP addresses are static, persistent public IP addresses which can be associated and disassociated with the instance, as required</li>
+<li>Elastic IP address is allocated at an VPC and owned by the account unless released</li>
+<li>A Network Interface can be assigned either a Public IP or an Elastic IP. If you assign an instance, already having an Public IP, an Elastic IP, the public IP is released</li>
+<li>Elastic IP addresses can be moved from one instance to another, which can be within the same or different VPC within the same account</li>
+<li>Elastic IP are charged for non usage i.e. if it is not associated or associated with a stopped instance or an unattached Network Interface</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="elastic-network-interface-eni">
+<h2>Elastic Network Interface (ENI)<a class="headerlink" href="#elastic-network-interface-eni" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Each Instance is attached with default elastic network interface (Primary Network Interface eth0) and cannot be detached from the instance</p>
+</li>
+<li><p class="first">ENI can include the following attributes</p>
+<blockquote>
+<div><ul class="simple">
+<li>Primary private IP address</li>
+<li>One or more secondary private IP addresses</li>
+<li>One Elastic IP address per private IP address</li>
+<li>One public IP address, which can be auto-assigned to the network interface for eth0 when you launch an instance, but only when you create a network interface for eth0 instead of using an existing ENI</li>
+<li>One or more security groups</li>
+<li>A MAC address</li>
+<li>A source/destination check flag</li>
+<li>A description</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">ENI’s attributes follow the ENI as it is attached or detached from an instance and reattached to another instance. When an ENI is moved from one instance to another, network traffic is redirected to the new instance.</p>
+</li>
+<li><p class="first">Multiple ENIs can be attached to an instance and is useful for use cases:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Create a management network.</li>
+<li>Use network and security appliances in your VPC.</li>
+<li>Create dual-homed instances with workloads/roles on distinct subnets.</li>
+<li>Create a low-budget, high-availability solution.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="route-tables">
+<h2>Route Tables<a class="headerlink" href="#route-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Route table defines rules, termed as routes, which determine where network traffic from the subnet would be routed</li>
+<li>Each VPC has a implicit router to route network traffic</li>
+<li>Each VPC has a Main Route table, and can have multiple custom route tables created</li>
+<li>Each Subnet within a VPC must be associated with a single route table at a time, while a route table can have multiple subnets associated with it</li>
+<li>Subnet, if not explicitly associated to a route table, is implicitly associated with the main route table</li>
+<li>Every route table contains a local route that enables communication within a VPC which cannot be modified or deleted</li>
+<li>Route priority is decided by matching the most specific route in the route table that matches the traffic</li>
+<li>Route tables needs to be updated to defined routes for Internet gateways, Virtual Private gateways, VPC Peering, VPC Endpoints, NAT Device etc.</li>
+</ul>
+</div>
+<div class="section" id="internet-gateways-igw">
+<h2>Internet Gateways – IGW<a class="headerlink" href="#internet-gateways-igw" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">An Internet gateway is a horizontally scaled, redundant, and highly available VPC component that allows communication between instances in the VPC and the Internet.</p>
+</li>
+<li><p class="first">IGW imposes no availability risks or bandwidth constraints on the network traffic.</p>
+</li>
+<li><p class="first">An Internet gateway serves two purposes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>To provide a target in the VPC route tables for Internet-routable traffic,</li>
+<li>To perform network address translation (NAT) for instances that have been assigned public IP addresses.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Enabling Internet access to an Instance requires</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Attaching Internet gateway to the VPC</li>
+<li>Subnet should have route tables associated with the route pointing to the Internet gateway</li>
+<li>Instances should have a Public IP or Elastic IP address assigned</li>
+<li>Security groups and NACLs associated with the Instance should allow relevant traffic</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="nat">
+<h2>NAT<a class="headerlink" href="#nat" title="Permalink to this headline">¶</a></h2>
+<p>NAT device enables instances in a private subnet to connect to the Internet or other AWS services, but prevents the Internet from initiating connections with the instances.</p>
+</div>
+<div class="section" id="vpc-security">
+<h2>VPC Security<a class="headerlink" href="#vpc-security" title="Permalink to this headline">¶</a></h2>
+<p>Security within a VPC is provided through</p>
+<ul class="simple">
+<li>Security groups – Act as a firewall for associated EC2 instances, controlling both inbound and outbound traffic at the instance level</li>
+<li>Network access control lists (ACLs) – Act as a firewall for associated subnets, controlling both inbound and outbound traffic at the subnet level</li>
+<li>Flow logs – Capture information about the IP traffic going to and from network interfaces in your VPC</li>
+</ul>
+</div>
+<div class="section" id="flow-logs">
+<h2>Flow logs<a class="headerlink" href="#flow-logs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>VPC Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in the VPC and can help in monitoring the traffic or troubleshooting any connectivity issues</li>
+<li>Flow log data is stored using Amazon CloudWatch Logs</li>
+<li>Flow log can be created for the entire VPC, subnets or each network interface. If enabled, for entire VPC or subnet all the network interfaces are monitored</li>
+<li>Flow logs do not capture real-time log streams for network interfaces.</li>
+<li>Flow logs can be created for network interfaces that are created by other AWS services; for example, Elastic Load Balancing, RDS, ElastiCache, Redshift, and WorkSpaces</li>
+</ul>
+</div>
+<div class="section" id="subnets">
+<h2>Subnets<a class="headerlink" href="#subnets" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Subnet spans a single Availability Zone, distinct locations engineered to be isolated from failures in other AZs, and cannot span across AZs</p>
+</li>
+<li><p class="first">Subnet can be configured with an Internet gateway to enable communication over the Internet, or virtual private gateway (VPN) connection to enable communication with your corporate network</p>
+</li>
+<li><p class="first">Subnet can be Public or Private and it depends on whether it has Internet connectivity i.e. is able to route traffic to the Internet through the IGW</p>
+</li>
+<li><p class="first">Instances within the Public Subnet should be assigned a Public IP or Elastic IP address to be able to communicate with the Internet</p>
+</li>
+<li><p class="first">For Subnets not connected to the Internet, but has traffic routed through Virtual Private Gateway only is termed as VPN-only subnet</p>
+</li>
+<li><p class="first">Subnets can be configured to Enable assignment of the Public IP address to all the Instances launched within the Subnet by default, which can be overridden during the creation of the Instance</p>
+</li>
+<li><p class="first"><strong>Subnet Sizing</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">CIDR block assigned to the Subnet can be the same as the VPC CIDR, in this case you can launch only one subnet within your VPC</p>
+</li>
+<li><p class="first">CIDR block assigned to the Subnet can be a subset of the VPC CIDR, which allows you to launch multiple subnets within the VPC</p>
+</li>
+<li><p class="first">CIDR block assigned to the subnet should not be overlapping</p>
+</li>
+<li><p class="first">CIDR block size allowed is between</p>
+<blockquote>
+<div><ul class="simple">
+<li>/28 netmask (minimum with 2^4 – 16 available IP address) and</li>
+<li>/16 netmask (maximum with 2^16 – 65536 IP address)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS reserves 5 IPs address (first 4 and last 1 IP address) in each Subnet which are not available for use and cannot be assigned to an instance. for e.g. for a Subnet with a CIDR block 10.0.0.0/24 the following five IPs are reserved</p>
+<blockquote>
+<div><ul class="simple">
+<li>10.0.0.0: Network address</li>
+<li>10.0.0.1: Reserved by AWS for the VPC router</li>
+<li>10.0.0.2: Reserved by AWS for mapping to Amazon-provided DNS</li>
+<li>10.0.0.3: Reserved by AWS for future use</li>
+<li>10.0.0.255: Network broadcast address. AWS does not support broadcast in a VPC, therefore the address is reserved.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Subnet Routing</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Each Subnet is associated with a route table which controls the traffic.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Subnet Security</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Subnet security can be configured using Security groups and NACLs</li>
+<li>Security groups works at instance level, NACLs work at the subnet level</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS Virtual Private Cloud - VPC</a><ul>
+<li><a class="reference internal" href="#vpc-overview-and-components">VPC Overview and Components</a></li>
+<li><a class="reference internal" href="#ip-addresses">IP Addresses</a></li>
+<li><a class="reference internal" href="#elastic-network-interface-eni">Elastic Network Interface (ENI)</a></li>
+<li><a class="reference internal" href="#route-tables">Route Tables</a></li>
+<li><a class="reference internal" href="#internet-gateways-igw">Internet Gateways – IGW</a></li>
+<li><a class="reference internal" href="#nat">NAT</a></li>
+<li><a class="reference internal" href="#vpc-security">VPC Security</a></li>
+<li><a class="reference internal" href="#flow-logs">Flow logs</a></li>
+<li><a class="reference internal" href="#subnets">Subnets</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_global_vs_regional.html"
+                        title="previous chapter">AWS Global vs. Regional vs. AZ resources</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_vpc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_global_vs_regional.html" title="AWS Global vs. Regional vs. AZ resources"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

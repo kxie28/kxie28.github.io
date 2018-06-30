@@ -1,0 +1,181 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Elastic Cloud Compute - EC2 &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AWS Simple Store Service - S3" href="aws_s3.html" />
+    <link rel="prev" title="AWS Virtual Private Cloud - VPC" href="aws_vpc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_s3.html" title="AWS Simple Store Service - S3"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aws_vpc.html" title="AWS Virtual Private Cloud - VPC"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-elastic-cloud-compute-ec2">
+<h1>AWS Elastic Cloud Compute - EC2<a class="headerlink" href="#aws-elastic-cloud-compute-ec2" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Elastic Compute Cloud (EC2) provides scalable computing capacity in the Amazon Web Services (AWS) cloud.</li>
+<li>EC2 eliminates the need to invest in hardware up front, so applications can be developed and deployed faster.</li>
+<li>EC2 can be used to launch as many or as few virtual servers as you need, configure security and networking, and manage storage.</li>
+<li>EC2 enables you to scale up or down to handle changes in requirements or spikes in popularity, reducing your need to forecast traffic.</li>
+</ul>
+<div class="section" id="ec2-features">
+<h2>EC2 features<a class="headerlink" href="#ec2-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Virtual computing environments, known as <strong>Ec2 instances</strong></li>
+<li>Preconfigured templates for your instances, known as <strong>Amazon Machine Images (AMIs)</strong>, that package the bits you need for your server (including the operating system and additional software)</li>
+<li>Various configurations of CPU, memory, storage, and networking capacity for your instances, known as <strong>Instance types</strong></li>
+<li>Secure login information for your instances using <strong>key pairs</strong> (AWS stores the public key, and you store the private key in a secure place)</li>
+<li>Storage volumes for temporary data that’s deleted when you stop or terminate your instance, known as <strong>Instance store volumes</strong></li>
+<li>Persistent storage volumes for your data using Amazon Elastic Block Store (Amazon EBS), known as <strong>Amazon EBS volumes</strong></li>
+<li>Multiple physical locations for your resources, such as instances and Amazon EBS volumes, known as <strong>Regions and Availability Zones</strong></li>
+<li>A firewall that enables you to specify the protocols, ports, and source IP ranges that can reach your instances using <strong>security groups</strong></li>
+<li>Static IP addresses for dynamic cloud computing, known as <strong>Elastic IP addresses</strong></li>
+<li>Metadata, known as <strong>tags</strong>, can be created and assigned to EC2 resources</li>
+<li>Virtual networks you can create that are logically isolated from the rest of the AWS cloud, and that you can optionally connect to your own network, known as <strong>Virtual private clouds (VPCs)</strong></li>
+</ul>
+</div>
+<div class="section" id="accessing-ec2">
+<h2>Accessing EC2<a class="headerlink" href="#accessing-ec2" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Amazon EC2 console</p>
+<blockquote>
+<div><ul class="simple">
+<li>Amazon EC2 console is the web-based user interface which can be accessed from AWS management console</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS Command line Interface (CLI)</p>
+<blockquote>
+<div><ul class="simple">
+<li>Provides commands for a broad set of AWS products, and is supported on Windows, Mac, and Linux.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Amazon EC2 Command Line Interface (CLI) tools</p>
+<blockquote>
+<div><ul class="simple">
+<li>Provides commands for Amazon EC2, Amazon EBS, and Amazon VPC, and is supported on Windows, Mac, and Linux</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS Tools for Windows Powershell</p>
+<blockquote>
+<div><ul class="simple">
+<li>Provides commands for a broad set of AWS products for those who script in the PowerShell environment</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS Query API</p>
+<blockquote>
+<div><ul class="simple">
+<li>Query API allows for requests are HTTP or HTTPS requests that use the HTTP verbs GET or POST and a Query parameter named Action</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS SDK libraries</p>
+<blockquote>
+<div><ul class="simple">
+<li>AWS provide libraries in various languages which provide basic functions that automate tasks such as cryptographically signing your requests, retrying requests, and handling error responses</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS Elastic Cloud Compute - EC2</a><ul>
+<li><a class="reference internal" href="#ec2-features">EC2 features</a></li>
+<li><a class="reference internal" href="#accessing-ec2">Accessing EC2</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_vpc.html"
+                        title="previous chapter">AWS Virtual Private Cloud - VPC</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aws_s3.html"
+                        title="next chapter">AWS Simple Store Service - S3</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_ec2.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_s3.html" title="AWS Simple Store Service - S3"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aws_vpc.html" title="AWS Virtual Private Cloud - VPC"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
