@@ -6,6 +6,9 @@ AWS Relational Database Service - RDS
    
    aws_rds_multi-az
    aws_rds_storage
+   aws_rds_snapshot_backup
+   aws_rds_security
+   aws_rds_best_practices
 
 Relation Database Service – RDS Overview
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

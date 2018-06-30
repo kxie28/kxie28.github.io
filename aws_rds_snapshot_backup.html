@@ -1,0 +1,290 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS RDS DB Snapshot, Backup and Restore &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AWS RDS Security" href="aws_rds_security.html" />
+    <link rel="prev" title="AWS RDS Storage" href="aws_rds_storage.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_rds_security.html" title="AWS RDS Security"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aws_rds_storage.html" title="AWS RDS Storage"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" accesskey="U">AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-rds-db-snapshot-backup-and-restore">
+<h1>AWS RDS DB Snapshot, Backup and Restore<a class="headerlink" href="#aws-rds-db-snapshot-backup-and-restore" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="rds-back-up-restore-and-snapshots">
+<h2>RDS Back Up, Restore and Snapshots<a class="headerlink" href="#rds-back-up-restore-and-snapshots" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>RDS creates a storage volume snapshot of the DB instance, backing up the entire DB instance and not just individual databases.</li>
+<li>RDS provides two different methods Automated and Manual for backing up your DB instances:</li>
+</ul>
+</div>
+<div class="section" id="automated-backups">
+<h2>Automated backups<a class="headerlink" href="#automated-backups" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Backups of the DB instance are automatically created and retained</p>
+</li>
+<li><p class="first">Automated backups are enabled by default for a new DB instance.</p>
+</li>
+<li><p class="first">Automated backup occurs during a daily user-configurable period of time, known as <strong>preferred backup window.</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>If a preferred backup window is not specified when an DB instance is created, RDS assigns a default 30-minute backup window which is selected at random from an 8-hour block of time per region.</li>
+<li>Changes to the backup window take effect immediately.</li>
+<li>Backup window cannot overlap with the weekly maintenance window for the DB instance.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Backups created during the backup window are retained for a user-configurable number of days , known as <strong>backup retention period</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>If the backup retention period is not set, RDS defaults the period retention period to one day one day if created using RDS API or the AWS CLI, or seven days if created AWS Console</li>
+<li>Backup retention period can be modified with valid values are 0 (for no backup retention) to a maximum of 35 days.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Manual snapshot limits (50 per region) do not apply to automated backups</p>
+</li>
+<li><p class="first">If the backup requires more time than allotted to the backup window, the backup will continue to completion.</p>
+</li>
+<li><p class="first">An immediate outage occurs if the backup retention period is changed</p>
+<blockquote>
+<div><ul class="simple">
+<li>from 0 to a non-zero value as the first backup occurs immediately or</li>
+<li>from non-zero value to 0 as it turns off automatic backups, and deletes all existing automated backups for the instance.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>RDS uses the periodic data backups in conjunction with the transaction logs to enable restoration of the DB Instance to any second during the retention period, up to the LatestRestorableTime (typically up to the last few minutes).</strong></p>
+</li>
+<li><p class="first">During the backup window,</p>
+<blockquote>
+<div><ul class="simple">
+<li>for Single AZ instance, storage I/O may be briefly suspended while the backup process initializes (typically under a few seconds) and a brief period of elevated latency might be experienced.</li>
+<li><strong>for Multi-AZ DB deployments, there is No I/O suspension since the backup is taken from the standby instance</strong></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Automated DB snapshots are deleted when</p>
+<blockquote>
+<div><ul class="simple">
+<li>the retention period expires</li>
+<li>the automated DB snapshots for a DB instance is disabled</li>
+<li>the DB instance is deleted</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">When a DB instance is deleted,</p>
+<blockquote>
+<div><ul class="simple">
+<li>a final DB snapshot can be created upon deletion; which can be used to restore the deleted DB instance at a later date.</li>
+<li>RDS retains the final user-created DB snapshot along with all other manually created DB snapshots</li>
+<li><strong>all automated backups are deleted and cannot be recovered</strong></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="point-in-time-recovery">
+<h2>Point-In-Time Recovery<a class="headerlink" href="#point-in-time-recovery" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>In addition to the daily automated backup, RDS archives database change logs. This enables recovery of the database to any point in time during the backup retention period, up to the last five minutes of database usage.</li>
+<li>Disabling automated backups also disables point-in-time recovery</li>
+<li>RDS stores multiple copies of your data, but for Single-AZ DB instances these copies are stored in a single availability zone.</li>
+<li>If for any reason a Single-AZ DB instance becomes unusable, point-in-time recovery can be used to launch a new DB instance with the latest restorable data</li>
+</ul>
+</div>
+<div class="section" id="db-snapshots-user-initiated">
+<h2>DB Snapshots (User Initiated)<a class="headerlink" href="#db-snapshots-user-initiated" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Manual DB snapshots are user-initiated backups that enables to back up a  DB instance to a known state, and restore to that specific state at any time.</li>
+<li><strong>RDS keeps all manual DB snapshots until explicitly deleted</strong></li>
+</ul>
+</div>
+<div class="section" id="db-snapshots-creation">
+<h2>DB Snapshots Creation<a class="headerlink" href="#db-snapshots-creation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>DB snapshot is a user-initiated storage volume snapshot of DB instance, backing up the entire DB instance and not just individual databases.</li>
+<li>DB snapshots enable backing up of the DB instance in a known state as needed, and can then be restored to that specific state at any time.</li>
+<li>DB snapshots are kept until explicitly deleted</li>
+<li>Creating DB snapshot on a Single-AZ DB instance results in a brief I/O suspension that typically lasting no more than a few minutes.</li>
+<li>Multi-AZ DB instances are not affected by this I/O suspension since the backup is taken on the standby instance</li>
+</ul>
+</div>
+<div class="section" id="db-snapshot-restore">
+<h2>DB Snapshot Restore<a class="headerlink" href="#db-snapshot-restore" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>DB instance can be restored to any specific time during this retention period, creating a new DB instance.</li>
+<li>New DB instance with a different endpoint is created by restoring from a DB snapshot</li>
+<li>RDS uses the periodic data backups in conjunction with the transaction logs to enable restoration of the DB Instance to any second during the retention period, up to the LatestRestorableTime (typically up to the last few minutes).</li>
+<li>Option group associated with the DB snapshot is associated with the restored DB instance once it is created. However, option group is associated with the VPC so would apply only when the instance is restored in the same VPC as the DB snapshot</li>
+<li>However, <strong>the default DB parameter and security groups are associated with the restored instance.</strong> After the restoration is complete, any custom DB parameter or security groups used by the instance restored from should be associated explicitly</li>
+<li>A DB instance can be restored with a different storage type than the source DB snapshot. In this case the restoration process will be slower because of the additional work required to migrate the data to the new storage type for e.g. from GP2 to Provisioned IOPS</li>
+<li>A DB instance can be restored with a different edition of the DB engine only if the DB snapshot has the required storage allocated for the new edition for e.g., to change from SQL Server Web Edition to SQL Server Standard Edition, the DB snapshot must have been created from a SQL Server DB instance that had at least 200 GB of allocated storage, which is the minimum allocated storage for SQL Server Standard edition</li>
+</ul>
+</div>
+<div class="section" id="db-snapshot-copy">
+<h2>DB Snapshot Copy<a class="headerlink" href="#db-snapshot-copy" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Amazon RDS supports two types of DB snapshot copying.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Copy an automated DB snapshot to create a manual DB snapshot in the same AWS region. Manual DB snapshot are not deleted automatically and can be kept indefinitely.</li>
+<li>Copy either an automated or manual DB snapshot from one region to another region. By copying the DB snapshot to another region, a manual DB snapshot is created that is retained in that region</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Manual DB snapshots can be shared with other AWS accounts and copy DB snapshots shared to you by other AWS accounts</p>
+</li>
+<li><p class="first">Snapshot Copy Encryption</p>
+<blockquote>
+<div><ul class="simple">
+<li>DB snapshot that has been encrypted using an AWS Key Management System (AWS KMS) encryption key can be copied</li>
+<li>Copying an encrypted DB snapshot, results in an encrypted copy of the DB snapshot</li>
+<li>When copying, DB snapshot can either be encrypted with the same KMS encryption key as the original DB snapshot, or a different KMS encryption key to encrypt the copy of the DB snapshot.</li>
+<li>An unencrypted DB snapshot can be copied to an encrypted snapshot, a quick way to add encryption to a previously encrypted DB instance.</li>
+<li>Encrypted snapshot can be restored only to an encrypted DB instance</li>
+<li>If a KMS encryption key is specified when restoring from an unencrypted DB cluster snapshot, the restored DB cluster is encrypted using the specified KMS encryption key</li>
+<li>Copying an encrypted snapshot shared from another AWS account, requires access to the KMS encryption key that was used to encrypt the DB snapshot.</li>
+<li>NOTE – AWS now allows copying encrypted DB snapshots between accounts and across multiple regions as seamlessly as unencrypted snapshots. Refer blog post</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="db-snapshot-sharing">
+<h2>DB Snapshot Sharing<a class="headerlink" href="#db-snapshot-sharing" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Manual DB snapshot or DB cluster snapshot can be shared with up to 20 other AWS accounts.</p>
+</li>
+<li><p class="first">Manual snapshot shared with other AWS accounts can copy the snapshot, or restore a DB instance or DB cluster from that snapshot.</p>
+</li>
+<li><p class="first">Manual snapshot can also be shared as public, which makes the snapshot available to all AWS accounts. Care should be taken when sharing a snapshot as public so that none of the private information is included</p>
+</li>
+<li><p class="first">Shared snapshot can be copied to another region.</p>
+</li>
+<li><p class="first">However, following limitations apply when sharing manual snapshots with other AWS accounts:</p>
+<blockquote>
+<div><ul class="simple">
+<li>When a DB instance or DB cluster is restored from a shared snapshot using the AWS CLI or RDS API, the Amazon Resource Name (ARN) of the shared snapshot as the snapshot identifier should be specified</li>
+<li>DB snapshot that uses an option group with permanent or persistent options cannot be shared</li>
+<li>A permanent option cannot be removed from an option group. Option groups with persistent options cannot be removed from a DB instance once the option group has been assigned to the DB instance.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">DB snapshots that have been encrypted “at rest” using the AES-256 encryption algorithm can be shared</p>
+</li>
+<li><p class="first">Users can only copy encrypted DB snapshots if they have access to the AWS Key Management Service (AWS KMS) encryption key that was used to encrypt the DB snapshot.</p>
+</li>
+<li><p class="first">AWS KMS encryption keys can be shared with another AWS account by adding the other account to the KMS key policy.</p>
+</li>
+<li><p class="first">However, KMS key policy must first be updated by adding any accounts to share the snapshot with, before sharing an encrypted DB snapshot</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS RDS DB Snapshot, Backup and Restore</a><ul>
+<li><a class="reference internal" href="#rds-back-up-restore-and-snapshots">RDS Back Up, Restore and Snapshots</a></li>
+<li><a class="reference internal" href="#automated-backups">Automated backups</a></li>
+<li><a class="reference internal" href="#point-in-time-recovery">Point-In-Time Recovery</a></li>
+<li><a class="reference internal" href="#db-snapshots-user-initiated">DB Snapshots (User Initiated)</a></li>
+<li><a class="reference internal" href="#db-snapshots-creation">DB Snapshots Creation</a></li>
+<li><a class="reference internal" href="#db-snapshot-restore">DB Snapshot Restore</a></li>
+<li><a class="reference internal" href="#db-snapshot-copy">DB Snapshot Copy</a></li>
+<li><a class="reference internal" href="#db-snapshot-sharing">DB Snapshot Sharing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_rds_storage.html"
+                        title="previous chapter">AWS RDS Storage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aws_rds_security.html"
+                        title="next chapter">AWS RDS Security</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_rds_snapshot_backup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_rds_security.html" title="AWS RDS Security"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aws_rds_storage.html" title="AWS RDS Storage"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_rds.html" >AWS Relational Database Service - RDS</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
