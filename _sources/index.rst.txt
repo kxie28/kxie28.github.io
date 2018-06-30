@@ -17,6 +17,7 @@ Welcome to KX's documentation!
    shell_scripts
    phantom
    pygames
+   aws
 
 
 Indices and tables
