@@ -5,6 +5,7 @@ AWS Relational Database Service - RDS
    :maxdepth: 2
    
    aws_rds_multi-az
+   aws_rds_storage
 
 Relation Database Service – RDS Overview
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
