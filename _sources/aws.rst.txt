@@ -8,3 +8,4 @@ Amazon Web Services
    aws_vpc
    aws_ec2
    aws_s3
+   aws_rds
