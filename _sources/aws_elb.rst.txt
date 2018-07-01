@@ -5,6 +5,8 @@ AWS Elastic Load Balancing - ELB
    :maxdepth: 2
    
    application_lb
+   network_lb
+   classic_vs_application
 
 AWS Elastic Load Balancer
 ^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,0 +1,241 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Classic Load Balancer vs Application Load Balancer &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS ELB Network Load Balancer" href="network_lb.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="network_lb.html" title="AWS ELB Network Load Balancer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_elb.html" accesskey="U">AWS Elastic Load Balancing - ELB</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-classic-load-balancer-vs-application-load-balancer">
+<h1>AWS Classic Load Balancer vs Application Load Balancer<a class="headerlink" href="#aws-classic-load-balancer-vs-application-load-balancer" title="Permalink to this headline">¶</a></h1>
+<p>Elastic Load Balancing supports two types of load balancers: Application Load Balancers and Classic Load Balancers. While there is some overlap in the features, AWS does not maintain feature parity between the two types of load balancers. Content below lists down the feature comparison for both.</p>
+<div class="section" id="usage-pattern">
+<h2>Usage Pattern<a class="headerlink" href="#usage-pattern" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>A Classic Load Balancer is ideal for simple load balancing of traffic across multiple EC2 instances,</li>
+<li>Application Load Balancer is ideal for microservices or container-based architectures where there is a need to route traffic to multiple services or load balance across multiple ports on the same EC2 instance.</li>
+</ul>
+<a class="reference internal image-reference" href="_images/AWS-ELB-Classic-Load-Balancer-vs-Application-Load-Balancer.png"><img alt="alternate text" class="align-center" src="_images/AWS-ELB-Classic-Load-Balancer-vs-Application-Load-Balancer.png" style="width: 650.0px; height: 450.0px;" /></a>
+</div>
+<div class="section" id="supported-protocols">
+<h2>Supported Protocols<a class="headerlink" href="#supported-protocols" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Classic Load Balancer operates at layer 4 and supports HTTP, HTTPS, TCP, SSL while Application Load Balancer operates at layer 7 and supports HTTP, HTTPS, HTTP/2, WebSockets</li>
+<li>If Layer-4 features are needed, Classic Load Balancers should be used</li>
+</ul>
+</div>
+<div class="section" id="supported-platforms">
+<h2>Supported Platforms<a class="headerlink" href="#supported-platforms" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Classic Load Balancer supports both EC2-Classic and EC2-VPC while Application Load Balancer supports only EC2-VPC</li>
+</ul>
+</div>
+<div class="section" id="stick-sessions-cookies">
+<h2>Stick Sessions (Cookies)<a class="headerlink" href="#stick-sessions-cookies" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Stick Sessions (Session Affinity) enables the load balancer to bind a user’s session to a specific instance, which ensures that all requests from the user during the session are sent to the same instance</li>
+<li>Both Classic &amp; Application Load Balancer supports sticky sessions to maintain session affinity</li>
+</ul>
+</div>
+<div class="section" id="idle-connection-timeout">
+<h2>Idle Connection Timeout<a class="headerlink" href="#idle-connection-timeout" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Idle Connection Timeout helps specify a time period, which ELB uses to close the connection if no data has been sent or received by the time that the idle timeout period elapses</li>
+<li>Both Classic &amp; Application Load Balancer supports idle connection timeout</li>
+</ul>
+</div>
+<div class="section" id="connection-draining">
+<h2>Connection Draining<a class="headerlink" href="#connection-draining" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Connection draining enables the load balancer to complete in-flight requests made to instances that are de-registering or unhealthy</li>
+<li>Both Classic &amp; Application Load Balancer supports connection draining</li>
+</ul>
+</div>
+<div class="section" id="ssl-termination">
+<h2>SSL Termination<a class="headerlink" href="#ssl-termination" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Both Classic Load Balancer and ALB support SSL Termination to decrypt requests from clients before sending them to targets and hence reducing the load. SSL certificate must be installed on the load balancer.</li>
+</ul>
+</div>
+<div class="section" id="back-end-server-authentication">
+<h2>Back-end Server Authentication<a class="headerlink" href="#back-end-server-authentication" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Back-end Server Authentication enables authentication of the instances. Load balancer communicates with an instance only if the public key that the instance presents to the load balancer matches a public key in the authentication policy for the load balancer.</li>
+<li>Classic Load Balancer supports while Application Load Balancer does not support Back-end Server Authentication</li>
+</ul>
+</div>
+<div class="section" id="cross-zone-load-balancing">
+<h2>Cross-zone Load Balancing<a class="headerlink" href="#cross-zone-load-balancing" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Cross-zone Load Balancing help distribute incoming requests evenly across all instances in its enabled AZs. By default, Load Balancer will evenly distribute requests evenly across its enabled AZs, irrespective of the instances it hosts.</li>
+<li>Both Classic &amp; Application Load Balancer both support Cross-zone load balancing, however for Classic it needs to be enabled while for ALB it is always enabled</li>
+</ul>
+</div>
+<div class="section" id="health-checks">
+<h2>Health Checks<a class="headerlink" href="#health-checks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Both Classic &amp; Application Load Balancer both support Health checks to determine if the instance is healthy or unhealthy</li>
+<li>ALB provides health check improvements that allow detailed error codes from 200-399 to be configured</li>
+</ul>
+</div>
+<div class="section" id="cloudwatch-metrics">
+<h2>CloudWatch Metrics<a class="headerlink" href="#cloudwatch-metrics" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Both Classic &amp; Application Load Balancer integrate with CloudWatch to provide metrics, with ALB providing additional metrics</li>
+</ul>
+</div>
+<div class="section" id="access-logs">
+<h2>Access Logs<a class="headerlink" href="#access-logs" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Access logs capture detailed information about requests sent to the load balancer. Each log contains information such as the time the request was received, the client’s IP address, latencies, request paths, and server responses</li>
+<li>Both Classic &amp; Application Load Balancer provide access logs, with ALB providing additional attributes</li>
+</ul>
+</div>
+<div class="section" id="host-based-routing-path-based-routing">
+<h2>Host-based Routing &amp; Path-based Routing<a class="headerlink" href="#host-based-routing-path-based-routing" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Host-based routing use host conditions to define rules that forward requests to different target groups based on the host name in the host header. This enables ALB to support multiple domains using a single load balancer.</li>
+<li>Path-based routing use path conditions to define rules that forward requests to different target groups based on the URL in the request. Each path condition has one path pattern. If the URL in a request matches the path pattern in a listener rule exactly, the request is routed using that rule.</li>
+<li>Only ALB supports Host-based &amp; Path-based routing.</li>
+</ul>
+</div>
+<div class="section" id="dynamic-ports">
+<h2>Dynamic Ports<a class="headerlink" href="#dynamic-ports" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Only ALB supports Dynamic Port Mapping with ECS, which allows two containers of a service to run on a single server on dynamic ports that ALB automatically detects and reconfigures itself.</li>
+</ul>
+</div>
+<div class="section" id="deletion-protection">
+<h2>Deletion Protection<a class="headerlink" href="#deletion-protection" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Only ALB supports Deletion Protection, wherein a load balancer can’t be deleted if deletion protection is enabled</li>
+</ul>
+</div>
+<div class="section" id="request-tracing">
+<h2>Request Tracing<a class="headerlink" href="#request-tracing" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Only ALB supports Request Tracing to track HTTP requests from clients to targets or other services.</li>
+</ul>
+</div>
+<div class="section" id="ipv6-in-vpc">
+<h2>IPv6 in VPC<a class="headerlink" href="#ipv6-in-vpc" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Only ALB supports IPv6 in VPC</li>
+</ul>
+</div>
+<div class="section" id="aws-waf">
+<h2>AWS WAF<a class="headerlink" href="#aws-waf" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Only ALB supports AWS WAF, which can be directly used on ALBs (both internal and external) in a VPC, to protect websites and web services</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS Classic Load Balancer vs Application Load Balancer</a><ul>
+<li><a class="reference internal" href="#usage-pattern">Usage Pattern</a></li>
+<li><a class="reference internal" href="#supported-protocols">Supported Protocols</a></li>
+<li><a class="reference internal" href="#supported-platforms">Supported Platforms</a></li>
+<li><a class="reference internal" href="#stick-sessions-cookies">Stick Sessions (Cookies)</a></li>
+<li><a class="reference internal" href="#idle-connection-timeout">Idle Connection Timeout</a></li>
+<li><a class="reference internal" href="#connection-draining">Connection Draining</a></li>
+<li><a class="reference internal" href="#ssl-termination">SSL Termination</a></li>
+<li><a class="reference internal" href="#back-end-server-authentication">Back-end Server Authentication</a></li>
+<li><a class="reference internal" href="#cross-zone-load-balancing">Cross-zone Load Balancing</a></li>
+<li><a class="reference internal" href="#health-checks">Health Checks</a></li>
+<li><a class="reference internal" href="#cloudwatch-metrics">CloudWatch Metrics</a></li>
+<li><a class="reference internal" href="#access-logs">Access Logs</a></li>
+<li><a class="reference internal" href="#host-based-routing-path-based-routing">Host-based Routing &amp; Path-based Routing</a></li>
+<li><a class="reference internal" href="#dynamic-ports">Dynamic Ports</a></li>
+<li><a class="reference internal" href="#deletion-protection">Deletion Protection</a></li>
+<li><a class="reference internal" href="#request-tracing">Request Tracing</a></li>
+<li><a class="reference internal" href="#ipv6-in-vpc">IPv6 in VPC</a></li>
+<li><a class="reference internal" href="#aws-waf">AWS WAF</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="network_lb.html"
+                        title="previous chapter">AWS ELB Network Load Balancer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/classic_vs_application.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="network_lb.html" title="AWS ELB Network Load Balancer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_elb.html" >AWS Elastic Load Balancing - ELB</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

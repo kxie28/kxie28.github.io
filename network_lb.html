@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS ELB Network Load Balancer &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AWS Classic Load Balancer vs Application Load Balancer" href="classic_vs_application.html" />
+    <link rel="prev" title="AWS ELB Application Load Balancer" href="application_lb.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classic_vs_application.html" title="AWS Classic Load Balancer vs Application Load Balancer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="application_lb.html" title="AWS ELB Application Load Balancer"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_elb.html" accesskey="U">AWS Elastic Load Balancing - ELB</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-elb-network-load-balancer">
+<h1>AWS ELB Network Load Balancer<a class="headerlink" href="#aws-elb-network-load-balancer" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Network Load Balancer operates at the connection level (Layer 4), routing connections to targets – EC2 instances, containers and IP addresses based on IP protocol data.</li>
+<li>Network Load Balancer is suited for load balancing of TCP traffic</li>
+<li>Network Load Balancer is capable of handling millions of requests per second while maintaining ultra-low latencies.</li>
+<li>Network Load Balancer is optimized to handle sudden and volatile traffic patterns while using a single static IP address per Availability Zone.</li>
+<li>NLB is integrated with other AWS services such as Auto Scaling, EC2 Container Service (ECS), and CloudFormation.</li>
+</ul>
+<div class="section" id="network-load-balancer-features">
+<h2>Network Load Balancer Features<a class="headerlink" href="#network-load-balancer-features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="connection-based-load-balancing">
+<h3>Connection-based Load Balancing<a class="headerlink" href="#connection-based-load-balancing" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Allows load balancing of  TCP traffic, routing connections to targets – EC2 instances, microservices and containers, and IP addresses.</li>
+</ul>
+</div>
+<div class="section" id="high-availability">
+<h3>High Availability<a class="headerlink" href="#high-availability" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>is highly available.</li>
+<li>accepts incoming traffic from clients and distributes this traffic across the targets within the same Availability Zone.</li>
+<li>monitors the health of its registered targets and routes the traffic only to healthy targets</li>
+<li>if a health check fails and an unhealthy target is detected, it stops routing traffic to that target and reroutes traffic to remaining healthy targets.</li>
+<li>if configured with multiple AZs and if all the targets in a single AZ fail, it routes traffic to healthy targets in the other AZs</li>
+</ul>
+</div>
+<div class="section" id="high-throughput">
+<h3>High Throughput<a class="headerlink" href="#high-throughput" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>is designed to handle traffic as it grows and can load balance millions of requests/sec.</li>
+<li>can also handle sudden volatile traffic patterns.</li>
+</ul>
+</div>
+<div class="section" id="low-latency">
+<h3>Low Latency<a class="headerlink" href="#low-latency" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>offers extremely low latencies for latency-sensitive applications.</li>
+</ul>
+</div>
+<div class="section" id="preserve-source-ip-address">
+<h3>Preserve source IP address<a class="headerlink" href="#preserve-source-ip-address" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>preserves client side source IP allowing the back-end to see client IP address</li>
+</ul>
+</div>
+<div class="section" id="static-ip-support">
+<h3>Static IP support<a class="headerlink" href="#static-ip-support" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>automatically provides a static IP per Availability Zone (subnet) that can be used by applications as the front-end IP of the load balancer.</li>
+</ul>
+</div>
+<div class="section" id="elastic-ip-support">
+<h3>Elastic IP support<a class="headerlink" href="#elastic-ip-support" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>an Elastic IP per Availability Zone (subnet) can also be assigned, optionally, thereby providing a fixed IP.</li>
+</ul>
+</div>
+<div class="section" id="health-checks">
+<h3>Health Checks<a class="headerlink" href="#health-checks" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">supports both network and application target health checks.</p>
+</li>
+<li><p class="first">Network-level health check</p>
+<blockquote>
+<div><ul class="simple">
+<li>is based on the overall response of the underlying target (instance or a container) to normal traffic.</li>
+<li>target is marked unavailable if it is slow or unable to respond to new connection requests</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Application-level health check</p>
+<blockquote>
+<div><ul class="simple">
+<li>is based on a specific URL on a given target to test the application health deeper</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="dns-fail-over">
+<h3>DNS Fail-over<a class="headerlink" href="#dns-fail-over" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>integrates with Route 53</li>
+<li>Route 53 will direct traffic to load balancer nodes in other AZs, if there are no healthy targets with NLB or if the NLB itself is unhealthy</li>
+<li>if NLB is unresponsive, Route 53 will remove the unavailable load balancer IP address from service and direct traffic to an alternate Network Load Balancer in another region.</li>
+</ul>
+</div>
+<div class="section" id="integration-with-aws-services">
+<h3>Integration with AWS Services<a class="headerlink" href="#integration-with-aws-services" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>is integrated with other AWS services such as Auto Scaling, EC2 Container Service (ECS), CloudFormation, CodeDeploy, and AWS Config.</li>
+</ul>
+<div class="section" id="long-lived-tcp-connections">
+<h4>Long-lived TCP Connections<a class="headerlink" href="#long-lived-tcp-connections" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>supports long-lived TCP connections ideal for WebSocket type of applications</li>
+</ul>
+</div>
+<div class="section" id="central-api-support">
+<h4>Central API Support<a class="headerlink" href="#central-api-support" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>uses the same API as Application Load Balancer.</li>
+<li>enables you to work with target groups, health checks, and load balance across multiple ports on the same EC2 instance to support containerized applications.</li>
+</ul>
+</div>
+<div class="section" id="robust-monitoring-and-auditing">
+<h4>Robust Monitoring and Auditing<a class="headerlink" href="#robust-monitoring-and-auditing" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>integrated with CloudWatch to report Network Load Balancer metrics.</li>
+<li>CloudWatch provides metrics such as Active Flow count, Healthy Host Count, New Flow Count, Processed bytes, and more.</li>
+<li>integrated with CloudTrail to track API calls to the NLB</li>
+</ul>
+</div>
+</div>
+<div class="section" id="enhanced-logging">
+<h3>Enhanced Logging<a class="headerlink" href="#enhanced-logging" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>use the Flow Logs feature to record all requests sent to the load balancer.</li>
+<li>Flow Logs capture information about the IP traffic going to and from network interfaces in the VPC</li>
+<li>Flow log data is stored using CloudWatch Logs</li>
+</ul>
+<div class="section" id="zonal-isolation">
+<h4>Zonal Isolation<a class="headerlink" href="#zonal-isolation" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>is designed for application architectures in a single zone.</li>
+<li>can be enabled in a single AZ to support architectures that require zonal isolation</li>
+<li>automatically fails-over to other healthy AZs, if something fails in a AZ</li>
+<li>its recommended to configure the load balancer and targets in multiple AZs for achieving high availability</li>
+</ul>
+</div>
+<div class="section" id="load-balancing-using-ip-addresses-as-targets">
+<h4>Load Balancing using IP addresses as Targets<a class="headerlink" href="#load-balancing-using-ip-addresses-as-targets" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>allows load balancing of any application hosted in AWS or on-premises using IP addresses of the application backends as targets.</li>
+<li>allows load balancing to an application backend hosted on any IP address and any interface on an instance.</li>
+<li>ability to load balance across AWS and on-premises resources helps migrate-to-cloud, burst-to-cloud or failover-to-cloud</li>
+<li>applications hosted in on-premises locations can be used as targets over a Direct Connect connection and EC2-Classic (using ClassicLink).</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="advantages-over-classic-load-balancer">
+<h2>Advantages over Classic Load Balancer<a class="headerlink" href="#advantages-over-classic-load-balancer" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Ability to handle volatile workloads and scale to millions of requests per second, without the need of pre-warming</li>
+<li>Support for static IP/Elastic IP addresses for the load balancer</li>
+<li>Support for registering targets by IP address, including targets outside the VPC (on-premises) for the load balancer.</li>
+<li>Support for routing requests to multiple applications on a single EC2 instance. Single instance or IP address can be registered with the same target group using multiple ports.</li>
+<li>Support for containerized applications. Using Dynamic port mapping, ECS can select an unused port when scheduling a task and register the task with a target group using this port.</li>
+<li>Support for monitoring the health of each service independently, as health checks are defined at the target group level and many CloudWatch metrics are reported at the target group level. Attaching a target group to an Auto Scaling group enables scaling each service dynamically based on demand</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS ELB Network Load Balancer</a><ul>
+<li><a class="reference internal" href="#network-load-balancer-features">Network Load Balancer Features</a><ul>
+<li><a class="reference internal" href="#connection-based-load-balancing">Connection-based Load Balancing</a></li>
+<li><a class="reference internal" href="#high-availability">High Availability</a></li>
+<li><a class="reference internal" href="#high-throughput">High Throughput</a></li>
+<li><a class="reference internal" href="#low-latency">Low Latency</a></li>
+<li><a class="reference internal" href="#preserve-source-ip-address">Preserve source IP address</a></li>
+<li><a class="reference internal" href="#static-ip-support">Static IP support</a></li>
+<li><a class="reference internal" href="#elastic-ip-support">Elastic IP support</a></li>
+<li><a class="reference internal" href="#health-checks">Health Checks</a></li>
+<li><a class="reference internal" href="#dns-fail-over">DNS Fail-over</a></li>
+<li><a class="reference internal" href="#integration-with-aws-services">Integration with AWS Services</a><ul>
+<li><a class="reference internal" href="#long-lived-tcp-connections">Long-lived TCP Connections</a></li>
+<li><a class="reference internal" href="#central-api-support">Central API Support</a></li>
+<li><a class="reference internal" href="#robust-monitoring-and-auditing">Robust Monitoring and Auditing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#enhanced-logging">Enhanced Logging</a><ul>
+<li><a class="reference internal" href="#zonal-isolation">Zonal Isolation</a></li>
+<li><a class="reference internal" href="#load-balancing-using-ip-addresses-as-targets">Load Balancing using IP addresses as Targets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advantages-over-classic-load-balancer">Advantages over Classic Load Balancer</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="application_lb.html"
+                        title="previous chapter">AWS ELB Application Load Balancer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="classic_vs_application.html"
+                        title="next chapter">AWS Classic Load Balancer vs Application Load Balancer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/network_lb.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="classic_vs_application.html" title="AWS Classic Load Balancer vs Application Load Balancer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="application_lb.html" title="AWS ELB Application Load Balancer"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_elb.html" >AWS Elastic Load Balancing - ELB</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
