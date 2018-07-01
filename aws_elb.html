@@ -1,0 +1,381 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Elastic Load Balancing - ELB &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AWS ELB Application Load Balancer" href="application_lb.html" />
+    <link rel="prev" title="AWS Simple Queue Service - SQS" href="aws_sqs.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="application_lb.html" title="AWS ELB Application Load Balancer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aws_sqs.html" title="AWS Simple Queue Service - SQS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-elastic-load-balancing-elb">
+<h1>AWS Elastic Load Balancing - ELB<a class="headerlink" href="#aws-elastic-load-balancing-elb" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="application_lb.html">AWS ELB Application Load Balancer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="application_lb.html#application-load-balancer-benefits">Application Load Balancer Benefits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application_lb.html#application-load-balancer-features">Application Load Balancer Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application_lb.html#application-load-balancer-listeners">Application Load Balancer Listeners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application_lb.html#advantages-over-classic-load-balancer">Advantages over Classic Load Balancer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="aws-elastic-load-balancer">
+<h2>AWS Elastic Load Balancer<a class="headerlink" href="#aws-elastic-load-balancer" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Elastic Load Balancing allows the incoming traffic to be distributed automatically across multiple healthy EC2 instances.</p>
+</li>
+<li><p class="first">ELB serves as a single point of contact to the client</p>
+</li>
+<li><p class="first">ELB helps to being transparent and increases the application availability by allowing addition or removal of multiple EC2 instances across one or more availability zones, without disrupting the overall flow of information.</p>
+</li>
+<li><p class="first">ELB benefits</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>is itself a distributed system that is fault tolerant and actively monitored</strong></li>
+<li>abstracts out the complexity of managing, maintaining, and scaling load balancers</li>
+<li>can also serve as the first line of defense against attacks on network.</li>
+<li>can offload the work of encryption and decryption (SSL termination) so that the EC2 instances can focus on their main work</li>
+<li>offers integration with Auto Scaling, which ensures enough back-end capacity available to meet varying traffic levels</li>
+<li>are engineered to not be a single point of failure</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Elastic Load Balancer, by default, routes each request independently to the registered instance with the smallest load.</p>
+</li>
+<li><p class="first">If an EC2 instance fails, ELB automatically reroutes the traffic to the remaining running healthy EC2 instances. If a failed EC2 instance is restored, Elastic Load Balancing restores the traffic to that instance.</p>
+</li>
+<li><p class="first"><strong>Load Balancers only work across AZs within a region</strong></p>
+</li>
+</ul>
+<a class="reference internal image-reference" href="_images/Load-Balancer.png"><img alt="alternate text" class="align-center" src="_images/Load-Balancer.png" style="width: 650.0px; height: 450.0px;" /></a>
+</div>
+<div class="section" id="elb-key-points">
+<h2>ELB Key Points<a class="headerlink" href="#elb-key-points" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scaling-elb">
+<h3>Scaling ELB<a class="headerlink" href="#scaling-elb" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Each ELB is allocated and configured with a default capacity</li>
+<li>ELB Controller is the service which stores all the configuration and also monitors the load balancer and manages the capacity that is used to handle the client requests</li>
+<li>As the traffic profile changes, the controller service scales the load balancers to handle more requests, scaling equally in all AZs.</li>
+<li>ELB increases its capacity by utilizing either larger resources (scale up – resources with higher performance characteristics) or more individual resources (scale out).</li>
+<li><strong>AWS itself handles the scaling of the ELB capacity and this scaling is different to scaling of the EC2 instances to which the ELB routes its request to, which is handled by Auto Scaling</strong></li>
+<li>Time required for Elastic Load Balancing to scale can range from 1 to 7 minutes, depending on the changes in the traffic profile</li>
+</ul>
+</div>
+<div class="section" id="pre-warming-elb">
+<h3>Pre-Warming ELB<a class="headerlink" href="#pre-warming-elb" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>ELB works best with gradual increase in traffic</li>
+<li>AWS is able to scale automatically and handle a vast majority of use cases</li>
+<li>However, in certain scenarios, if there is a flash traffic spike expected or a load test cannot be configured to gradually increase traffic, recommended to contact AWS support to have the load balancer “pre-warmed”</li>
+<li>AWS will help Pre-warming the ELB, by configuring the load balancer to have the appropriate level of capacity based on expected traffic</li>
+<li>AWS would need the information for the start, end dates and the expected request rate per second with the total size of request/response.</li>
+</ul>
+</div>
+<div class="section" id="dns-resolution">
+<h3>DNS Resolution<a class="headerlink" href="#dns-resolution" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>ELB is scaled automatically depending on the traffic profile</li>
+<li>When scaled, Elastic Load Balancing service will update the Domain Name System (DNS) record of the load balancer so that the new resources have their respective IP addresses registered in DNS.</li>
+<li>DNS record created includes a Time-to-Live (TTL) setting of 60 seconds</li>
+<li>By default, ELB will return multiple IP addresses when clients perform a DNS resolution, with the records being randomly ordered on each DNS resolution request.</li>
+<li>It is recommended that clients will re-lookup the DNS at least every 60 seconds to take advantage of the increased capacity</li>
+</ul>
+</div>
+<div class="section" id="load-balancer-types">
+<h3>Load Balancer Types<a class="headerlink" href="#load-balancer-types" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first"><strong>Internet Load Balancer</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>An Internet-facing load balancer takes requests from clients over the Internet and distributes them across the EC2 instances that are registered with the load balancer</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><a href="#id1"><span class="problematic" id="id2">**</span></a>Internal Load Balancer – **</p>
+<blockquote>
+<div><ul class="simple">
+<li>Internal load balancer routes traffic to EC2 instances in private subnets</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="availability-zones-subnets">
+<h3>Availability Zones/Subnets<a class="headerlink" href="#availability-zones-subnets" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Elastic Load Balancing allows subnets to be added and creates a load balancer node in each of the Availability Zone where the subnet resides.</li>
+<li>Elastic Load Balancer should have atleast one subnet attached</li>
+<li>Only one subnet per AZ can be attached to the ELB. Attaching a subnet with an AZ already attached replaces the existing subnet</li>
+<li>Each Subnet must have a CIDR block with at least a /27 bitmask and has at least 8 free IP addresses, which ELB uses to establish connections with the back-end instances.</li>
+<li>For High Availability, it is recommended to attach one subnet per AZ for at least two AZs, even if the instances are in a single subnet.</li>
+<li>Subnets can be attached or detached from the ELB and it would start or stop sending requests to the instances in the subnet accordingly</li>
+</ul>
+</div>
+</div>
+<div class="section" id="security-groups-nacl">
+<h2>Security Groups &amp; NACL<a class="headerlink" href="#security-groups-nacl" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Security groups &amp; NACLs should allow Inbound traffic, on the load balancer listener port, from the Client for an Internet ELB or VPC CIDR for an Internal ELB</li>
+<li>Security groups &amp; NACLs should allow Outbound traffic to the back-end instances on both the instance listener port and the health check port</li>
+<li>NACLs, in addition, should allow responses on the ephemeral ports</li>
+<li>All EC2 instances should allow incoming traffic from ELB</li>
+</ul>
+</div>
+<div class="section" id="ssl-negotiation-configuration">
+<h2>SSL Negotiation Configuration<a class="headerlink" href="#ssl-negotiation-configuration" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">For HTTPS load balancer, Elastic Load Balancing uses an Secure Socket Layer (SSL) negotiation configuration, known as a security policy, to negotiate SSL connections between a client and the load balancer.</p>
+</li>
+<li><p class="first">A security policy is a combination of SSL protocols, SSL ciphers, and the Server Order Preference option</p>
+<blockquote>
+<div><ul class="simple">
+<li>Elastic Load Balancing supports the following versions of the SSL protocol TLS 1.2, TLS 1.1,  TLS 1.0, SSL 3.0, SSL 2.0 (deprecated now)</li>
+<li>SSL protocols use several SSL ciphers to encrypt data over the Internet.</li>
+<li>Elastic Load Balancing supports the Server Order Preference option for negotiating connections between a client and a load balancer.</li>
+<li>During the SSL connection negotiation process, this allows the load balancer to control and select the first cipher in its list that is in the client’s list of ciphers instead of the default behavior of checking matching first cipher in client’s list with server’s list.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Elastic Load Balancer allows using a Predefined Security Policies or creating a Custom Security Policy for specific needs. If none is specified, ELB selects the latest Predefined Security Policy.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="health-checks">
+<h2>Health Checks<a class="headerlink" href="#health-checks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Load balancer performs health checks on all registered instances, whether the instance is in a healthy state or an unhealthy state.</li>
+<li>Load balancer performs health checks to discover the availability of the EC2 instances, the load balancer periodically sends pings, attempts connections, or sends request to health check the EC2 instances.</li>
+<li>Health check is <strong>InService</strong> for status of healthy instances and <strong>OutOfService</strong> for unhealthy ones</li>
+<li>Load balancer sends a request to each registered instance at the Ping Protocol, Ping Port and Ping Path every HealthCheck Interval seconds. It waits for the instance to respond within the Response Timeout period. If the health checks exceed the Unhealthy Threshold for consecutive failed responses, the load balancer takes the instance out of service. When the health checks exceed the Healthy Threshold for consecutive successful responses, the load balancer puts the instance back in service.</li>
+<li>Load balancer only sends requests to the healthy EC2 instances and stops routing requests to the unhealthy instances</li>
+</ul>
+</div>
+<div class="section" id="listeners">
+<h2>Listeners<a class="headerlink" href="#listeners" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Listeners is the process which checks for connection requests from client</li>
+<li>Listeners are configured with a protocol and a port for front-end (client to load balancer) connections, and a protocol and a port for back-end (load balancer to back-end instance) connections.</li>
+<li>Listeners support HTTP, HTTPS, SSL, TCP protocols</li>
+<li>A X.509 certificate is required for HTTPS or SSL connections and load balancer uses the certificate to terminate the connection and then decrypt requests from clients before sending them to the back-end instances.</li>
+<li>If you want to use SSL, but don’t want to terminate the connection on the load balancer, use TCP for connections from the client to the load balancer, use the SSL protocol for connections from the load balancer to the back-end application, and deploy certificates on the back-end instances handling requests.</li>
+<li>If you use an HTTPS/SSL connection for your back end, you can enable authentication on the back-end instance. This authentication can be used to ensure that back-end instances accept only encrypted communication, and to ensure that the back-end instance has the correct certificates.</li>
+<li>ELB HTTPS listener <strong>does not support Client-Side SSL certificates</strong></li>
+</ul>
+</div>
+<div class="section" id="idle-connection-timeout">
+<h2>Idle Connection Timeout<a class="headerlink" href="#idle-connection-timeout" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>For each request that a client makes through a load balancer, it maintains two connections, for each client request, one connection with the client and the other connection is to the back-end instance.</li>
+<li>For each connection, the load balancer manages an idle timeout that is triggered when no data is sent over the connection for a specified time period. If no data has been sent or received, it closes the connection after the idle timeout period (defaults to 60 seconds) has elapsed</li>
+<li>For lengthy operations, such as file uploads, the idle timeout setting for the connections should be adjusted to ensure that lengthy operations have time to complete.</li>
+</ul>
+</div>
+<div class="section" id="x-forwarded-headers-proxy-protocol-support">
+<h2>X-Forwarded Headers &amp; Proxy Protocol Support<a class="headerlink" href="#x-forwarded-headers-proxy-protocol-support" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">As the Elastic Load Balancer intercepts the traffic between the client and the back end servers, the back end server does not know the IP address, Protocol and the Port used between the Client and the Load balancer.</p>
+</li>
+<li><p class="first">ELB provides X-Forwarded headers support to help back end servers track the same when using HTTP protocol</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>X-Forwarded-For</strong> request header to help back end servers identify the IP address of a client when you use an HTTP or HTTPS load balancer.</li>
+<li><strong>X-Forwarded-Proto</strong> request header to help back end servers identify the protocol (HTTP/S) that a client used to connect to the server</li>
+<li><strong>X-Forwarded-Port</strong> request header to help back end servers identify the port that an HTTP or HTTPS load balancer uses to connect to the client.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">ELB provides Proxy Protocol support to help back end servers track the same when using non-HTTP protocol  or when using HTTPS and not terminating the SSL connection on the load balancer.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Proxy Protocol is an Internet protocol used to carry connection information from the source requesting the connection to the destination for which the connection was requested.</li>
+<li>Elastic Load Balancing uses Proxy Protocol version 1, which uses a human-readable header format with connection information such as the source IP address, destination IP address, and port numbers</li>
+<li>If the ELB is already behind a Proxy with the Proxy protocol enabled, enabling the Proxy Protocol on ELB would add the header twice</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="cross-zone">
+<h2>Cross-Zone<a class="headerlink" href="#cross-zone" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>By default, the load balancer distributes incoming requests evenly across its enabled Availability Zones for e.g. If AZ-a has 5 instances and AZ-b has 2 instances, the load will still be distributed 50% across each of the AZs</li>
+<li>Enabling Cross-Zone load balancing allows the ELB to distribute incoming requests evenly across all the back-end instances, regardless of the AZ</li>
+<li>Cross-zone load balancer reduces the need to maintain equivalent numbers of back-end instances in each Availability Zone, and improves application’s ability to handle the loss of one or more back-end instances.</li>
+<li>It is still recommended to maintain approximately equivalent numbers of instances in each Availability Zone for higher fault tolerance.</li>
+</ul>
+</div>
+<div class="section" id="connection-draining">
+<h2>Connection Draining<a class="headerlink" href="#connection-draining" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>By default, if an registered EC2 instance with the ELB is deregistered or becomes unhealthy, the load balancer immediately closes the connection</li>
+<li>Connection draining can help the load balancer to complete the in-flight requests made while keeping the existing connections open, and preventing any new requests being sent to the instances that are de-registering or unhealthy.</li>
+<li>Connection draining helps perform maintenance such as deploying software upgrades or replacing back-end instances without affecting customers’ experience</li>
+<li>Connection draining allows you to specify a maximum time (between 1 and 3,600 seconds and default 300 seconds) to keep the connections alive before reporting the instance as de-registered. Maximum timeout limit does not apply to connections to unhealthy instances.</li>
+<li>If the instances are part of an Auto Scaling group and connection draining is enabled for your load balancer, Auto Scaling waits for the in-flight requests to complete, or for the maximum timeout to expire, before terminating instances due to a scaling event or health check replacement.</li>
+</ul>
+</div>
+<div class="section" id="sticky-sessions-session-affinity">
+<h2>Sticky Sessions (Session Affinity)<a class="headerlink" href="#sticky-sessions-session-affinity" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>ELB can be configured to use sticky session feature (also called session affinity) which enables it to bind a user’s session to an instance and ensures all requests are sent to the same instance.</li>
+<li>Stickiness remains for a period of time which can be controlled by the application’s session cookie, if one exists, or through cookie, named AWSELB, created through Elastic Load balancer.</li>
+<li>Sticky sessions for ELB are disabled, by default.</li>
+</ul>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>An HTTP/HTTPS load balancer.</li>
+<li><strong>SSL traffic should be terminated on the ELB. ELB does session stickiness on a HTTP/HTTPS listener is by utilizing an HTTP cookie. If SSL traffic is not terminated on the ELB and is terminated on the back-end instance, the ELB has no visibility into the HTTP headers and therefore can not set or read any of the HTTP headers being passed back and forth.</strong></li>
+<li>At least one healthy instance in each Availability Zone.</li>
+</ul>
+</div>
+<div class="section" id="duration-based-session-stickiness">
+<h3>Duration-Based Session Stickiness<a class="headerlink" href="#duration-based-session-stickiness" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Duration-Based Session Stickiness is maintained by ELB using a special cookie created to track the instance for each request to each listener.</li>
+<li>When the load balancer receives a request, it first checks to see if this cookie is present in the request. If so, the request is sent to the instance specified in the cookie.</li>
+<li>If there is no cookie, the ELB chooses an instance based on the existing load balancing algorithm and a cookie is inserted into the response for binding subsequent requests from the same user to that instance.</li>
+<li>Stickiness policy configuration defines a cookie expiration, which establishes the duration of validity for each cookie. The cookie is automatically updated after its duration expires.</li>
+</ul>
+</div>
+<div class="section" id="application-controlled-session-stickiness">
+<h3>Application-Controlled Session Stickiness<a class="headerlink" href="#application-controlled-session-stickiness" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Load balancer uses a special cookie only to associate the session with the instance that handled the initial request, but follows the lifetime of the application cookie specified in the policy configuration.</li>
+<li>Load balancer only inserts a new stickiness cookie if the application response includes a new application cookie. The load balancer stickiness cookie does not update with each request.</li>
+<li>If the application cookie is explicitly removed or expires, the session stops being sticky until a new application cookie is issued.</li>
+<li>If an instance fails or becomes unhealthy, the load balancer stops routing request to that instance, instead chooses a new healthy instance based on the existing load balancing algorithm. The load balancer treats the session as now “stuck” to the new healthy instance, and continues routing requests to that instance even if the failed instance comes back.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="load-balancer-deletion">
+<h2>Load Balancer Deletion<a class="headerlink" href="#load-balancer-deletion" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Deleting a load balancer does not affect the instances registered with the load balancer and they would continue to run</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS Elastic Load Balancing - ELB</a><ul>
+<li><a class="reference internal" href="#aws-elastic-load-balancer">AWS Elastic Load Balancer</a></li>
+<li><a class="reference internal" href="#elb-key-points">ELB Key Points</a><ul>
+<li><a class="reference internal" href="#scaling-elb">Scaling ELB</a></li>
+<li><a class="reference internal" href="#pre-warming-elb">Pre-Warming ELB</a></li>
+<li><a class="reference internal" href="#dns-resolution">DNS Resolution</a></li>
+<li><a class="reference internal" href="#load-balancer-types">Load Balancer Types</a></li>
+<li><a class="reference internal" href="#availability-zones-subnets">Availability Zones/Subnets</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security-groups-nacl">Security Groups &amp; NACL</a></li>
+<li><a class="reference internal" href="#ssl-negotiation-configuration">SSL Negotiation Configuration</a></li>
+<li><a class="reference internal" href="#health-checks">Health Checks</a></li>
+<li><a class="reference internal" href="#listeners">Listeners</a></li>
+<li><a class="reference internal" href="#idle-connection-timeout">Idle Connection Timeout</a></li>
+<li><a class="reference internal" href="#x-forwarded-headers-proxy-protocol-support">X-Forwarded Headers &amp; Proxy Protocol Support</a></li>
+<li><a class="reference internal" href="#cross-zone">Cross-Zone</a></li>
+<li><a class="reference internal" href="#connection-draining">Connection Draining</a></li>
+<li><a class="reference internal" href="#sticky-sessions-session-affinity">Sticky Sessions (Session Affinity)</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#duration-based-session-stickiness">Duration-Based Session Stickiness</a></li>
+<li><a class="reference internal" href="#application-controlled-session-stickiness">Application-Controlled Session Stickiness</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#load-balancer-deletion">Load Balancer Deletion</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_sqs.html"
+                        title="previous chapter">AWS Simple Queue Service - SQS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="application_lb.html"
+                        title="next chapter">AWS ELB Application Load Balancer</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_elb.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="application_lb.html" title="AWS ELB Application Load Balancer"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aws_sqs.html" title="AWS Simple Queue Service - SQS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

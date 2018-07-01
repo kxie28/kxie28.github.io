@@ -9,3 +9,5 @@ Amazon Web Services
    aws_ec2
    aws_s3
    aws_rds
+   aws_sqs
+   aws_elb
