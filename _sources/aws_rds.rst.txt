@@ -35,7 +35,7 @@ Relation Database Service – RDS Overview
 
 	* databases can be further protected by putting them in a VPC, using SSL for data in transit and encryption for data in rest
 	
-	*However, **as it is a managed service, shell (root ssh) access to DB instances is not provided**, and this restricts access to certain system procedures and tables that require advanced privileges.
+	* However, **as it is a managed service, shell (root ssh) access to DB instances is not provided**, and this restricts access to certain system procedures and tables that require advanced privileges.
 
 RDS Components
 ^^^^^^^^^^^^^^
