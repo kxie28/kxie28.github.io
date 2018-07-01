@@ -1,0 +1,211 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS ELB Application Load Balancer &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS Elastic Load Balancing - ELB" href="aws_elb.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_elb.html" title="AWS Elastic Load Balancing - ELB"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_elb.html" accesskey="U">AWS Elastic Load Balancing - ELB</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-elb-application-load-balancer">
+<h1>AWS ELB Application Load Balancer<a class="headerlink" href="#aws-elb-application-load-balancer" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>An Application Load Balancer is a load balancing option for the ELB service that operates at the layer 7 (application layer) and allows defining routing rules based on content across multiple services or containers running on one or more EC2 instances.</li>
+</ul>
+<a class="reference internal image-reference" href="_images/application-lb.png"><img alt="alternate text" class="align-center" src="_images/application-lb.png" style="width: 650.0px; height: 450.0px;" /></a>
+<div class="section" id="application-load-balancer-benefits">
+<h2>Application Load Balancer Benefits<a class="headerlink" href="#application-load-balancer-benefits" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Support for Path-based routing,  where listener rules can be configured to forward requests based on the URL in the request. This enables structuring application as smaller services, and route requests to the correct service based on the content of the URL.</li>
+<li>Support for routing requests to multiple services on a single EC2 instance by registering the instance using multiple ports.</li>
+<li>Support for containerized applications. EC2 Container Service (ECS) can select an unused port when scheduling a task and register the task with a target group using this port, enabling efficient use of the clusters.</li>
+<li>Support for monitoring the health of each service independently, as health checks are defined at the target group level and many CloudWatch metrics are reported at the target group level. Attaching a target group to an Auto Scaling group enables you to scale each service dynamically based on demand.</li>
+</ul>
+</div>
+<div class="section" id="application-load-balancer-features">
+<h2>Application Load Balancer Features<a class="headerlink" href="#application-load-balancer-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>supports load balancing of applications using <strong>HTTP and HTTPS (Secure HTTP) protocols</strong></li>
+<li>supports <strong>HTTP/2</strong>, which is enabled natively. Clients that support HTTP/2 can connect over TLS</li>
+<li>supports <strong>WebSockets</strong> and Secure WebSockets natively</li>
+<li>supports <strong>Request tracing</strong>, by default</li>
+<li>supports <strong>Sticky Sessions (Session Affinity)</strong> using load balancer generated cookies, to route requests from the same client to the same target</li>
+<li>supports <strong>SSL termination</strong>, to decrypt the request on ALB before sending it to the underlying targets.</li>
+<li>supports layer 7 specific features like <strong>X-Forwarded-For</strong> headers to help determine the actual client IP, port and protocol</li>
+<li>automatically <strong>scales</strong> its request handling capacity in response to incoming application traffic.</li>
+<li>provides <strong>High Availability</strong>, by allowing you to specify more than one AZ and distribution of incoming traffic across multiple AZs.</li>
+<li>integrates with <strong>ACM</strong> to provision and bind a SSL/TLS certificate to the load balancer thereby making the entire SSL offload process very easy</li>
+<li>supports <strong>IPv6</strong> addressing, for an Internet facing load balancer</li>
+<li>supports <strong>Request Tracking</strong>, where in a new custom identifier “X-Amzn-Trace-Id” HTTP header is injected on all requests to help track in the request flow across various services</li>
+<li>supports <strong>Security Groups</strong> to control the traffic allowed to and from the load balancer.</li>
+<li>provides <strong>Access Logs</strong>, to record all requests sent the load balancer, and store the logs in S3 for later analysis in compressed format</li>
+<li>provides <strong>Delete Protection</strong>, to prevent the ALB from accidental deletion</li>
+<li>supports <strong>Connection Idle Timeout</strong> – ALB maintains two connections for each request one with the Client (front end) and one with the target instance (back end). If no data has been sent or received by the time that the idle timeout period elapses, ALB closes the front-end connection</li>
+<li>integrates with <strong>CloudWatch</strong> to provide metrics such as request counts, error counts, error types, and request latency</li>
+<li>integrates with <strong>AWS WAF</strong>, a web application firewall that helps protect web applications from attacks by allowing rules configuration based on IP addresses, HTTP headers, and custom URI strings</li>
+<li>integrates with <strong>CloudTrail</strong> to receive a history of ALB API calls made on the AWS account</li>
+</ul>
+</div>
+<div class="section" id="application-load-balancer-listeners">
+<h2>Application Load Balancer Listeners<a class="headerlink" href="#application-load-balancer-listeners" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">A listener is a process that checks for connection requests, using the configured protocol and port</p>
+</li>
+<li><p class="first">Listener supports HTTP &amp; HTTPS protocol with Ports from 1-65535</p>
+</li>
+<li><p class="first">ALB supports SSL Termination for HTTPS listener, which helps to offload the work of encryption and decryption so that the targets can focus on their main work.</p>
+</li>
+<li><p class="first">HTTPS listener supports exactly one SSL server certificate on the listener.</p>
+</li>
+<li><p class="first">WebSockets with both HTTP and HTTPS listeners (Secure WebSockets)</p>
+</li>
+<li><p class="first">Supports HTTP/2 with HTTPS listeners</p>
+<blockquote>
+<div><ul class="simple">
+<li>128 requests can be sent in parallel using one HTTP/2 connection.</li>
+<li>ALB converts these to individual HTTP/1.1 requests and distributes them across the healthy targets in the target group using the round robin routing algorithm.</li>
+<li>HTTP/2 uses front-end connections more efficiently resulting in fewer connections between clients and the load balancer.</li>
+<li>Server-push feature of HTTP/2 is not supported</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Each listener has a default rule, and can optionally define additional rules.</p>
+</li>
+<li><p class="first">Each rule consists of a priority, action, optional host condition, and optional path condition.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Priority – Rules are evaluated in priority order, from the lowest value to the highest value. The default rule has lowest priority</li>
+<li>Action – Each rule action has a type and a target group. Currently, the only supported type is forward, which forwards requests to the target group. You can change the target group for a rule at any time.</li>
+<li>Condition – There are two types of rule conditions: host and path. When the conditions for a rule are met, then its action is taken</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Host Condition or Host-based routing</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Host conditions can be used to define rules that forward requests to different target groups based on the host name in the host header</li>
+<li>This enables support for multiple domains using a single ALB for e.g. orders.example.com, images.example.com, registration.example.com</li>
+<li>Each host condition has one hostname. If the hostname in</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Path Condition or path-based routing</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>Path conditions can be used to define rules that forward requests to different target groups based on the URL in the request</li>
+<li>Each path condition has one path pattern for e.g. example.com/orders, example.com/images, example.com/registration</li>
+<li>If the URL in a request matches the path pattern in a listener rule exactly, the request is routed using that rule.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="advantages-over-classic-load-balancer">
+<h2>Advantages over Classic Load Balancer<a class="headerlink" href="#advantages-over-classic-load-balancer" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Support for path-based routing, where rules can be configured for the listener to forward requests based on the URL</li>
+<li>Support for host-based routing, where rules can be configured for the listener to forward requests based on the host field in the HTTP header.</li>
+<li>Support for routing requests to multiple applications on a single EC2 instance. Each instance or IP address can be registered with the same target group using multiple ports</li>
+<li>Support for registering targets by IP address, including targets outside the VPC for the load balancer.</li>
+<li>Support containerized applications with ECS using Dynamic port mapping</li>
+<li>Support monitoring the health of each service independently, as health checks and many CloudWatch metrics are defined at the target group level</li>
+<li>Attaching of target group to an Auto Scaling group enables scaling of each service dynamically based on demand</li>
+<li>Access logs contain additional information &amp; stored in compressed format</li>
+<li>Improved load balancer performance.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS ELB Application Load Balancer</a><ul>
+<li><a class="reference internal" href="#application-load-balancer-benefits">Application Load Balancer Benefits</a></li>
+<li><a class="reference internal" href="#application-load-balancer-features">Application Load Balancer Features</a></li>
+<li><a class="reference internal" href="#application-load-balancer-listeners">Application Load Balancer Listeners</a></li>
+<li><a class="reference internal" href="#advantages-over-classic-load-balancer">Advantages over Classic Load Balancer</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_elb.html"
+                        title="previous chapter">AWS Elastic Load Balancing - ELB</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/application_lb.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_elb.html" title="AWS Elastic Load Balancing - ELB"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="aws_elb.html" >AWS Elastic Load Balancing - ELB</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

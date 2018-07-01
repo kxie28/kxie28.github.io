@@ -1,9 +1,5 @@
 AWS Simple Queue Service - SQS
 ==============================
-
-.. toctree::
-   :maxdepth: 2
-   
    
    
 Simple Queue Service – SQS
@@ -96,7 +92,7 @@ SQS Standard Queue Features & Key Points
 
 	* provides the ability to move data between distributed components of the applications that perform different tasks without losing messages or requiring each component to be always available
 
-* Multiple writers and readers
+* **Multiple writers and readers**
 
 	* supports multiple readers and writers interacting with the same queue as the same time
 
@@ -108,7 +104,7 @@ SQS Standard Queue Features & Key Points
 
 	* messages larger than 256 KB can be managed using the S3 or DynamoDB, with  SQS holding a pointer to the S3 object
 
-* Access Control
+* **Access Control**
 
 	* Access can be controlled for who can produce and consume messages to each queue
 
@@ -197,8 +193,8 @@ Visibility timeout
 ^^^^^^^^^^^^^^^^^^
 
 .. image:: Visibility-timeout.png
-   :width: 650px
-   :height: 450px
+   :width: 550px
+   :height: 350px
    :scale: 100 %
    :alt: alternate text
    :align: center
