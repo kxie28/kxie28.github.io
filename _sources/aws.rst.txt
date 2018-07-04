@@ -11,3 +11,5 @@ Amazon Web Services
    aws_rds
    aws_sqs
    aws_elb
+   aws_route53
+   aws_cloudwatch
