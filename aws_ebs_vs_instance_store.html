@@ -1,0 +1,234 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS EBS vs Instance Store &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS Simple Notification Service - SNS" href="aws_sns.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_sns.html" title="AWS Simple Notification Service - SNS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-ebs-vs-instance-store">
+<h1>AWS EBS vs Instance Store<a class="headerlink" href="#aws-ebs-vs-instance-store" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p class="first">EC2 instances support two types for block level storage</p>
+<blockquote>
+<div><ul class="simple">
+<li>Elastic Block Store (EBS)</li>
+<li>Instance Store (Ephemeral store)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">EC2 Instances can be launched using either Elastic Block Store (EBS) or Instance Store volume as root volumes and additional volumes.</p>
+</li>
+<li><p class="first">EC2 instances can be launched by choosing between AMIs backed by EC2 instance store and AMIs backed by EBS. However, AWS recommends use of EBS backed AMIs, because they launch faster and use persistent storage</p>
+</li>
+</ul>
+<div class="section" id="instance-store-ephemeral-storage">
+<h2>Instance Store (Ephemeral storage)<a class="headerlink" href="#instance-store-ephemeral-storage" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/instance_store_backed_instance.png"><img alt="alternate text" class="align-center" src="_images/instance_store_backed_instance.png" style="width: 650.0px; height: 450.0px;" /></a>
+<ul class="simple">
+<li>An Instance store backed instance is an EC2 instance using an Instance store as root device volume created from a template stored in S3.</li>
+<li>Instance store volumes accesses storage from disks that are physically attached to the host computer.</li>
+<li>When an Instance stored instance is launched, the image that is used to boot the instance is copied to the root volume (typically sda1).</li>
+<li>Instance store provides temporary block-level storage for instances.</li>
+<li>Data on an instance store volume persists only during the life of the associated instance; if an instance is stopped or terminated, any data on instance store volumes is lost.</li>
+</ul>
+<div class="section" id="key-points-for-instance-store-backed-instance">
+<h3>Key points for Instance store backed Instance<a class="headerlink" href="#key-points-for-instance-store-backed-instance" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Boot time is slower then EBS backed volumes and usually less then 5 min</p>
+</li>
+<li><p class="first">Can be selected as Root Volume and attached as additional volumes</p>
+</li>
+<li><p class="first">Instance store backed Instances can be of maximum 10GiB volume size</p>
+</li>
+<li><p class="first">Instance store volume can be attached as additional volumes only when the instance is being launched and cannot be attached once the Instance is up and running</p>
+</li>
+<li><p class="first">Instance store backed Instances cannot be stopped, as when stopped and started AWS does not guarantee the instance would be launched in the same host and hence the data is lost</p>
+</li>
+<li><p class="first">Data on Instance store volume is LOST in following scenarios :-</p>
+<blockquote>
+<div><ul class="simple">
+<li>Failure of an underlying drive</li>
+<li>Stopping an EBS-backed instance where instance store are attached as additional volumes</li>
+<li>Termination of the Instance</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Data on Instance store volume is NOT LOST when the instance is rebooted</p>
+</li>
+<li><p class="first">For EC2 instance store-backed instances AWS recommends to</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li>distribute the data on the instance stores across multiple AZs</li>
+<li>back up critical data from the instance store volumes to persistent storage on a regular basis.</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">AMI creation requires usage on AMI tools and needs to be executed from within the running instance</p>
+</li>
+<li><p class="first">Instance store backed Instances cannot be upgraded</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="amazon-elastic-block-store-ebs">
+<h2>Amazon Elastic Block Store (EBS)<a class="headerlink" href="#amazon-elastic-block-store-ebs" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/ebs_backed_instance.png"><img alt="alternate text" class="align-center" src="_images/ebs_backed_instance.png" style="width: 650.0px; height: 450.0px;" /></a>
+<ul class="simple">
+<li>An “EBS-backed” instance means that the root device for an instance launched from the AMI is an EBS volume created from an EBS snapshot</li>
+<li>An EBS volume behaves like a raw, unformatted, external block device that can be attached to a single instance and are not physically attached to the Instance host computer (more like a network attached storage).</li>
+<li>Volume persists independently from the running life of an instance. After an EBS volume is attached to an instance, you can use it like any other physical hard drive.</li>
+<li>EBS volume can be detached from one instance and attached to another instance</li>
+<li>EBS volumes can be created as encrypted volumes using the EBS encryption feature</li>
+</ul>
+<div class="section" id="key-points-for-ebs-backed-instance">
+<h3>Key points for EBS backed Instance<a class="headerlink" href="#key-points-for-ebs-backed-instance" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Boot time is very fast usually less then a min</p>
+</li>
+<li><p class="first">Can be selected as Root Volume and attached as additional volumes</p>
+</li>
+<li><p class="first">EBS backed Instances can be of maximum 16TiB volume size depending upon the OS</p>
+</li>
+<li><p class="first">EBS volume can be attached as additional volumes when the Instance is launched and even when the Instance is up and running</p>
+</li>
+<li><p class="first">Data on the EBS volume is LOST</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li>for EBS Root volume, if Delete On Termination flag is disabled (enabled, by default)</li>
+<li>for attached EBS volumes, if the Delete On Termination flag is disabled, which is the default.</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">Data on EBS volume is NOT LOST in following scenarios :-</p>
+<blockquote>
+<div><ul class="simple">
+<li>Reboot on the Instance</li>
+<li>Stopping an EBS-backed instance</li>
+<li>Termination of the Instance for the additional EBS volumes. Additional EBS volumes are detached with their data intact</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">When EBS-backed instance is in a stopped state, various instance– and volume-related tasks can be done for e.g. you can modify the properties of the instance, you can change the size of your instance or update the kernel it is using, or you can attach your root volume to a different running instance for debugging or any other purpose</p>
+</li>
+<li><p class="first">EBS volumes are AZ scoped and tied to a single AZ  in which created</p>
+</li>
+<li><p class="first">EBS volumes are automatically replicated within that zone to prevent data loss due to failure of any single hardware component</p>
+</li>
+<li><p class="first">AMI creation is easy using a Single command</p>
+</li>
+<li><p class="first">EBS backed Instances can be upgraded for instance type, Kernel, RAM disk and user data</p>
+</li>
+</ol>
+<a class="reference internal image-reference" href="_images/ebs-vs-ephemeral.png"><img alt="alternate text" class="align-center" src="_images/ebs-vs-ephemeral.png" style="width: 650.0px; height: 450.0px;" /></a>
+</div>
+</div>
+<div class="section" id="boot-times">
+<h2>Boot Times<a class="headerlink" href="#boot-times" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>EBS-backed AMIs launch faster than EC2 instance store-backed AMIs.</li>
+<li>When an EC2 instance store-backed AMI is launched, all the parts have to be retrieved from S3 before the instance is available.</li>
+<li>With an EBS-backed AMI is launched, parts are lazily loaded and only the parts required to boot the instance need to be retrieved from the snapshot before the instance is available.</li>
+<li>However, the performance of an instance that uses an EBS volume for its root device is slower for a short time while the remaining parts are retrieved from the snapshot and loaded into the volume.</li>
+<li>When you stop and restart the instance, it launches quickly, because the state is stored in an EBS volume.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS EBS vs Instance Store</a><ul>
+<li><a class="reference internal" href="#instance-store-ephemeral-storage">Instance Store (Ephemeral storage)</a><ul>
+<li><a class="reference internal" href="#key-points-for-instance-store-backed-instance">Key points for Instance store backed Instance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#amazon-elastic-block-store-ebs">Amazon Elastic Block Store (EBS)</a><ul>
+<li><a class="reference internal" href="#key-points-for-ebs-backed-instance">Key points for EBS backed Instance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#boot-times">Boot Times</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_sns.html"
+                        title="previous chapter">AWS Simple Notification Service - SNS</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_ebs_vs_instance_store.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_sns.html" title="AWS Simple Notification Service - SNS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,235 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Simple Notification Service - SNS &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AWS EBS vs Instance Store" href="aws_ebs_vs_instance_store.html" />
+    <link rel="prev" title="AWS CloudWatch" href="aws_cloudwatch.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_ebs_vs_instance_store.html" title="AWS EBS vs Instance Store"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aws_cloudwatch.html" title="AWS CloudWatch"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-simple-notification-service-sns">
+<h1>AWS Simple Notification Service - SNS<a class="headerlink" href="#aws-simple-notification-service-sns" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="_images/aws-sns.png"><img alt="alternate text" class="align-center" src="_images/aws-sns.png" style="width: 650.0px; height: 450.0px;" /></a>
+<ul class="simple">
+<li>Simple Notification Service – SNS is a web service that coordinates and manages the delivery or sending of messages to subscribing endpoints or clients</li>
+<li>SNS provides the ability to create Topic which is a logical access point and communication channel.</li>
+<li>Each topic has a unique name that identifies the SNS endpoint for publishers to post messages and subscribers to register for notifications.</li>
+<li>Producers and Consumers communicate asynchronously with subscribers by producing and sending a message to a topic</li>
+<li>Producers push messages to the topic, they created or have access to, and SNS matches the topic to a list of subscribers who have subscribed to that topic, and delivers the message to each of those subscribers</li>
+<li>Subscribers receive all messages published to the topics to which they subscribe, and all subscribers to a topic receive the same messages.</li>
+<li>Subscribers (i.e., web servers, email addresses, SQS queues, AWS Lambda functions) consume or receive the message or notification over one of the supported protocols (i.e., SQS, HTTP/S, email, SMS, Lambda) when they are subscribed to the topic.</li>
+</ul>
+<div class="section" id="accessing-amazon-sns">
+<h2>Accessing Amazon SNS<a class="headerlink" href="#accessing-amazon-sns" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Amazon Management console</p>
+<blockquote>
+<div><ul class="simple">
+<li>Amazon Management console is the web-based user interface which can be used to manage SNS</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS Command line Interface (CLI)</p>
+<blockquote>
+<div><ul class="simple">
+<li>Provides commands for a broad set of AWS products, and is supported on Windows, Mac, and Linux.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS Tools for Windows Powershell</p>
+<blockquote>
+<div><ul class="simple">
+<li>Provides commands for a broad set of AWS products for those who script in the PowerShell environment</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS SNS Query API</p>
+<blockquote>
+<div><ul class="simple">
+<li>Query API allows for requests are HTTP or HTTPS requests that use the HTTP verbs GET or POST and a Query parameter named Action</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">AWS SDK libraries</p>
+<blockquote>
+<div><ul class="simple">
+<li>AWS provide libraries in various languages which provide basic functions that automate tasks such as cryptographically signing your requests, retrying requests, and handling error responses</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="sns-supported-transport-protocols">
+<h2>SNS Supported Transport Protocols<a class="headerlink" href="#sns-supported-transport-protocols" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>HTTP, HTTPS</strong> – Subscribers specify a URL as part of the subscription registration; notifications will be delivered through an HTTP POST to the specified URL.</li>
+<li><strong>Email, Email-JSON</strong> – Messages are sent to registered addresses as email. Email-JSON sends notifications as a JSON object, while Email sends text-based email.</li>
+<li><strong>SQS</strong> – Users can specify an SQS queue as the endpoint; SNS will enqueue a notification message to the specified queue (which subscribers can then process using SQS APIs such as ReceiveMessage, DeleteMessage, etc.)</li>
+<li><strong>SMS</strong> – Messages are sent to registered phone numbers as SMS text messages</li>
+</ul>
+</div>
+<div class="section" id="sns-supported-endpoints">
+<h2>SNS Supported Endpoints<a class="headerlink" href="#sns-supported-endpoints" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first"><strong>Email Notifications</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>SNS provides the ability to send Email notifications</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Mobile Push Notifications</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">SNS provides an ability to send push notification messages directly to apps on mobile devices. Push notification messages sent to a mobile endpoint can appear in the mobile app as message alerts, badge updates, or even sound alerts</p>
+</li>
+<li><p class="first">Supported push notification services</p>
+<blockquote>
+<div><ul class="simple">
+<li>Amazon Device Messaging (ADM)</li>
+<li>Apple Push Notification Service (APNS)</li>
+<li>Google Cloud Messaging (GCM)</li>
+<li>Windows Push Notification Service (WNS) for Windows 8+ and Windows Phone 8.1+</li>
+<li>Microsoft Push Notification Service (MPNS) for Windows Phone 7+</li>
+<li>Baidu Cloud Push for Android devices in China</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>SQS Queues</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>SNS with SQS provides the ability for messages to be delivered to applications that require immediate notification of an event, and also persist in an SQS queue for other applications to process at a later time</li>
+<li>SNS allows applications to send time-critical messages to multiple subscribers through a “push” mechanism, eliminating the need to periodically check or “poll” for updates.</li>
+<li>SQS can be used by distributed applications to exchange messages through a polling model, and can be used to decouple sending and receiving components, without requiring each component to be concurrently available.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>SMS Notifications</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>SNS provides the ability to send and receive Short Message Service (SMS) notifications to SMS-enabled mobile phones and smart phones</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>HTTP/HTTPS Endpoints</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>SNS provides the ability to send notification messages to one or more HTTP or HTTPS endpoints.When you subscribe an endpoint to a topic, you can publish a notification to the topic and Amazon SNS sends an HTTP POST request delivering the contents of the notification to the subscribed endpoint</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Lambda</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>SNS and Lambda are integrated so Lambda functions can be invoked with SNS notifications.</li>
+<li>When a message is published to an SNS topic that has a Lambda function subscribed to it, the Lambda function is invoked with the payload of the published message</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS Simple Notification Service - SNS</a><ul>
+<li><a class="reference internal" href="#accessing-amazon-sns">Accessing Amazon SNS</a></li>
+<li><a class="reference internal" href="#sns-supported-transport-protocols">SNS Supported Transport Protocols</a></li>
+<li><a class="reference internal" href="#sns-supported-endpoints">SNS Supported Endpoints</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_cloudwatch.html"
+                        title="previous chapter">AWS CloudWatch</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aws_ebs_vs_instance_store.html"
+                        title="next chapter">AWS EBS vs Instance Store</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_sns.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_ebs_vs_instance_store.html" title="AWS EBS vs Instance Store"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aws_cloudwatch.html" title="AWS CloudWatch"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

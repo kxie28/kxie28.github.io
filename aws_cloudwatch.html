@@ -15,6 +15,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="AWS Simple Notification Service - SNS" href="aws_sns.html" />
     <link rel="prev" title="AWS Route 53" href="aws_route53.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -23,6 +24,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_sns.html" title="AWS Simple Notification Service - SNS"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="aws_route53.html" title="AWS Route 53"
              accesskey="P">previous</a> |</li>
@@ -38,9 +42,9 @@
             
   <div class="section" id="aws-cloudwatch">
 <h1>AWS CloudWatch<a class="headerlink" href="#aws-cloudwatch" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="aws-cloudwatch-monitors-aws-resources-and-applications-in-real-time">
-<h2>AWS CloudWatch monitors AWS resources and applications in real-time.<a class="headerlink" href="#aws-cloudwatch-monitors-aws-resources-and-applications-in-real-time" title="Permalink to this headline">¶</a></h2>
 <ul>
+<li><p class="first">AWS CloudWatch monitors AWS resources and applications in real-time.</p>
+</li>
 <li><p class="first">CloudWatch can be used to collect and track metrics, which are the variables to be measured for resources and applications.</p>
 </li>
 <li><p class="first">CloudWatch alarms can be configured</p>
@@ -61,14 +65,14 @@
 </li>
 </ul>
 <div class="section" id="cloudwatch-architecture">
-<h3>CloudWatch Architecture<a class="headerlink" href="#cloudwatch-architecture" title="Permalink to this headline">¶</a></h3>
+<h2>CloudWatch Architecture<a class="headerlink" href="#cloudwatch-architecture" title="Permalink to this headline">¶</a></h2>
 <a class="reference internal image-reference" href="_images/CW-Overview.png"><img alt="alternate text" class="align-center" src="_images/CW-Overview.png" style="width: 650.0px; height: 450.0px;" /></a>
-</div>
-</div>
 <div class="section" id="cloudwatch-concepts">
-<h2>CloudWatch Concepts<a class="headerlink" href="#cloudwatch-concepts" title="Permalink to this headline">¶</a></h2>
+<h3>CloudWatch Concepts<a class="headerlink" href="#cloudwatch-concepts" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
 <div class="section" id="metrics">
-<h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h3>
+<h2>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first">Metric is the fundamental concept in CloudWatch.</p>
 </li>
@@ -104,7 +108,7 @@
 </ul>
 </div>
 <div class="section" id="namespaces">
-<h3>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h3>
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>CloudWatch namespaces are containers for metrics.</li>
 <li>Metrics in different namespaces are isolated from each other, so that metrics from different applications are not mistakenly aggregated into the same statistics.</li>
@@ -114,7 +118,7 @@
 </ul>
 </div>
 <div class="section" id="dimensions">
-<h3>Dimensions<a class="headerlink" href="#dimensions" title="Permalink to this headline">¶</a></h3>
+<h2>Dimensions<a class="headerlink" href="#dimensions" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>A dimension is a name/value pair that uniquely identifies a metric.</li>
 <li>Every metric has specific characteristics that describe it, and you can think of dimensions as categories for those characteristics.</li>
@@ -125,7 +129,7 @@
 </ul>
 </div>
 <div class="section" id="time-stamps">
-<h3>Time Stamps<a class="headerlink" href="#time-stamps" title="Permalink to this headline">¶</a></h3>
+<h2>Time Stamps<a class="headerlink" href="#time-stamps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Each metric data point must be marked with a time stamp to identify the data point on a time series</li>
 <li>Time stamp can be up to two weeks in the past and up to two hours into the future.</li>
@@ -134,20 +138,20 @@
 </ul>
 </div>
 <div class="section" id="units">
-<h3>Units<a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h3>
+<h2>Units<a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Units represent the statistic’s unit of measure for e.g. count, bytes, % etc</li>
 </ul>
 </div>
 <div class="section" id="statistics">
-<h3>Statistics<a class="headerlink" href="#statistics" title="Permalink to this headline">¶</a></h3>
+<h2>Statistics<a class="headerlink" href="#statistics" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Statistics are metric data aggregations over specified periods of time</li>
 <li>Aggregations are made using the namespace, metric name, dimensions, and the data point unit of measure, within the specified time period</li>
 </ul>
 </div>
 <div class="section" id="periods">
-<h3>Periods<a class="headerlink" href="#periods" title="Permalink to this headline">¶</a></h3>
+<h2>Periods<a class="headerlink" href="#periods" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Period is the length of time associated with a specific statistic.</li>
 <li>Each statistic represents an aggregation of the metrics data collected for a specified period of time.</li>
@@ -155,7 +159,7 @@
 </ul>
 </div>
 <div class="section" id="aggregation">
-<h3>Aggregation<a class="headerlink" href="#aggregation" title="Permalink to this headline">¶</a></h3>
+<h2>Aggregation<a class="headerlink" href="#aggregation" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>CloudWatch aggregates statistics according to the period length specified in calls to GetMetricStatistics.</li>
 <li>Multiple data points can be published with the same or similar time stamps. CloudWatch aggregates them by period length when the statistics about those data points are requested.</li>
@@ -165,7 +169,7 @@
 </ul>
 </div>
 <div class="section" id="alarms">
-<h3>Alarms<a class="headerlink" href="#alarms" title="Permalink to this headline">¶</a></h3>
+<h2>Alarms<a class="headerlink" href="#alarms" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first">Alarms can automatically initiate actions on behalf of the user, based on specified parameters</p>
 </li>
@@ -212,14 +216,12 @@
 </ul>
 </div>
 <div class="section" id="regions">
-<h3>Regions<a class="headerlink" href="#regions" title="Permalink to this headline">¶</a></h3>
+<h2>Regions<a class="headerlink" href="#regions" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>CloudWatch does not aggregate data across regions. Therefore, metrics are completely separate between regions.</li>
 </ul>
-</div>
-</div>
 <div class="section" id="custom-metrics">
-<h2>Custom Metrics<a class="headerlink" href="#custom-metrics" title="Permalink to this headline">¶</a></h2>
+<h3>Custom Metrics<a class="headerlink" href="#custom-metrics" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">CloudWatch allows publishing custom metrics with put-metric-data CLI command (or its Query API equivalent PutMetricData)</p>
 </li>
@@ -269,6 +271,7 @@
 </ul>
 </div>
 </div>
+</div>
 
 
           </div>
@@ -279,11 +282,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">AWS CloudWatch</a><ul>
-<li><a class="reference internal" href="#aws-cloudwatch-monitors-aws-resources-and-applications-in-real-time">AWS CloudWatch monitors AWS resources and applications in real-time.</a><ul>
-<li><a class="reference internal" href="#cloudwatch-architecture">CloudWatch Architecture</a></li>
+<li><a class="reference internal" href="#cloudwatch-architecture">CloudWatch Architecture</a><ul>
+<li><a class="reference internal" href="#cloudwatch-concepts">CloudWatch Concepts</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#cloudwatch-concepts">CloudWatch Concepts</a><ul>
 <li><a class="reference internal" href="#metrics">Metrics</a></li>
 <li><a class="reference internal" href="#namespaces">Namespaces</a></li>
 <li><a class="reference internal" href="#dimensions">Dimensions</a></li>
@@ -293,10 +295,10 @@
 <li><a class="reference internal" href="#periods">Periods</a></li>
 <li><a class="reference internal" href="#aggregation">Aggregation</a></li>
 <li><a class="reference internal" href="#alarms">Alarms</a></li>
-<li><a class="reference internal" href="#regions">Regions</a></li>
+<li><a class="reference internal" href="#regions">Regions</a><ul>
+<li><a class="reference internal" href="#custom-metrics">Custom Metrics</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#custom-metrics">Custom Metrics</a></li>
 </ul>
 </li>
 </ul>
@@ -304,6 +306,9 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="aws_route53.html"
                         title="previous chapter">AWS Route 53</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aws_sns.html"
+                        title="next chapter">AWS Simple Notification Service - SNS</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -333,6 +338,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="aws_sns.html" title="AWS Simple Notification Service - SNS"
+             >next</a> |</li>
         <li class="right" >
           <a href="aws_route53.html" title="AWS Route 53"
              >previous</a> |</li>
