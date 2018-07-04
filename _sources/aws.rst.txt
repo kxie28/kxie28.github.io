@@ -13,3 +13,5 @@ Amazon Web Services
    aws_elb
    aws_route53
    aws_cloudwatch
+   aws_sns
+   aws_ebs_vs_instance_store

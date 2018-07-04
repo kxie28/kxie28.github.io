@@ -1,8 +1,7 @@
 AWS CloudWatch
 ==============
 
-AWS CloudWatch monitors AWS resources and applications in real-time.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* AWS CloudWatch monitors AWS resources and applications in real-time.
 
 * CloudWatch can be used to collect and track metrics, which are the variables to be measured for resources and applications.
 
