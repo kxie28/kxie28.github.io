@@ -15,3 +15,4 @@ Amazon Web Services
    aws_cloudwatch
    aws_sns
    aws_ebs_vs_instance_store
+   aws_cloudfront
