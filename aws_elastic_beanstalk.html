@@ -1,0 +1,265 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Elastic Beanstalk &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS CloudFront" href="aws_cloudfront.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_cloudfront.html" title="AWS CloudFront"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-elastic-beanstalk">
+<h1>AWS Elastic Beanstalk<a class="headerlink" href="#aws-elastic-beanstalk" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p class="first">AWS Elastic Beanstalk helps to quickly deploy and manage applications in the AWS Cloud without having to worry about the infrastructure that runs those applications.</p>
+</li>
+<li><p class="first">Elastic Beanstalk reduces management complexity without restricting choice or control.</p>
+</li>
+<li><p class="first">Elastic Beanstalk enables automated infrastructure management and code deployment, by simply uploading, for applications and includes</p>
+<blockquote>
+<div><ul class="simple">
+<li>Application platform management</li>
+<li>Capacity provisioning</li>
+<li>Load Balancing</li>
+<li>Auto scaling</li>
+<li>Code deployment</li>
+<li>Health Monitoring</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Once an application is uploaded, Elastic Beanstalk automatically launches an environment, creates and configures the AWS resources needed to run the code. After your environment is launched, it can be managed and used to deploy new application versions</p>
+</li>
+<li><p class="first">AWS resources launched by Elastic Beanstalk are fully accessible i.e. EC2 instances can be sshed into</p>
+</li>
+<li><p class="first">Elastic Beanstalk provides developers and systems administrators an easy, fast way to deploy and manage the applications without having to worry about AWS infrastructure.</p>
+</li>
+<li><p class="first">CloudFormation, using templates, is a better option if the internal AWS resources to be used are known and fine grained control is needed</p>
+</li>
+</ul>
+<div class="section" id="elastic-beanstalk-components">
+<h2>Elastic Beanstalk Components<a class="headerlink" href="#elastic-beanstalk-components" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/Elastic-Beanstalk-Components.png"><img alt="alternate text" class="align-center" src="_images/Elastic-Beanstalk-Components.png" style="width: 650.0px; height: 450.0px;" /></a>
+<ul>
+<li><p class="first">Application</p>
+<blockquote>
+<div><ul class="simple">
+<li>An Elastic Beanstalk application is a logical collection of Elastic Beanstalk components, including environments, versions, and environment configurations.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Application Version</p>
+<blockquote>
+<div><ul class="simple">
+<li>An application version refers to a specific, labeled iteration of deployable code for a web application</li>
+<li>Applications can have many versions and each application version is unique and points to an S3 object</li>
+<li>Multiple versions can be deployed for an Application for testing differences and helps rollback to any version if case of issues</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Environment</p>
+<blockquote>
+<div><ul class="simple">
+<li>An environment is a version that is deployed onto AWS resources</li>
+<li>An environment runs a single application version at a time, but same application version can be deployed across multiple environments</li>
+<li>When an environment is created, Elastic Beanstalk provisions the resources needed to run the application version you specified.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Environment Configuration</p>
+<blockquote>
+<div><ul class="simple">
+<li>An environment configuration identifies a collection of parameters and settings that define how an environment and its associated resources behave</li>
+<li>When an environment’s configuration settings is updated, Elastic Beanstalk automatically applies the changes to existing resources or deletes and deploys new resources, depending upon the change</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Configuration Template</p>
+<blockquote>
+<div><ul class="simple">
+<li>A configuration template is a starting point for creating unique environment configurations</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<a class="reference internal image-reference" href="_images/clearbox-flow-00.png"><img alt="alternate text" class="align-center" src="_images/clearbox-flow-00.png" style="width: 650.0px; height: 450.0px;" /></a>
+</div>
+<div class="section" id="elastic-beanstalk-architecture">
+<h2>Elastic Beanstalk Architecture<a class="headerlink" href="#elastic-beanstalk-architecture" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/Elastic-Beanstalk-Environment-Tiers.png"><img alt="alternate text" class="align-center" src="_images/Elastic-Beanstalk-Environment-Tiers.png" style="width: 650.0px; height: 450.0px;" /></a>
+<ul>
+<li><p class="first">Elastic Beanstalk environment requires an environment tier, platform, and environment type</p>
+</li>
+<li><p class="first">Environment tier determines whether Elastic Beanstalk provisions resources to support a web application that handles HTTP(S) requests or a web application that handles background-processing tasks</p>
+</li>
+<li><p class="first"><strong>Web Environment Tier</strong></p>
+<blockquote>
+<div><ul>
+<li><p class="first">An environment tier whose web application processes web requests is known as a web server tier.</p>
+</li>
+<li><p class="first">AWS resources created for a web environment tier include a Elastic Load Balancer, an Auto Scaling group, one or more EC2 instances</p>
+</li>
+<li><p class="first">Every Environment has a CNAME url pointing to the ELB, aliased in Route 53 to ELB url</p>
+</li>
+<li><p class="first">Each EC2 server instance that runs the application uses a container type, which defines the infrastructure topology and software stack</p>
+</li>
+<li><p class="first">A software component called the host manager (HM) runs on each EC2 server instance and is responsible for</p>
+<blockquote>
+<div><ul class="simple">
+<li>Deploying the application</li>
+<li>Aggregating events and metrics for retrieval via the console, the API, or the command line</li>
+<li>Generating instance-level events</li>
+<li>Monitoring the application log files for critical errors</li>
+<li>Monitoring the application server</li>
+<li>Patching instance components</li>
+<li>Rotating your application’s log files and publishing them to S3</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Worker Environment Tier</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li>An environment tier whose web application runs background jobs is known as a worker tier</li>
+<li>AWS resources created for a worker environment tier include an Auto Scaling group, one or more Amazon EC2 instances, and an IAM role.</li>
+<li>For the worker environment tier, Elastic Beanstalk also creates and provisions an SQS queue, if one doesn’t exist</li>
+<li>When a worker environment tier is launched, Elastic Beanstalk installs the necessary support files for the programming language of choice and a daemon on each EC2 instance in the Auto Scaling group reading from the same SQS queue</li>
+<li>Daemon is responsible for pulling requests from an SQS queue and then sending the data to the web application running in the worker environment tier that will process those messages</li>
+<li>Elastic Beanstalk worker environments support SQS dead letter queues which can be used to store messages that could not be successfully processed. Dead letter queue provides the ability to sideline, isolate and analyze the unsuccessfully processed messages</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">One environment cannot support two different environment tiers because each requires its own set of resources; a worker environment tier and a web server environment tier each require an Auto Scaling group, but Elastic Beanstalk supports only one Auto Scaling group per environment.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="elastic-beanstalk-with-other-aws-services">
+<h2>Elastic Beanstalk with other AWS Services<a class="headerlink" href="#elastic-beanstalk-with-other-aws-services" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Elastic Beanstalk supports VPC and launches AWS resources, such as instances, into the VPC</p>
+</li>
+<li><p class="first">Elastic Beanstalk supports IAM and helps you securely control access to your AWS resources.</p>
+</li>
+<li><p class="first">CloudFront can be used to distribute the content in S3, after an Elastic Beanstalk is created and deployed</p>
+</li>
+<li><p class="first">CloudTrail</p>
+<blockquote>
+<div><ul class="simple">
+<li>Elastic Beanstalk is integrated with CloudTrail, a service that captures all of the Elastic BeanstalkAPI calls and delivers the log files to an S3 bucket that you specify.</li>
+<li>CloudTrail captures API calls from the Elastic Beanstalk console or from your code to the Elastic Beanstalk APIs and help to determine the request made to Elastic Beanstalk, the source IP address from which the request was made, who made the request, when it was made etc.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">RDS</p>
+<blockquote>
+<div><ul class="simple">
+<li>Elastic Beanstalk provides support for running RDS instances in the Elastic Beanstalk environment which is ideal for development and testing but not for production.</li>
+<li>For a production environment, it is not recommended because it ties the lifecycle of the database instance to the lifecycle of application’s environment. So it the Elastic beanstalk environment is deleted, the RDS instance is deleted as well</li>
+<li>It is recommended to launch a database instance outside of the environment and configure the application to connect to it outside of the functionality provided by Elastic Beanstalk.</li>
+<li>Using a database instance external to your environment requires additional security group and connection string configuration, but it also lets the application connect to the database from multiple environments, use database types not supported with integrated databases, perform blue/green deployments, and tear down your environment without affecting the database instance.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">S3</p>
+<blockquote>
+<div><ul class="simple">
+<li>Elastic Beanstalk creates an S3 bucket named elasticbeanstalk-region-account-id for each region in which environments is created.</li>
+<li>Elastic Beanstalk uses the bucket to store application versions, logs, and other supporting files.</li>
+<li>It applies a bucket policy to buckets it creates to allow environments to write to the bucket and prevent accidental deletion</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS Elastic Beanstalk</a><ul>
+<li><a class="reference internal" href="#elastic-beanstalk-components">Elastic Beanstalk Components</a></li>
+<li><a class="reference internal" href="#elastic-beanstalk-architecture">Elastic Beanstalk Architecture</a></li>
+<li><a class="reference internal" href="#elastic-beanstalk-with-other-aws-services">Elastic Beanstalk with other AWS Services</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_cloudfront.html"
+                        title="previous chapter">AWS CloudFront</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_elastic_beanstalk.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_cloudfront.html" title="AWS CloudFront"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
