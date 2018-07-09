@@ -16,3 +16,4 @@ Amazon Web Services
    aws_sns
    aws_ebs_vs_instance_store
    aws_cloudfront
+   aws_elastic_beanstalk
