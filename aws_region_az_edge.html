@@ -1,0 +1,143 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AWS Regions, Availability Zones (AZ) and Edge Locations &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AWS Elastic Beanstalk" href="aws_elastic_beanstalk.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="aws_elastic_beanstalk.html" title="AWS Elastic Beanstalk"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" accesskey="U">Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="aws-regions-availability-zones-az-and-edge-locations">
+<h1>AWS Regions, Availability Zones (AZ) and Edge Locations<a class="headerlink" href="#aws-regions-availability-zones-az-and-edge-locations" title="Permalink to this headline">¶</a></h1>
+<p>Amazon Services are hosted in multiple locations world wide. Amazon provides the ability to place resources and data in multiple locations to improve performance, provide fault tolerance, high availability and cost optimization.</p>
+<a class="reference internal image-reference" href="_images/aws-global-infrastructure.png"><img alt="alternate text" class="align-center" src="_images/aws-global-infrastructure.png" style="width: 650.0px; height: 450.0px;" /></a>
+<div class="section" id="regions">
+<h2>Regions<a class="headerlink" href="#regions" title="Permalink to this headline">¶</a></h2>
+<p>AWS provides customers with the flexibility to place instances and store data within multiple geographic regions called Region. Each region is an independent collection of AWS resources in a defined geography.</p>
+<ul class="simple">
+<li>Each region is a separate geographic area and is completely independent</li>
+<li>Each Amazon region is designed to be completely isolated from the other regions &amp; helps achieve the greatest possible fault tolerance and stability</li>
+<li>Communication between regions is across the public Internet and appropriate measures should be taken to protect the data using encryption</li>
+<li>Data transfer between regions is charged at the Internet data transfer rate for both the sending and the receiving instance</li>
+<li>Resources aren’t replicated across regions unless done explicitly</li>
+</ul>
+<p>Selection of a Region can be driven from a lot of factors</p>
+<ol class="arabic simple">
+<li><strong>Latency</strong> – Regions can be selected to be closet to the targeted user base to reduce data latency</li>
+<li><strong>Cost</strong> – AWS provides the same set of services across all regions, usually, however the cost would differ from region to region depending upon the cost (due to land, electricity, bandwidth etc) incurred by Amazon and hence can be cheaper in one region compared to the other</li>
+<li><strong>Legal Compliance</strong> – Lot of the countries enforce compliance and regulatory requirements for data to reside within the region itself</li>
+<li><a href="#id1"><span class="problematic" id="id2">**</span></a>Features&amp;&amp; – As not all the regions provide all the AWS features and services, the region selection can depend on the Services supported by the region</li>
+</ol>
+</div>
+<div class="section" id="availability-zones">
+<h2>Availability Zones<a class="headerlink" href="#availability-zones" title="Permalink to this headline">¶</a></h2>
+<p>Each Region consists of multiple, isolated locations known as Availability Zones and each Availability Zone runs on its own physically distinct, independent infrastructure and is engineered to be highly reliable.</p>
+<ul class="simple">
+<li>Each Region has multiple Availability Zones.</li>
+<li>Each AZ is physically isolated from each other so that an uncommon disaster such as fire, earthquake would only affect a single AZ</li>
+<li>AZs are geographically separated from each other, within the same region, and acts as an independent failure zone</li>
+<li>AZs are redundantly connected to multiple tier-1 transit providers</li>
+<li>AZs in a region are connected with low-latency private links and not through public internet</li>
+<li>Multi-AZ, distribution of resources across multiple Availability Zones, feature can be used to distribute instances across multiple AZ to provide High Availability</li>
+<li>AWS ensures that resources are distributed across the Availability Zones for a region by independently mapping Availability Zones to identifiers for each account. for e.g. us-east-1 region with us-east-1a AZ might not be the same location as us-east-1a AZ for another account. There’s no way for you to coordinate Availability Zones between accounts.</li>
+</ul>
+</div>
+<div class="section" id="edge-locations">
+<h2>Edge Locations<a class="headerlink" href="#edge-locations" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Edge locations are locations maintained by AWS through a worldwide network of data centers for the distribution of content.</li>
+<li>These locations are located in most of the major cities around the world and are used by CloudFront (CDN) to distribute content to end user to reduce latency.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AWS Regions, Availability Zones (AZ) and Edge Locations</a><ul>
+<li><a class="reference internal" href="#regions">Regions</a></li>
+<li><a class="reference internal" href="#availability-zones">Availability Zones</a></li>
+<li><a class="reference internal" href="#edge-locations">Edge Locations</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aws_elastic_beanstalk.html"
+                        title="previous chapter">AWS Elastic Beanstalk</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/aws_region_az_edge.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="aws_elastic_beanstalk.html" title="AWS Elastic Beanstalk"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aws.html" >Amazon Web Services</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
