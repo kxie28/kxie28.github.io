@@ -17,3 +17,4 @@ Amazon Web Services
    aws_ebs_vs_instance_store
    aws_cloudfront
    aws_elastic_beanstalk
+   aws_region_az_edge

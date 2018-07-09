@@ -31,7 +31,7 @@ Elastic Beanstalk Components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: Elastic-Beanstalk-Components.png
-   :width: 650px
+   :width: 600px
    :height: 450px
    :scale: 100 %
    :alt: alternate text
@@ -68,8 +68,8 @@ Elastic Beanstalk Components
 	* A configuration template is a starting point for creating unique environment configurations
 	
 .. image:: clearbox-flow-00.png
-   :width: 650px
-   :height: 450px
+   :width: 500px
+   :height: 400px
    :scale: 100 %
    :alt: alternate text
    :align: center
@@ -78,8 +78,8 @@ Elastic Beanstalk Architecture
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: Elastic-Beanstalk-Environment-Tiers.png
-   :width: 650px
-   :height: 450px
+   :width: 750px
+   :height: 550px
    :scale: 100 %
    :alt: alternate text
    :align: center
