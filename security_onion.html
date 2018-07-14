@@ -40,16 +40,72 @@
 <a class="reference internal image-reference" href="_images/typicalhomenetwork-300x214.png"><img alt="alternate text" class="align-center" src="_images/typicalhomenetwork-300x214.png" style="width: 300.0px; height: 214.0px;" /></a>
 <p>What we want to change our set up to:</p>
 <a class="reference internal image-reference" href="_images/monitoringnetwork-284x300.png"><img alt="alternate text" class="align-center" src="_images/monitoringnetwork-284x300.png" style="width: 284.0px; height: 300.0px;" /></a>
-<p>We need to set up a switch to use as a mirror port or span. This will allow a user to configure one of the network connections on the switch to be able to hear all the traffic from all the other ports. This is for an Intrusion Detection System (IDS) such as Security Onion since we need to be able to see all the traffic</p>
+<p>We need to set up a switch to use as a mirror port or span. This will allow a user to configure one of the network connections on the switch to be able to hear all the traffic from all the other ports. This is for an Intrusion Detection System (IDS) such as Security Onion since we need to be able to see all the traffic.</p>
 <p>Example switches:
 <a class="reference external" href="https://www.amazon.com/gp/product/B0048U3FMS/ref=oh_details_o03_s00_i00?ie=UTF8&amp;psc=1/">Netgear</a></p>
 <p>Enterprise Switch:
 <a class="reference external" href="https://www.amazon.com/Cisco-WS-C2950T-24-Catalyst-2950-Switch/dp/B00007MD88/ref=sr_1_2?s=electronics&amp;ie=UTF8&amp;qid=1531604261&amp;sr=1-2&amp;keywords=Cisco+2950/">Cisco</a></p>
-<p>Next we want to add the SecurityOnion IDS device via a one-way connection to the switch and then set up a secondary connection to that same switch for management traffic to the IDS. If we don’t have the second connection, then we can’t perform look-ups on systems and get updates on the IDS. You can also plug this management connection right into the router but, if you do, some of the network traffic will not be alerted on. Traffic from the IDS to the Internet will bypass the IDS and this isn’t somethign we want.</p>
+<p>Next we want to add the SecurityOnion IDS device via a one-way connection to the switch and then set up a secondary connection to that same switch for management traffic to the IDS. If we don’t have the second connection, then we can’t perform look-ups on systems and get updates on the IDS. You can also plug this management connection right into the router but, if you do, some of the network traffic will not be alerted on. Traffic from the IDS to the Internet will bypass the IDS and this isn’t something we want.</p>
 <a class="reference internal image-reference" href="_images/monitoringuntablenetwork.png"><img alt="alternate text" class="align-center" src="_images/monitoringuntablenetwork.png" style="width: 380.0px; height: 300.0px;" /></a>
+<div class="section" id="setting-up-security-onion-home-setup">
+<h2>Setting up Security Onion Home Setup<a class="headerlink" href="#setting-up-security-onion-home-setup" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/Security-Onion-Solutions/security-onion/releases/download/v16.04.4.2_20180615/securityonion-16.04.4.2.iso">16.04.4.2 ISO image</a></p>
+<p><a class="reference external" href="https://github.com/Security-Onion-Solutions/security-onion/raw/master/sigs/securityonion-16.04.4.2.iso.sig">Signature for ISO image</a></p>
+<p><a class="reference external" href="https://raw.githubusercontent.com/Security-Onion-Solutions/security-onion/master/KEYS">Signing key</a></p>
+<p>For example, here are the steps you can use on most Linux distributions to download and verify our Security Onion ISO image.</p>
+<p>Download the signing key:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Security</span><span class="o">-</span><span class="n">Onion</span><span class="o">-</span><span class="n">Solutions</span><span class="o">/</span><span class="n">security</span><span class="o">-</span><span class="n">onion</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">KEYS</span>
+</pre></div>
+</div>
+<p>Import the signing key:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gpg</span> <span class="o">--</span><span class="kn">import</span> <span class="nn">KEYS</span>
+</pre></div>
+</div>
+<p>Download the signature file for the ISO:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Security</span><span class="o">-</span><span class="n">Onion</span><span class="o">-</span><span class="n">Solutions</span><span class="o">/</span><span class="n">security</span><span class="o">-</span><span class="n">onion</span><span class="o">/</span><span class="n">raw</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">sigs</span><span class="o">/</span><span class="n">securityonion</span><span class="o">-</span><span class="mf">16.04</span><span class="o">.</span><span class="mf">4.2</span><span class="o">.</span><span class="n">iso</span><span class="o">.</span><span class="n">sig</span>
+</pre></div>
+</div>
+<p>Download the ISO image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Security</span><span class="o">-</span><span class="n">Onion</span><span class="o">-</span><span class="n">Solutions</span><span class="o">/</span><span class="n">security</span><span class="o">-</span><span class="n">onion</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v16</span><span class="o">.</span><span class="mf">04.4</span><span class="o">.</span><span class="mi">2</span><span class="n">_20180615</span><span class="o">/</span><span class="n">securityonion</span><span class="o">-</span><span class="mf">16.04</span><span class="o">.</span><span class="mf">4.2</span><span class="o">.</span><span class="n">iso</span>
+</pre></div>
+</div>
+<p>Verify the downloaded ISO image using the signature file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gpg</span> <span class="o">--</span><span class="n">verify</span> <span class="n">securityonion</span><span class="o">-</span><span class="mf">16.04</span><span class="o">.</span><span class="mf">4.2</span><span class="o">.</span><span class="n">iso</span><span class="o">.</span><span class="n">sig</span> <span class="n">securityonion</span><span class="o">-</span><span class="mf">16.04</span><span class="o">.</span><span class="mf">4.2</span><span class="o">.</span><span class="n">iso</span>
+</pre></div>
+</div>
+<p>The output should show “Good signature” and the Primary key fingerprint should match what’s shown below:”</p>
+<blockquote>
+<div>gpg: Signature made Tue 19 Jun 2018 03:10:02 PM EDT using RSA key ID ED6CF680
+gpg: Good signature from “Doug Burks &lt;<a class="reference external" href="mailto:doug&#46;burks&#37;&#52;&#48;gmail&#46;com">doug<span>&#46;</span>burks<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;”
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: BD56 2813 E345 A068 5FBB  91D3 788F 62F8 ED6C F680</div></blockquote>
+<p>After the ISO is verified go to:</p>
+<p><a class="reference external" href="https://github.com/Security-Onion-Solutions/security-onion/wiki/Installation">Security Onion Installation Guide</a></p>
+</div>
+<div class="section" id="what-kind-of-equipment-to-use">
+<h2>What kind of equipment to use:<a class="headerlink" href="#what-kind-of-equipment-to-use" title="Permalink to this headline">¶</a></h2>
+<p>You can even use an old laptop, install Security Onion on that system and just plug in the ethernet network port to the mirrored port on the switch and it will work.</p>
+<p><strong>To have the laptop in a closet or other space and access it remote, you’ll need to add another network interface</strong>
+You can use this <a class="reference external" href="https://www.amazon.com/TRENDnet-Ethernet-Chromebook-Specific-TU2-ET100/dp/B00007IFED/ref=sr_1_1?ie=UTF8&amp;qid=1401241047&amp;sr=8-1&amp;keywords=trendnet+usb+ethernet">USB to Ethernet adapter</a>
+Configure this built-in adapter to remain on the mirrored port and configure the USB to Ethernet adapter to have a static IP address on the internal home network. This gives the capability to log into the SecurityOnion system via SSH or HTTPS to monitor and manage the system.
+You might also want to have a fan keeping the system cool.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><strong>Syslog Server</strong>
+Security Onion has a syslog server for collecting logs from other devices on the network. It will aggregate and alert on these logs if desired.</p>
+<p><strong>HTTPS Front Page</strong>
+You can access Security Onion from the device you install it on if that has a keyboard, mouse, and monitor, via SSH or via HTTPS. The HTTPS web page looks like this:</p>
+<a class="reference internal image-reference" href="_images/so_start-300x240.png"><img alt="alternate text" class="align-center" src="_images/so_start-300x240.png" style="width: 300.0px; height: 240.0px;" /></a>
+</div>
+<div class="section" id="elsa">
+<h2>ELSA<a class="headerlink" href="#elsa" title="Permalink to this headline">¶</a></h2>
+<p><em>ELSA is a centralized syslog framework built on Syslog-NG, MySQL, and Sphinx full-text search. It provides a fully asynchronous web-based query interface that normalizes logs and makes searching billions of them for arbitrary strings as easy as searching the web. It also includes tools for assigning permissions for viewing the logs as well as email based alerts, scheduled queries, and graphing.</em></p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">Not complete, more to be added..</p>
+</div>
 </div>
 </div>
 
@@ -59,6 +115,17 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Security Onion Home Setup</a><ul>
+<li><a class="reference internal" href="#setting-up-security-onion-home-setup">Setting up Security Onion Home Setup</a></li>
+<li><a class="reference internal" href="#what-kind-of-equipment-to-use">What kind of equipment to use:</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#elsa">ELSA</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="aws_region_az_edge.html"
                         title="previous chapter">AWS Regions, Availability Zones (AZ) and Edge Locations</a></p>
