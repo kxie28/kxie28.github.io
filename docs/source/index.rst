@@ -18,6 +18,7 @@ Welcome to KX's documentation!
    phantom
    pygames
    aws
+   security_onion
 
 
 Indices and tables
