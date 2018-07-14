@@ -69,9 +69,13 @@ Verify the downloaded ISO image using the signature file::
 The output should show "Good signature" and the Primary key fingerprint should match what's shown below:"
 
 	gpg: Signature made Tue 19 Jun 2018 03:10:02 PM EDT using RSA key ID ED6CF680
-	gpg: Good signature from "Doug Burks <doug.burks@gmail.com>"
+	
+	gpg: Good signature from "xxx xxx <xxx.xxx@gmail.com>"
+	
 	gpg: WARNING: This key is not certified with a trusted signature!
+	
 	gpg:          There is no indication that the signature belongs to the owner.
+	
 	Primary key fingerprint: BD56 2813 E345 A068 5FBB  91D3 788F 62F8 ED6C F680
 
 After the ISO is verified go to: 
