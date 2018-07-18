@@ -82,8 +82,8 @@ After the ISO is verified go to:
 
 `Security Onion Installation Guide <https://github.com/Security-Onion-Solutions/security-onion/wiki/Installation>`_
 	
-What kind of equipment to use:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+What kind of equipment to use
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can even use an old laptop, install Security Onion on that system and just plug in the ethernet network port to the mirrored port on the switch and it will work. 	
 

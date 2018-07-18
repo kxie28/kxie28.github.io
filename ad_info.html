@@ -1,0 +1,125 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Active Directory Info &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Home Active Directory Lab" href="ad_lab.html" />
+    <link rel="prev" title="Active Directory" href="active_directory.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ad_lab.html" title="Home Active Directory Lab"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="active_directory.html" title="Active Directory"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="active_directory.html" accesskey="U">Active Directory</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="active-directory-info">
+<h1>Active Directory Info<a class="headerlink" href="#active-directory-info" title="Permalink to this headline">¶</a></h1>
+<p>Active Directory is a collection of technoligies used to manage a group or users and computers. This collection of users and computers falls under a <strong>domain</strong>.</p>
+<p>Typically, compoanies will have their Active Directory domain as a subdomain of their main domain for exmaple, <strong>ad.company.com</strong></p>
+<p>Another term is Forest**, which is a collection of domains. A domain is always part of a forest even if there’s just one domain.</p>
+<div class="section" id="services-that-make-an-active-directory-domain">
+<h2>Services that make an Active Directory Domain<a class="headerlink" href="#services-that-make-an-active-directory-domain" title="Permalink to this headline">¶</a></h2>
+<p><strong>DNS</strong>
+DNS is absolutely vital for Active Directory to work. Active Directory relies on a series of DNS records to establish what services are available on the domain and who provides what. For the most part, these records are management automatically, all we need to worry about right now is making sure DNS is available.</p>
+<p><strong>LDAP</strong>
+Light weight Directory Access Protocol. This service is responsible for keeping track of what is on the network</p>
+<p><strong>Kerberos</strong>
+Kerberos handles Single Sign On throughout the domain. It is what allows you to use one username and password to log into multiple computers throughout the domain.</p>
+<p><strong>SMB</strong>
+SMB is used to share files throughout a domain. Domain Controllers use it to share group policy objects among other things.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Active Directory Info</a><ul>
+<li><a class="reference internal" href="#services-that-make-an-active-directory-domain">Services that make an Active Directory Domain</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="active_directory.html"
+                        title="previous chapter">Active Directory</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ad_lab.html"
+                        title="next chapter">Home Active Directory Lab</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ad_info.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ad_lab.html" title="Home Active Directory Lab"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="active_directory.html" title="Active Directory"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="active_directory.html" >Active Directory</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>

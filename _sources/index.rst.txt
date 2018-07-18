@@ -19,6 +19,8 @@ Welcome to KX's documentation!
    pygames
    aws
    security_onion
+   linux
+   active_directory
 
 
 Indices and tables

@@ -1,0 +1,193 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Linux Overview &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Linux Cheat Sheet" href="linux_cheat_sheet.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="linux_cheat_sheet.html" title="Linux Cheat Sheet"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="linux.html" accesskey="U">System Admin Stuff</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="linux-overview">
+<h1>Linux Overview<a class="headerlink" href="#linux-overview" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="_images/linux-overview.png"><img alt="alternate text" class="align-center" src="_images/linux-overview.png" style="width: 575.0px; height: 600.0px;" /></a>
+<div class="section" id="fedora">
+<h2>Fedora<a class="headerlink" href="#fedora" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Uses <strong>RPM</strong>-based <strong>yum</strong> package manager to install, update, and remove packages in the system</li>
+<li><strong>RHEL</strong> is widely used by eterprises which host their own systems.</li>
+</ul>
+</div>
+<div class="section" id="debian">
+<h2>Debian<a class="headerlink" href="#debian" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Ubuntu and Linux Mint</p>
+<blockquote>
+<div><ul class="simple">
+<li>Uses <strong>DPKG</strong>-based <strong>APT</strong> package manager (using apt-get, apt-cache,etc.) to install, update, and remove packages in the system</li>
+<li><strong>Ubuntu</strong> used widely for cloud deployments</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="boot-loader">
+<h2>Boot Loader<a class="headerlink" href="#boot-loader" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/linux-power-on.png"><img alt="alternate text" class="align-center" src="_images/linux-power-on.png" style="width: 340.0px; height: 500.0px;" /></a>
+<a class="reference internal image-reference" href="_images/boot-loader.png"><img alt="alternate text" class="align-center" src="_images/boot-loader.png" style="width: 400.0px; height: 400.0px;" /></a>
+</div>
+<div class="section" id="sbin-init-and-services">
+<h2>/sbin/init and Services<a class="headerlink" href="#sbin-init-and-services" title="Permalink to this headline">¶</a></h2>
+<a class="reference internal image-reference" href="_images/sbin.png"><img alt="alternate text" class="align-center" src="_images/sbin.png" style="width: 250.0px; height: 300.0px;" /></a>
+<p>Once the kernel has set up all its hardware and mounted the root filesystem, the kernel runs the <cite>/sbin/init</cite> program. This then becomes the initial process, which then starts other processes to get the system running. Most other processes on the system trace their origin ultimately to init; the exceptions are the kernel processes, started by the kernel directly for managing internal operating system details.</p>
+<p>Besides starting the system, <strong>init</strong> is responsible for keeping the system running and for shutting it down cleanly. One of its responsibilities is to act when necessary as manager for all non-kernel processes; it cleans up after them upon completion, and restarts user login services as needed when users log in and out, and does the same for other background system services.</p>
+</div>
+<div class="section" id="systemd-features">
+<h2>systemd Features<a class="headerlink" href="#systemd-features" title="Permalink to this headline">¶</a></h2>
+<p>Systems with <strong>systemd</strong> boot faster than those with earlier init methods. This is largely because it replaces a serialized set of steps with aggressive parallelization techniques, which permits multiple services to be initiated simultaneously.</p>
+<p>Complicated startup shell scripts are replaced with simpler configuration files, which enumerate what has to be done before a service is started, how to execute service startup, and what conditions the service should indicate have been accomplished when startup is finished.</p>
+<p>One <strong>systemd</strong> command (<strong>systemctl</strong>) is used for most basic tasks.</p>
+<ul>
+<li><p class="first">Starting, stopping, restarting a service (<strong>fooservice</strong> could be something like <strong>nfsd</strong> or the network) on a currently runnign system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo systemctl start/stop/restart fooservice
+</pre></div>
+</div>
+</li>
+<li><p class="first">Enablind or disabling a system service from starting up at system boot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo systemctl enable/disable fooservice
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="partitions-and-filesystems">
+<h2>Partitions and Filesystems<a class="headerlink" href="#partitions-and-filesystems" title="Permalink to this headline">¶</a></h2>
+<p>A <strong>partition</strong> is a logical part of the disk, whereas a <strong>filesystem</strong> is a method of storing/finding files on a hard disk.</p>
+<p>Windows vs Linux</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="26%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&#160;</th>
+<th class="head">&#160;</th>
+<th class="head">&#160;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Partitions</td>
+<td>Disk1</td>
+<td>/dev/sda1</td>
+</tr>
+<tr class="row-odd"><td>Filesystem type</td>
+<td>NTFS/VFAT</td>
+<td>EXT3/EXT4/XFS/BTRFS…</td>
+</tr>
+<tr class="row-even"><td>Mounting Parameters</td>
+<td>DriveLetter</td>
+<td>MountPoint</td>
+</tr>
+<tr class="row-odd"><td>Base Folder where OS is stored</td>
+<td>C:</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<a class="reference internal image-reference" href="_images/file-structure.png"><img alt="alternate text" class="align-center" src="_images/file-structure.png" style="width: 475.0px; height: 500.0px;" /></a>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Linux Overview</a><ul>
+<li><a class="reference internal" href="#fedora">Fedora</a></li>
+<li><a class="reference internal" href="#debian">Debian</a></li>
+<li><a class="reference internal" href="#boot-loader">Boot Loader</a></li>
+<li><a class="reference internal" href="#sbin-init-and-services">/sbin/init and Services</a></li>
+<li><a class="reference internal" href="#systemd-features">systemd Features</a></li>
+<li><a class="reference internal" href="#partitions-and-filesystems">Partitions and Filesystems</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="linux_cheat_sheet.html"
+                        title="previous chapter">Linux Cheat Sheet</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/linux_overview.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="linux_cheat_sheet.html" title="Linux Cheat Sheet"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="linux.html" >System Admin Stuff</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
