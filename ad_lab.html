@@ -109,6 +109,85 @@
 <h2>Next Steps?<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
 <p>After the server comes back up, you’ll have a domain controller. You can log in using the same Administrator account as before, onyl now it’s a <strong>Domain Administrator</strong>. <em>In interesting characteristic of Domain Controllers</em> is that there are no longer local accounts on the server. Domain Controllers <strong>are</strong> the domain, they’re what host everything that makes the domain work, so the concept of “local accounts” doesn’t apply here.</p>
 </div>
+<div class="section" id="setup-a-firewall">
+<h2>Setup a Firewall<a class="headerlink" href="#setup-a-firewall" title="Permalink to this headline">¶</a></h2>
+<p>In the last steps, a <strong>Host-Only Network</strong> was created for the domain. This is nice because it keeps the miscellaneous domain traffic from crossing over to other networks we’re connected to. The downside is that we won’t have internet access. We’re going to fix this by creating a simple Firewall VM that will handle routing between the Host-Only Network and our Host Computers network. We’ll do this by using <a class="reference external" href="https://www.pfsense.org/">PFsense</a></p>
+<div class="section" id="building-the-firewall-vm">
+<h3>Building the Firewall VM<a class="headerlink" href="#building-the-firewall-vm" title="Permalink to this headline">¶</a></h3>
+<p>Provision a new VM for the Firewall. 1vCPU, 256MB of RAM and 5GB of HDD would be enough. Choose the <strong>FreeBSD 64-bit</strong></p>
+<p>We’ll also need to add a second network card to the VM.</p>
+<ol class="arabic simple">
+<li>Go to properties pane for the VM, select the “Network” section.</li>
+<li>On the first network card tab, make sure that it is set to “NAT”</li>
+<li>Click the second network card tab, enable the adapter</li>
+<li>Assign it to the “Host-Only Network” created before.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/ad_lab_virtualbox_network03.png"><img alt="alternate text" class="align-center" src="_images/ad_lab_virtualbox_network03.png" style="width: 800.0px; height: 600.0px;" /></a>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>PFSense<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><a class="reference external" href="https://www.pfsense.org/download/">Download the ISO from the website</a></li>
+<li>When prompted <strong>Press I</strong> to start the Installer. Choose <strong>Accept These Settings</strong> and then <strong>Quick/Easy Install</strong></li>
+</ol>
+<a class="reference internal image-reference" href="_images/pfsense03.png"><img alt="alternate text" class="align-center" src="_images/pfsense03.png" style="width: 800.0px; height: 600.0px;" /></a>
+<ol class="arabic simple" start="3">
+<li>When prompted, choose <strong>Standard Kernel</strong> and then reboot when prompted. Make sure to <strong>unmount the ISO from the VM</strong> before the machine boots back up</li>
+</ol>
+</div>
+<div class="section" id="setting-up-pfsense">
+<h2>Setting up PFSense<a class="headerlink" href="#setting-up-pfsense" title="Permalink to this headline">¶</a></h2>
+<p>When PFSense is booted, you’ll see:</p>
+<a class="reference internal image-reference" href="_images/pfsense05.png"><img alt="alternate text" class="align-center" src="_images/pfsense05.png" style="width: 800.0px; height: 600.0px;" /></a>
+<p>We need to configure the LAN interface to work propertly for our Host-Only network. To do this, from the PFSense menu, press <cite>2</cite> to select <strong>Change IP Addressing</strong> and <cite>2</cite> again to select the <strong>LAN Interface</strong>. You’ll then run through a series of prompts to setup the router. The following are what you should do:</p>
+<ol class="arabic simple">
+<li><strong>New LAN IPv4 Address:</strong> The address we give this interface should be the same address you used as the <em>gateway address</em> when you setup the IP address on the Domain Controller. In the example, we used 10.10.10.2</li>
+<li><strong>New LAN Subnet Bit Counnt</strong>: This depends on how you setup your “Host-Only network”, but it’s probably 24</li>
+<li><strong>Upstream Gateway Address:</strong> Just press enter, don’t need an upstream IP for LAN interface.</li>
+<li><strong>New LAN IPv6 Address:</strong> Just press enter, we’re not using IPv6 for routing.</li>
+<li><strong>Enable DHCP Server on LAN?</strong> “N”, we want to disable the DHCP server in PFSense.</li>
+<li><strong>Revert to HTTP?</strong> “N”, we do not want to use HTTP for the admin interface.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/pfsense06.png"><img alt="alternate text" class="align-center" src="_images/pfsense06.png" style="width: 800.0px; height: 600.0px;" /></a>
+</div>
+<div class="section" id="installing-dhcp">
+<h2>Installing DHCP<a class="headerlink" href="#installing-dhcp" title="Permalink to this headline">¶</a></h2>
+<p>Hosting DHCP through a Windows box in Active Directory gives lots of benefits, chief among them being that DHCP leases will automatically be added to our DNS servers.</p>
+<p>We can just host DHCP on the Domain Controller. This isn’t something you’d typically see in production except for maybe in tiny networks. In a production environment, you typically want your domain controllers dedicated to domain controlling. Adding extra roles to the DCs increases risk, patching overhead and the chance that they’re going to crash cause something stupid.</p>
+<p>Go back to the DC and start the <strong>Add Role sand Features</strong> wizard again. This time we’re adding the DHCP Server Role. When prompted to add the required features, select <strong>Add Features</strong></p>
+<a class="reference internal image-reference" href="_images/dhcp01.png"><img alt="alternate text" class="align-center" src="_images/dhcp01.png" style="width: 800.0px; height: 600.0px;" /></a>
+<p>After that, keep clicking “Next” until you get the option to “Install”, then click that.</p>
+<p>Once the install has finished, we can configure the DHCP server by clicking on the “Notification” button in Server Manager and selecting <strong>Complete DHCP configuration</strong></p>
+<a class="reference internal image-reference" href="_images/dhcp02.png"><img alt="alternate text" class="align-center" src="_images/dhcp02.png" style="width: 800.0px; height: 600.0px;" /></a>
+<p>Just click Next &gt; Next &gt; Finish.</p>
+</div>
+<div class="section" id="configure-the-dhcp-server">
+<h2>Configure the DHCP Server<a class="headerlink" href="#configure-the-dhcp-server" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>In <strong>Server Manager</strong> click on the Tools menu in the upper right and select <strong>DHCP</strong></li>
+</ol>
+<a class="reference internal image-reference" href="_images/dhcp03.png"><img alt="alternate text" class="align-center" src="_images/dhcp03.png" style="width: 800.0px; height: 600.0px;" /></a>
+<ol class="arabic simple" start="2">
+<li>Expand your domain on the left-hand side, right click <strong>IPv4</strong> and select <strong>Add New Scope</strong></li>
+</ol>
+<a class="reference internal image-reference" href="_images/dhcp04.png"><img alt="alternate text" class="align-center" src="_images/dhcp04.png" style="width: 800.0px; height: 600.0px;" /></a>
+<ol class="arabic simple" start="3">
+<li>Click Next through the Wizard. When prompted, name your DHCP scope whatever you want. This will be “Lab” here</li>
+<li>When prompted for the scope, create a range of 50 to 100 IPs within your network and set your subnet mask appropriately.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/dhcp07.png"><img alt="alternate text" class="align-center" src="_images/dhcp07.png" style="width: 800.0px; height: 600.0px;" /></a>
+<ol class="arabic simple" start="4">
+<li>Keep clicking next in the wizard, if you’re asked if you’d like to set <strong>additional options</strong>, select <strong>yes</strong> and click next.</li>
+</ol>
+<ol class="arabic simple" start="6">
+<li>For the router address, <strong>enter the address that you set for the LAN interface on the PFSense VM</strong> (the same address that you put as the default gateway on the Domain Controller). For this lab, we’re using <cite>10.10.10.2</cite>. Click <strong>Add</strong> then click next.</li>
+</ol>
+<a class="reference internal image-reference" href="_images/dhcp08.png"><img alt="alternate text" class="align-center" src="_images/dhcp08.png" style="width: 800.0px; height: 600.0px;" /></a>
+<ol class="arabic simple" start="7">
+<li>Keep clicking <strong>Next</strong> until yuo get to the end of the wizard.</li>
+</ol>
+</div>
 </div>
 
 
@@ -129,6 +208,14 @@
 </li>
 <li><a class="reference internal" href="#promoting-the-server-to-a-domain-controller">Promoting the Server to a Domain Controller</a></li>
 <li><a class="reference internal" href="#next-steps">Next Steps?</a></li>
+<li><a class="reference internal" href="#setup-a-firewall">Setup a Firewall</a><ul>
+<li><a class="reference internal" href="#building-the-firewall-vm">Building the Firewall VM</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">PFSense</a></li>
+<li><a class="reference internal" href="#setting-up-pfsense">Setting up PFSense</a></li>
+<li><a class="reference internal" href="#installing-dhcp">Installing DHCP</a></li>
+<li><a class="reference internal" href="#configure-the-dhcp-server">Configure the DHCP Server</a></li>
 </ul>
 </li>
 </ul>
