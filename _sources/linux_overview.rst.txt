@@ -81,7 +81,7 @@ A **partition** is a logical part of the disk, whereas a **filesystem** is a met
 Windows vs Linux
 
 =============================== ================================ ===============================
-								Windows							 Linux 
+Details							Windows							 Linux 
 =============================== ================================ ===============================					
 Partitions						Disk1							 /dev/sda1
 Filesystem type					NTFS/VFAT						 EXT3/EXT4/XFS/BTRFS...
