@@ -7,4 +7,5 @@ Active Directory
    
    ad_info
    ad_lab
+   ad_lab2
 	
