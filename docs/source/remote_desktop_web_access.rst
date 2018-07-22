@@ -47,8 +47,8 @@ Publishing RemoteApp on Windows Server 2008 R2
 To make remote apps accessible, the program must be added to the RemoteApp Program list using the RemoteApp Manager.
 
 .. image:: RemoteAppManager.png
-   :width: 650px
-   :height: 450px
+   :width: 750px
+   :height: 550px
    :scale: 100 %
    :alt: alternate text
    :align: center
@@ -69,7 +69,7 @@ Notice that the RDS plug-in of Server Manager replaces the following UI in Windo
 	* RemoteApp Manager
 	
 .. image:: RemoteDesktopServicesCollections.png
-   :width: 650px
+   :width: 700px
    :height: 550px
    :scale: 100 %
    :alt: alternate text
@@ -80,7 +80,7 @@ Once the application is published, it may be verified using the Remote Desktop W
 For example, https://remoteapps.workspot.com/RDWeb/, is a possible URL for Remote Desktop Web Access (RD Web Access), formerly Terminal Services Web Access (TS Web Access). This enables users to access RemoteApp and Desktop Connection through the Start menu on a computer that is running Windows 7 or through a Web browser. It also provides IT with a good place to test RemoteApp behavior.
 
 .. image:: RDWeb.png
-   :width: 650px
+   :width: 700px
    :height: 350px
    :scale: 100 %
    :alt: alternate text
