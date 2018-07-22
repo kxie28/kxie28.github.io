@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>How to Setup Remote Desktop Services (RDS) Web Access &#8212; KX 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Home Active Directory Lab" href="ad_lab.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ad_lab.html" title="Home Active Directory Lab"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-setup-remote-desktop-services-rds-web-access">
+<h1>How to Setup Remote Desktop Services (RDS) Web Access<a class="headerlink" href="#how-to-setup-remote-desktop-services-rds-web-access" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Windows Server 2008 R2 or Windows Server 2012 R2 for RemoteApp.</li>
+<li>Windows Server 2008 R2, Windows Server 2012 R2, Windows 7 (32 bit and 64 bit), Windows 8.1 Pro (32 bit and 64 bits) for Remote Desktop.</li>
+</ul>
+<div class="section" id="remoting-desktops-and-applications">
+<h3>Remoting Desktops and Applications<a class="headerlink" href="#remoting-desktops-and-applications" title="Permalink to this headline">¶</a></h3>
+<p>Remote Desktop is not enabled by default on Windows. The feature must be enabled to allow remote access to a workstation or server. Once enabled, any member of the Administrators group can connect to a desktop. Other users must be placed on a remote access list to gain access. To configure remote access, follow these steps:</p>
+<p>For Windows 7 and Windows Server 2008 R2:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>In Control Panel, click System and Security, and then click System.</li>
+</ol>
+</div></blockquote>
+<p>For Windows 8.1 Pro and Windows Servere 2012 R2:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Start at the Start Screen, and type in the word “remote”.</li>
+<li>From the options provided as a result of the search, select “Allow remote access to your computer”. This opens the System Properties dialog box to the Remote tab.</li>
+</ol>
+</div></blockquote>
+<p>Then follow these steps:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">On the System page, click Remote Settings in the left pane. This opens the Systems Properties dialog box to the Remote tab. To disable Remote Desktop, select “Don’t Allow Connections To This Computer”, and then click OK. Skip the remaining steps.</p>
+</li>
+<li><p class="first">To enable Remote Desktop, you have two options. You can:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Select “Allow Connections from Computers Running Any Version Of Remote Desktop” to allow connections from any versions of Windows.</li>
+<li>Select “Allow Connections Only From Computers Running Remote Desktop With Network Level Authentication” to allow connections only from Windows 7 or later computers (and computers with secure network authentication).</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Click Select Users. This displays the Remote Desktop Users dialog box.</p>
+</li>
+<li><p class="first">To grant Remote Desktop access to the user, click Add. This opens the Select Users dialog box. In the Select Users dialog box, click Locations to select the computer or domain in which the users you want to work with are located. Type the name of a user you want to work with in the Enter The Objects Names to Select field, and then click Check Names. If matches are found, select the account you want to use and then click OK. If no matches are found, update the name you entered and try searching again. Repeat this step as necessary, and then click OK.</p>
+</li>
+<li><p class="first">To revoke remote access permissions for a user account, select the account and then click Remote.</p>
+</li>
+<li><p class="first">Click OK twice when you have finished.</p>
+</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="publishing-remoteapp-on-windows-server-2008-r2">
+<h3>Publishing RemoteApp on Windows Server 2008 R2<a class="headerlink" href="#publishing-remoteapp-on-windows-server-2008-r2" title="Permalink to this headline">¶</a></h3>
+<p>To make remote apps accessible, the program must be added to the RemoteApp Program list using the RemoteApp Manager.</p>
+<a class="reference internal image-reference" href="_images/RemoteAppManager.png"><img alt="alternate text" class="align-center" src="_images/RemoteAppManager.png" style="width: 650.0px; height: 450.0px;" /></a>
+</div>
+<div class="section" id="publishing-remoteapp-on-windows-server-2012-r2">
+<h3>Publishing RemoteApp on Windows Server 2012 R2<a class="headerlink" href="#publishing-remoteapp-on-windows-server-2012-r2" title="Permalink to this headline">¶</a></h3>
+<p>RemoteApps are published using Remote Desktop Services running Windows 2012 R2. As shown below, RemoteApps are usually group in “Collections” to allow various users privileges to be applied efficiently.</p>
+<p>Notice that the RDS plug-in of Server Manager replaces the following UI in Windows Server 2008 releases:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Remote Desktop Services Manager, or tsadmin</li>
+<li>Remote Desktop Services Configuration, or tsconfig</li>
+<li>Remote Desktop Connection Manager, i.e. Remote Desktop Collection Broker (RDCB) UI</li>
+<li>RemoteApp Manager</li>
+</ul>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/RemoteDesktopServicesCollections.png"><img alt="alternate text" class="align-center" src="_images/RemoteDesktopServicesCollections.png" style="width: 650.0px; height: 550.0px;" /></a>
+<p>Once the application is published, it may be verified using the Remote Desktop Web Access (RD Web Access).</p>
+<p>For example, <a class="reference external" href="https://remoteapps.workspot.com/RDWeb/">https://remoteapps.workspot.com/RDWeb/</a>, is a possible URL for Remote Desktop Web Access (RD Web Access), formerly Terminal Services Web Access (TS Web Access). This enables users to access RemoteApp and Desktop Connection through the Start menu on a computer that is running Windows 7 or through a Web browser. It also provides IT with a good place to test RemoteApp behavior.</p>
+<a class="reference internal image-reference" href="_images/RDWeb.png"><img alt="alternate text" class="align-center" src="_images/RDWeb.png" style="width: 650.0px; height: 350.0px;" /></a>
+</div>
+<div class="section" id="connect-to-another-computer-using-remote-desktop-connection-testing-rdp">
+<h3>Connect to another computer using Remote Desktop Connection [Testing RDP]<a class="headerlink" href="#connect-to-another-computer-using-remote-desktop-connection-testing-rdp" title="Permalink to this headline">¶</a></h3>
+<p>To connect to a remote computer, that computer must be turned on, it must have a network connection, Remote Desktop must be anabled, you must have network access to the remote computer (this could be through the Internet), and you must have permission to connect. For permission to connect, you must be on the list of users. Before you start a connection, it’s a good idea to look up the name of the computer you’re connecting to and to make sure Remote Desktop connects are allowed through its firewall.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to Setup Remote Desktop Services (RDS) Web Access</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li><a class="reference internal" href="#remoting-desktops-and-applications">Remoting Desktops and Applications</a></li>
+<li><a class="reference internal" href="#publishing-remoteapp-on-windows-server-2008-r2">Publishing RemoteApp on Windows Server 2008 R2</a></li>
+<li><a class="reference internal" href="#publishing-remoteapp-on-windows-server-2012-r2">Publishing RemoteApp on Windows Server 2012 R2</a></li>
+<li><a class="reference internal" href="#connect-to-another-computer-using-remote-desktop-connection-testing-rdp">Connect to another computer using Remote Desktop Connection [Testing RDP]</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ad_lab.html"
+                        title="previous chapter">Home Active Directory Lab</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/remote_desktop_web_access.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ad_lab.html" title="Home Active Directory Lab"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Kevin X.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+    </div>
+  </body>
+</html>
