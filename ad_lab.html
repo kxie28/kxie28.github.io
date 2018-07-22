@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Home Active Directory Lab &#8212; KX 1.0 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -16,24 +16,15 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Home Active Directory Lab Part 2" href="ad_lab2.html" />
-    <link rel="prev" title="Active Directory Info" href="ad_info.html" /> 
+    <link rel="prev" title="Active Directory Info" href="ad_info.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="ad_lab2.html" title="Home Active Directory Lab Part 2"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="ad_info.html" title="Active Directory Info"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="active_directory.html" accesskey="U">Active Directory</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -143,7 +134,7 @@
 <div class="section" id="setting-up-pfsense">
 <h2>Setting up PFSense<a class="headerlink" href="#setting-up-pfsense" title="Permalink to this headline">¶</a></h2>
 <p>When PFSense is booted, you’ll see:</p>
-<a class="reference internal image-reference" href="_images/pfsense05.png"><img alt="alternate text" class="align-center" src="_images/pfsense05.png" style="width: 800.0px; height: 600.0px;" /></a>
+<a class="reference internal image-reference" href="_images/pfsense05.png"><img alt="alternate text" class="align-center" src="_images/pfsense05.png" style="width: 825.0px; height: 600.0px;" /></a>
 <p>We need to configure the LAN interface to work propertly for our Host-Only network. To do this, from the PFSense menu, press <cite>2</cite> to select <strong>Change IP Addressing</strong> and <cite>2</cite> again to select the <strong>LAN Interface</strong>. You’ll then run through a series of prompts to setup the router. The following are what you should do:</p>
 <ol class="arabic simple">
 <li><strong>New LAN IPv4 Address:</strong> The address we give this interface should be the same address you used as the <em>gateway address</em> when you setup the IP address on the Domain Controller. In the example, we used 10.10.10.2</li>
@@ -230,13 +221,17 @@
 </ul>
 </li>
 </ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="ad_info.html"
-                        title="previous chapter">Active Directory Info</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ad_lab2.html"
-                        title="next chapter">Home Active Directory Lab Part 2</a></p>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="active_directory.html">Active Directory</a><ul>
+      <li>Previous: <a href="ad_info.html" title="previous chapter">Active Directory Info</a></li>
+      <li>Next: <a href="ad_lab2.html" title="next chapter">Home Active Directory Lab Part 2</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -260,25 +255,20 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ad_lab2.html" title="Home Active Directory Lab Part 2"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ad_info.html" title="Active Directory Info"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">KX 1.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="active_directory.html" >Active Directory</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2018, Kevin X.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/ad_lab.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, Kevin X.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
-    </div>
+
+    
+
+    
   </body>
 </html>
