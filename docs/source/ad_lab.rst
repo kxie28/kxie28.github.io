@@ -203,7 +203,7 @@ Setting up PFSense
 When PFSense is booted, you'll see:
 
 .. image:: pfsense05.png
-   :width: 800px
+   :width: 825px
    :height: 600px
    :scale: 100 %
    :alt: alternate text
