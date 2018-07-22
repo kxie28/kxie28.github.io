@@ -21,6 +21,7 @@ Welcome to KX's documentation!
    security_onion
    linux
    active_directory
+   remote_desktop_web_access
 
 
 Indices and tables
