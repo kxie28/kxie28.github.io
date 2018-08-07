@@ -8,8 +8,6 @@ Important notes before starting:
 
 	- This is your login to my.phantom.us, not a local OS username and password.
 
-* Access to the Phantom RPM bundles used for offline or AWS installs are limited to paid customers and users in POV (Proof of Value) evaluation. Paid customers may email support@phantom.us for access to the RPM bundles and users in POV will need to request access from their Sales Person or Sales Engineer.
-
 * Upgrades to or from Early Access or Beta releases are not supported.
 
 Phantom officially supports the Phantom OVA or official supplied minimal images for the following operating systems:
@@ -76,9 +74,7 @@ This will make the phantom repositories available to yum, install the phantom in
 
 	/opt/phantom/bin/phantom_setup.sh install
 
-**The script will prompt for login and password information.**  
-.. NOTE::
-	This is your login to my.phantom.us, not a local OS username and password.
+**The script will prompt for login and password information.** This is your login to my.phantom.us, not a local OS username and password.
 
 You can also opt-out of installing the apps during the upgrade process. You can always upgrade apps and install new ones via the Phantom UI:
 ::
