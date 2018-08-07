@@ -1,3 +1,5 @@
+import sphinx_rtd_theme
+
 # -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
