@@ -6,4 +6,5 @@ Phantom - Security Automation and Orchestration
 
    phantom_playbooks
    phantom_installation
+   phantom_upgrade
 
