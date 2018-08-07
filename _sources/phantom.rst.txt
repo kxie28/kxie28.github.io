@@ -5,4 +5,5 @@ Phantom - Security Automation and Orchestration
    :maxdepth: 2
 
    phantom_playbooks
+   phantom_installation
 
